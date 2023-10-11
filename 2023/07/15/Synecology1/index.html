@@ -19,25 +19,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"peng-guo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Stay Hungry. Stay Foolish.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Peng&#39;s Blog">
-<meta property="og:url" content="http://peng-guo.github.io/index.html">
+    <meta name="description" content="引言一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性$^\text{[1]}$。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于种群遗传多样性影响因素的分析">
+<meta property="og:url" content="http://peng-guo.github.io/2023/07/15/Synecology1/index.html">
 <meta property="og:site_name" content="Peng&#39;s Blog">
-<meta property="og:description" content="Stay Hungry. Stay Foolish.">
+<meta property="og:description" content="引言一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性$^\text{[1]}$。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-15T14:37:16.000Z">
+<meta property="article:modified_time" content="2023-10-11T11:22:37.120Z">
 <meta property="article:author" content="Peng Guo">
+<meta property="article:tag" content="种群遗传学">
+<meta property="article:tag" content="模型模拟">
+<meta property="article:tag" content="R语言">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://peng-guo.github.io/">
+<link rel="canonical" href="http://peng-guo.github.io/2023/07/15/Synecology1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://peng-guo.github.io/2023/07/15/Synecology1/","path":"2023/07/15/Synecology1/","title":"关于种群遗传多样性影响因素的分析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Peng's Blog</title>
+<title>关于种群遗传多样性影响因素的分析 | Peng's Blog</title>
   
 
 
@@ -70,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Peng's Blog</h1>
+      <p class="site-title">Peng's Blog</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -96,7 +101,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -109,6 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%A8%A1%E6%8B%9F"><span class="nav-number">2.</span> <span class="nav-text">模型模拟</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%81%97%E4%BC%A0%E6%BC%82%E5%8F%98%EF%BC%88Drift%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. 遗传漂变（Drift）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9F%BA%E5%9B%A0%E8%BF%81%E7%A7%BB%EF%BC%88Migration%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. 基因迁移（Migration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B2%9B%E9%99%86%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">岛陆模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%BB%E9%87%8C%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.2.</span> <span class="nav-text">邻里模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%AA%81%E5%8F%98%E4%BD%9C%E7%94%A8%EF%BC%88Mutation%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 突变作用（Mutation）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%80%89%E6%8B%A9%E4%BD%9C%E7%94%A8%EF%BC%88Selection%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">4. 选择作用（Selection）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%91%E4%BA%A4%E6%95%88%E5%BA%94%EF%BC%88Inbreeding%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">5. 近交效应（Inbreeding）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,181 +164,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/09/05/ImmunoBiology1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peng's Blog">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Peng's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/09/05/ImmunoBiology1/" class="post-title-link" itemprop="url">免疫生物学 (01)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-09-05 16:01:29" itemprop="dateCreated datePublished" datetime="2023-09-05T16:01:29+08:00">2023-09-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-07 16:12:36" itemprop="dateModified" datetime="2023-09-07T16:12:36+08:00">2023-09-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课堂笔记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>Chapter 1: Basic Concepts in Immunology</strong></p>
-<p>本章主要展示<strong>免疫学发展历史</strong>，并对该<strong>免疫学课程内容</strong>进行总结概要，了解一些免疫学的<strong>基本概念</strong>。可以说本章是全书的摘要。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/05/ImmunoBiology1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/07/15/First-Blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peng's Blog">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Peng's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/07/15/First-Blog/" class="post-title-link" itemprop="url">First Blog</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-07-15 22:37:16 / 修改时间：22:38:53" itemprop="dateCreated datePublished" datetime="2023-07-15T22:37:16+08:00">2023-07-15</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="My-First-Blog"><a href="#My-First-Blog" class="headerlink" title="My First Blog"></a>My First Blog</h1><p>text1…</p>
-<h2 id="Hello"><a href="#Hello" class="headerlink" title="Hello"></a>Hello</h2><p>text11…</p>
-<h2 id="Bye"><a href="#Bye" class="headerlink" title="Bye"></a>Bye</h2><p>text12…</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/07/15/Synecology1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -346,13 +188,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Peng's Blog">
+      <meta itemprop="name" content="关于种群遗传多样性影响因素的分析 | Peng's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/07/15/Synecology1/" class="post-title-link" itemprop="url">关于种群遗传多样性影响因素的分析</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          关于种群遗传多样性影响因素的分析
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -382,6 +224,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -390,8 +239,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性$^\text{[1]}$。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传多样性最主要的因素。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性$^\text{[1]}$。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传多样性最主要的因素。</p>
 <p>在分析各个因素对于种群遗传多样性的影响前，本文首先引入哈代-温伯格平衡（Hardy-Weinberg equilibrium）。哈代-温伯格平衡作为遗传学中的一个基本概念，描述了一个不进化的、封闭的种群内，基因型和等位基因频率保持稳定的状态。这意味着在没有突变、选择、迁移和随机效应的影响下，种群内的遗传结构将保持不变。</p>
 <p>一般情况下，种群实现哈代-温伯格平衡需满足以下几个条件：</p>
 <ol>
@@ -462,7 +310,6 @@
 <p>[6] Nowak, M. A. (2006). <em>Evolutionary dynamics: exploring the equations of life</em>. Harvard university press.</p>
 <p>[7] 高程, &amp; 郭良栋. (2022). 微生物物种多样性, 群落构建与功能性状研究进展. <em>生物多样性</em>, <em>30</em>(10), 22429.</p>
 
-      
     </div>
 
     
@@ -470,11 +317,44 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Peng Guo
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://peng-guo.github.io/2023/07/15/Synecology1/" title="关于种群遗传多样性影响因素的分析">http://peng-guo.github.io/2023/07/15/Synecology1/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%A7%8D%E7%BE%A4%E9%81%97%E4%BC%A0%E5%AD%A6/" rel="tag"># 种群遗传学</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E6%A8%A1%E6%8B%9F/" rel="tag"># 模型模拟</a>
+              <a href="/tags/R%E8%AF%AD%E8%A8%80/" rel="tag"># R语言</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/15/First-Blog/" rel="next" title="First Blog">
+                  First Blog <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
   </article>
 </div>
+
 
 
 
