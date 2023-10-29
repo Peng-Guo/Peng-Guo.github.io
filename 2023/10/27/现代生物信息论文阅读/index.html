@@ -246,9 +246,10 @@
     <div class="post-body" itemprop="articleBody"><p><strong>Multi-constraint molecular generation based on conditional
 transformer, knowledge distillation and reinforcement
 learning</strong></p>
-<p><a href="(https://www.nature.com/articles/s42256-021-00403-1)">https://www.nature.com/articles/s42256-021-00403-1</a></p>
+<p><a
+href="(https://www.nature.com/articles/s42256-021-00403-1)">https://www.nature.com/articles/s42256-021-00403-1</a></p>
 <p>Nature Machine Intelligence   18 October 2021</p>
-<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现<多约束下药物分子的生成></多约束下药物分子的生成></p>
+<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现<多约束下药物分子的生成></p>
 <span id="more"></span>
 <h2 id="这篇文章做了什么">这篇文章做了什么</h2>
 <p>提出Multi-constraint Molecular
@@ -283,13 +284,13 @@ VAEs 是一种生成模型，它可以学习数据的潜在表示。在分子生
 知识蒸馏）</strong>和<strong>reinforcement learning（RL
 强化学习）</strong>三部分组成</p>
 <ul>
-<li>CT 构建<生成模型>，学习<结构和性质之间的关系></结构和性质之间的关系></生成模型></li>
+<li>CT 构建<生成模型>，学习<结构和性质之间的关系></li>
 <li>KD 降低模型复杂度</li>
-<li>RL 进行模型微调，实现多目标优化，增加<生成分子的结构多样性></生成分子的结构多样性></li>
+<li>RL 进行模型微调，实现多目标优化，增加<生成分子的结构多样性></li>
 </ul>
 <h3 id="conditional-transformer">conditional transformer</h3>
 <p>是基于Transformer架构的一种变体，引入了条件信息。在生成分子（的字符）的每一步前，会根据条件信息计算下一个字符的概率分布，并生成符合条件的分子序列。</p>
-<p><conditional transformer最后构建得到的模型>能够将&lt;输入的条件信息（例如分子的特定性质或结构特征）&gt;与&lt;输出的分子结构（SMILES表示法）&gt;关联起来。当给定特定条件信息时，模型能够生成符合这些条件的分子结构（SMILES字符串），在后续的强化学习中使用。</conditional></p>
+<p><conditional transformer最后构建得到的模型>能够将&lt;输入的条件信息（例如分子的特定性质或结构特征）&gt;与&lt;输出的分子结构（SMILES表示法）&gt;关联起来。当给定特定条件信息时，模型能够生成符合这些条件的分子结构（SMILES字符串），在后续的强化学习中使用。</p>
 <h3 id="knowledge-distillation">knowledge distillation</h3>
 <p>是一种用于训练轻量级神经网络模型的技术。能够将一个大型复制模型的知识转移到一个小型简单的模型中，从而使小型模型同时具备高性能和高计算/内存效率。</p>
 <ol type="1">
