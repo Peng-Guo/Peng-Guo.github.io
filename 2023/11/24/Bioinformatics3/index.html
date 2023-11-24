@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Times+New+Roman:300,300italic,400,400italic,700,700italic%7CSimSun:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"peng-guo.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文为基因组与蛋白组学课程论文分享阅读笔记。 论文信息如下： Deciphering microbial gene function using natural language processing https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s41467-022-33397-4 Nature Communication   29 September 2022 使用基因组数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="现代生物信息学论文阅读（03）">
+<meta property="og:url" content="http://peng-guo.github.io/2023/11/24/Bioinformatics3/index.html">
+<meta property="og:site_name" content="Peng&#39;s Blog">
+<meta property="og:description" content="本文为基因组与蛋白组学课程论文分享阅读笔记。 论文信息如下： Deciphering microbial gene function using natural language processing https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s41467-022-33397-4 Nature Communication   29 September 2022 使用基因组数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-24T04:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-24T09:52:30.561Z">
+<meta property="article:author" content="Peng Guo">
+<meta property="article:tag" content="自然语言处理">
+<meta property="article:tag" content="微生物基因组">
+<meta property="article:tag" content="基因功能预测">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://peng-guo.github.io/2023/11/24/Bioinformatics3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://peng-guo.github.io/2023/11/24/Bioinformatics3/","path":"2023/11/24/Bioinformatics3/","title":"现代生物信息学论文阅读（03）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>现代生物信息学论文阅读（03） | Peng's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Peng's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">假设基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8Bmethods"><span class="nav-number">2.</span> <span class="nav-text">实现过程（Methods）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%8F%91%E7%8E%B0results"><span class="nav-number">3.</span> <span class="nav-text">结果发现（Results）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3%E8%AF%B4%E6%98%8Ereadme"><span class="nav-number">4.</span> <span class="nav-text">技术文档说明（README）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E6%96%87%E4%BB%B6%E8%AF%A6%E6%83%85models_and_data"><span class="nav-number">5.</span> <span class="nav-text">补充文件详情（models_and_data）</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Peng Guo"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Peng Guo</p>
+  <div class="site-description" itemprop="description">Stay Hungry. Stay Foolish.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Peng-Guo" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Peng-Guo" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:guopengcn@outlook.com" title="E-Mail → mailto:guopengcn@outlook.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/11/24/Bioinformatics3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Peng Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peng's Blog">
+      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="现代生物信息学论文阅读（03） | Peng's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          现代生物信息学论文阅读（03）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-11-24 12:00:00 / 修改时间：17:52:30" itemprop="dateCreated datePublished" datetime="2023-11-24T12:00:00+08:00">2023-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">现代生物信息学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文为<strong>基因组与蛋白组学</strong>课程<strong>论文分享</strong>阅读笔记。</p>
+<p>论文信息如下：</p>
+<p><strong>Deciphering microbial gene function using natural language
+processing</strong></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.nature.com/articles/s41467-022-33397-4">https://www.nature.com/articles/s41467-022-33397-4</a></p>
+<p>Nature Communication   29 September 2022</p>
+<p>使用基因组数据集建立基因语料库，通过机器学习的方法对基因进行分类和功能预测</p>
+<span id="more"></span>
+<hr />
+<h1 id="假设基础">假设基础</h1>
+<p>在原核生物中，具有协同功能的基因通常在基因组中成簇存在 e.g.,
+CRISPR-Cas系统</p>
+<p>在NLP中，常常根据上下文（context）来推断词（target）含义</p>
+<p>基因家族 <span class="math inline">\(\rightarrow\)</span> 词</p>
+<p>基因组 <span class="math inline">\(\rightarrow\)</span> 语句</p>
+<p>（蛋白质）功能 <span class="math inline">\(\rightarrow\)</span>
+语义</p>
+<hr />
+<h1 id="实现过程methods">实现过程（Methods）</h1>
+<ol type="1">
+<li><p>获取基因组和宏基因组数据</p></li>
+<li><p>过滤<strong>contigs</strong> with little contextual data on the
+gene level</p></li>
+<li><p>使用prodigal预测基因，并使用Prokka pipline进行初始基因注释</p>
+<ol type="1">
+<li>对于基因组：选取存在Uniprot非冗余蛋白组的基因组</li>
+<li>对于宏基因组：使用BBMAP删除高度相似的contigs</li>
+</ol></li>
+<li><p>最终得到11119550个contigs上编码的394374454个基因</p></li>
+<li><p>基于KO生成功能注释的参考</p>
+<ol type="1">
+<li>从KEGG下载来自24307个KO的17107806个蛋白质</li>
+<li>使用mmseqs2对每个KO中的蛋白质进行子聚类</li>
+<li>使用MAFFT对含有5个以上蛋白的子簇进行对齐</li>
+<li>使用HMMer根据对齐结果构建KO HMM数据库（隐马尔可夫模型）</li>
+</ol></li>
+<li><p>使用上述HMM数据库扫描由上述非冗余的contigs编码的蛋白质，构建基因语料库，大小为360039110个基因，有563589个词代表</p>
+<ol type="1">
+<li>对于与KO
+HMM显著匹配的蛋白质，给予标识符KXXXX.YY（KXXXX为KEGG的KO，YY是子簇索引）</li>
+<li>对于没有KO数据库映射的蛋白质，若其与<使用DIAMOND在NCBI的非冗余蛋白质数据库中搜索了每个假设簇的代表>相比具有较高的同源性，则认为假设簇的注释可以被可靠地迁移到该蛋白质上</li>
+<li>对于均没有匹配的蛋白质，认为其为“假设蛋白质”，根据氨基酸序列相似性进行迭代聚类
+<ol type="1">
+<li>使用CD-HIT对蛋白质进行聚类，得到每一类的代表</li>
+<li>使用mmseqs2将上一步的代表聚类为基因家族</li>
+<li>给予每个假设蛋白唯一的标识符“hypo.clst.ZZZZ”</li>
+</ol></li>
+</ol></li>
+<li><p>使用无监督的学习方式将语料库中的每个基因家族表示为“embedding”（向量化表示）</p>
+<p>word2vec架构 + skip-gram模型</p>
+<p>基于单层神经网络的学习</p>
+<p>以<预测给定单词的邻近单词>的正确率作为损失函数</p></li>
+<li><p>基于embedding进行分类（采用<四层DNN><SVM模型><随机森林><GBDT梯度提升分类>）。具体分为以下功能类别：</p>
+<ol type="1">
+<li>氨基糖和核苷酸糖代谢（312个基因）</li>
+<li>苯甲酸盐代谢（168个基因）</li>
+<li>能量代谢（209个基因）</li>
+<li>氧化磷酸化（409个基因）</li>
+<li>卟啉和叶绿素代谢（274 个基因）</li>
+<li>原核生物防御（871 个基因）</li>
+<li>核糖体（489 个基因）</li>
+<li>分泌系统（1617 个基因）</li>
+<li>双组分系统（1174 个基因）</li>
+</ol></li>
+<li><p>与其他广泛使用的基于序列的远程搜索方法进行比较，使用交叉验证来评估分类模型的性能</p></li>
+</ol>
+<hr />
+<h1 id="结果发现results">结果发现（Results）</h1>
+<ol type="1">
+<li><p>==图1==<被注释的基因>在语料库中占比大，但聚类成基因家族后，只占语料库中基因家族的7.8%</p>
+<ol type="1">
+<li><微生物核心功能的特征基因>聚集成相对少但大的基因家族</li>
+<li>微生物的大部分遗传多样性没有得到很好的注释</li>
+</ol></li>
+<li><p>==图2==（在根据环境聚类下）具有相似功能的基因往往聚集在一起，但是有些<同一基因家族的基因>彼此远离：具有不同的功能
+e.g. <em>cas4</em>家族的基因同时具有CRISPR相关和非相关基因</p></li>
+<li><p>==图3==对于一些典型的多基因共同完成的基因功能，该模型体现出很高的预测性能（e.g.
+分泌系统，原核防御系统，氧化磷酸化）；而氨基糖代谢等功能提供上下文信息少，会阻碍正确分类</p>
+<p><span class="math inline">\(\frac1{\text{F1
+score}}=\frac{\frac1{准确率}+\frac1{召回率}}2,\
+准确率=\frac{真阳}{真阳+假阳},\
+召回率=\frac{真阳}{真阳+假阴}\)</span></p></li>
+<li><p>==图4==实现对假设蛋白对应基因的功能预测。</p>
+<p>在&lt;一些新发现的，尚未注释，与训练数据无同源性的原核防御系统的基因&gt;上进行验证，正确率高达98.6%</p>
+<p>同时还发现另外的40247个未表征的基因家族与防御系统相关，说明防御系统还存在着巨大的发现可能</p>
+<p>除了防御系统外，分泌系统和双组分系统等功能类别也显示出很高的发现潜力</p></li>
+</ol>
+<hr />
+<h1 id="技术文档说明readme">技术文档说明（README）</h1>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># genomic-nlp</span></span><br><span class="line"></span><br><span class="line">该存储库包含用于编译和分析论文中介绍的“生物语料库”的代码：</span><br><span class="line"></span><br><span class="line"><span class="strong">**利用自然语言处理解读微生物基因功能**</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 获取数据</span></span><br><span class="line"><span class="emphasis">*注意：*</span> 数据将存储在Zenodo数据库中并分配永久的DOI。与此同时，请不要使用下面的下载说明，而转到[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)。</span><br><span class="line"></span><br><span class="line">从Zenodo数据库下载数据文件。</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 单击存储库顶部的Zenodo链接，或使用[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)下载数据zip文件。</span><br><span class="line"><span class="bullet">2.</span> 或者，使用命令行如下：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">mkdir data</span></span><br><span class="line"><span class="code">cd data</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">wget https://zenodo.org/record/XXX/files/models_and_data.tar.gz?download=1</span></span><br><span class="line"><span class="code">tar -zxvf models_and_data.tar.gz</span></span><br><span class="line"><span class="code">mv data/* ./</span></span><br><span class="line"><span class="code">rm models_and_data.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 设置工作环境</span></span><br><span class="line">首先，设置Python环境和依赖项。</span><br><span class="line"><span class="section">#### 使用pip</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python3 -m venv env</span></span><br><span class="line"><span class="code">source env/bin/activate</span></span><br><span class="line"><span class="code">pip install -r requirements.txt</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 使用conda</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">conda env create -f environment.yml</span></span><br><span class="line"><span class="code">conda activate g2v-env</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">此设置在Python 3.7上进行了测试。所有必需程序的版本在<span class="code">`requirements.txt`</span>（对于pip）和<span class="code">`environment.yml`</span>（对于conda）中都有。</span><br><span class="line"></span><br><span class="line"><span class="section">### 代码可用性</span></span><br><span class="line">用于训练word2vec模型、提取其嵌入和功能分类器的源代码可以通过pip下载：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">pip install genomic-embeddings</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 训练好的基因注释嵌入</span></span><br><span class="line">在整个基因组语料库上训练的word2vec模型可在<span class="code">`models_and_data`</span>中作为gensim模型获得。</span><br><span class="line">要在下游分析中进一步使用它们，请设置您的工作环境并加载模型。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">model_path = model_and_data/gene2vec_w5_v300_tf24_annotation_extended/gene2vec_w5_v300_tf24_annotation_extended_2021-10-03.w2v</span></span><br><span class="line"><span class="code">gene_embeddings = Embeddings.load_embeddings(model_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">从这里开始，您可以使用[<span class="string">gensim api</span>](<span class="link">https://radimrehurek.com/gensim/models/word2vec.html</span>)提取单词嵌入、计算单词之间的距离等。例如：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">gene_embeddings.wv[&quot;K09140.2&quot;]</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 二维嵌入空间</span></span><br><span class="line">经过UMAP降维的基因嵌入可作为pickle文件获得。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">embeddings_2d_rep_path = &quot;model_and_data/gene2vec_w5_v300_tf24_annotation_extended/words_umap_2021-10-03&quot;</span></span><br><span class="line"><span class="code">embeddings_2d = Embeddings.get_2d_mapping(embeddings_2d_rep_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类器</span></span><br><span class="line">要重新训练所有功能分类器/生成性能图：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic_embeddings.models import NNClf</span></span><br><span class="line"><span class="code">from genomic_embeddings.data import Embedding</span></span><br><span class="line"><span class="code">from genomic_embeddings.plot import ModelPlots</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">metadata_path = &#x27;/models_and_data/metadata.csv&#x27;</span></span><br><span class="line"><span class="code">labels = [&#x27;Prokaryotic defense system&#x27;,&#x27;Ribosome&#x27;,&#x27;Secretion system&#x27;] # 举例标签</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 加载嵌入</span></span><br><span class="line"><span class="code">emb = Embedding(mdl=model_path, metadata=metadata_path, labels=labels)</span></span><br><span class="line"><span class="code">emb.process_data_pipeline(label=&#x27;label&#x27;, q=&#x27;&#x27;, add_other=True)</span></span><br><span class="line"><span class="code">X, y = emb.data.drop(columns=[&#x27;label&#x27;]).values, emb.data[&#x27;label&#x27;].values</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 分类</span></span><br><span class="line"><span class="code">clf = NNClf(X=X, y=y, out_dir=&#x27;./&#x27;)</span></span><br><span class="line"><span class="code">clf.classification_pipeline(&#x27;labe&#x27;, alias=&#x27;DNN&#x27;)</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 绘图 </span></span><br><span class="line"><span class="code">plotter = ModelPlots(mdl=clf)</span></span><br><span class="line"><span class="code">plotter.plot_precision_recall()</span></span><br><span class="line"><span class="code">plotter.plot_roc()</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类模型验证</span></span><br><span class="line">功能分类验证位于：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span>。</span><br><span class="line">要重新运行验证并生成AUC和AUPR图，请运行以下脚本：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python scripts/classify.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata PATH_TO_METADATA</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">`metadata.csv`</span>文件可以在<span class="code">`models_and_data`</span>中找到。</span><br><span class="line">运行此脚本将生成文件夹下的所有数据：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 对所有假设蛋白进行功能分类</span></span><br><span class="line">语料库中所有假设蛋白的所有预测都可以在此处找到：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl`</span></span><br><span class="line"></span><br><span class="line">要将文件加载为表格，请在Python中运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import </span></span><br><span class="line"><span class="code">preds_path = &quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;</span></span><br><span class="line"><span class="code">preds = get_functional_prediction(preds_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">或者，使用以下替代方法：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import pandas as pd</span></span><br><span class="line"><span class="code">table = pd.read_pickle(&quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要<span class="strong">**重新生成**</span>模型预测，请运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data/gene2vec_w5_v300_tf24_annotation_extended/</span></span><br><span class="line"><span class="code">python scripts/predict_hypothetical.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata ../metadata.csv</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 重新训练使用语料库的词嵌入</span></span><br><span class="line">可以使用以下脚本执行具有不同参数的词嵌入的重新训练：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 首先，转到<span class="code">`models_and_data`</span>文件夹并提取语料库文件：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data </span></span><br><span class="line"><span class="code">tar -zxvf corpus.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 训练模型：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python src/gene2vec.py --input &#x27;corpus/*.txt&#x27;</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要更改算法的特定参数，请运行</span><br><span class="line"><span class="code">`python src/gene2vec.py --help`</span> 并相应地配置。</span><br><span class="line"></span><br><span class="line"><span class="section">### 运行时间</span></span><br><span class="line">模型加载、结果生成和分析脚本预计将在几秒钟到4-5分钟之间运行。</span><br><span class="line">语言模型和降维的重新训练可能需要使用20个CPU长达10小时。</span><br><span class="line"></span><br><span class="line"><span class="section">### 论文图形可重现性</span></span><br><span class="line">所有论文图形（不包括插图）均可作为jupyter笔记本提供。</span><br><span class="line">要在计算机上运行笔记本，请转到<span class="code">`figures/`</span>并在命令行中键入<span class="code">`jupyter notebook`</span>。</span><br><span class="line">笔记本<span class="code">`paper_figures.ipynb`</span>将在您的本地计算机上可用。</span><br><span class="line"></span><br><span class="line"><span class="emphasis">*注意：*</span> 运行笔记本需要<span class="code">`models_and_data`</span>文件夹，请根据需要配置路径。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr />
+<h1
+id="补充文件详情models_and_data">补充文件详情（models_and_data）</h1>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> corpus.tar.gz&lt;语料库.tar.gz&gt;</span><br><span class="line"><span class="bullet">-</span> corpus .txt files&lt;语料库文本文件&gt;</span><br><span class="line"><span class="bullet">-</span> figures data.csv&lt;图像数据.csv&gt;- 用于图像生成的数据</span><br><span class="line"><span class="bullet">-</span> word to label.csv&lt;词到标签.csv&gt;- 用于分类的词到标签的映射</span><br><span class="line"><span class="bullet">-</span> include.txt<span class="language-xml"><span class="tag">&lt;<span class="name">include.txt</span>&gt;</span></span>- 包含在语料库中的contigs列表（内部使用）</span><br><span class="line"><span class="bullet">-</span> metadata.csv&lt;元数据.csv&gt;- 基因注释的元数据</span><br><span class="line"><span class="bullet">-</span> hypothetical in NR predictions by class.xlsx<span class="language-xml"><span class="tag">&lt;<span class="name">NR数据库中假设的</span> <span class="attr">hits</span> <span class="attr">按类别分类的预测.xlsx</span>&gt;</span></span>- NCBI的NR蛋白数据库的假设 hits 预测，按类别分类</span><br><span class="line"><span class="bullet">-</span> taxonomy and origins&lt;分类和起源&gt;- 样本的分类和起源信息</span><br><span class="line"><span class="bullet">-</span> cross validation&lt;交叉验证&gt;- 模型和性能</span><br><span class="line"><span class="bullet">  -</span> 5foldcv/&lt;5折交叉验证&gt;/</span><br><span class="line"><span class="bullet">  -</span> LOTGOCV<span class="language-xml"><span class="tag">&lt;<span class="name">LOTGOCV</span>&gt;</span></span></span><br><span class="line"><span class="bullet">    -</span> label/paper model/&lt;标签/论文模型&gt;/</span><br><span class="line"><span class="bullet">    -</span> /...</span><br><span class="line"><span class="bullet">-</span> gene2vec w5 v300 tf24 annotation extended&lt;基因嵌入模型 w5 v300 tf24 注释扩展&gt;- 完整语料库的嵌入模型</span><br><span class="line"><span class="bullet">  -</span> gene2vec w5 v300 tf24 annotation extended 2021<span class="emphasis">*10*</span>03.w2v<span class="language-xml"><span class="tag">&lt;<span class="name">gene2vec</span> <span class="attr">w5</span> <span class="attr">v300</span> <span class="attr">tf24</span> <span class="attr">注释扩展</span> <span class="attr">2021</span>*<span class="attr">10</span>*<span class="attr">03.w2v</span>&gt;</span></span></span><br><span class="line"><span class="bullet">  -</span> /...</span><br><span class="line"><span class="bullet">  -</span> predictions&lt;预测&gt;</span><br><span class="line"><span class="bullet">    -</span> hypothetical space.png&lt;假设空间.png&gt;</span><br><span class="line"><span class="bullet">    -</span> space by class&lt;按类别分的空间&gt; * the space color coded by class* 按类别着色的空间</span><br><span class="line"><span class="bullet">    -</span> label&lt;标签&gt; * classifiers model evaluation by functional categories selected.* 按选择的功能类别评估的分类器模型</span><br><span class="line"><span class="bullet">-</span> benchmark and optimization/&lt;基准和优化&gt; * benchmark and optimization accuracy summary* 基准和优化的准确性摘要</span><br><span class="line"><span class="bullet">-</span> rarefaction&lt;稀疏性&gt; * rarefaction analysis .pkl files* 稀疏性分析的.pkl文件</span><br><span class="line"><span class="bullet">-</span> novel defense mapping&lt;新防御映射&gt;</span><br><span class="line"><span class="bullet">  -</span> word mapping to novel defense systems&lt;单词映射到新防御系统&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical hmm predictions.csv&lt;防御假设hmm预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical system predictions.csv&lt;防御假设系统预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> all samples hmmsearch hits.pkl&lt;所有样本的hmmsearch hits.pkl&gt; * HMMs mapping of all unannotated words* 所有未注释单词的HMM映射</span><br><span class="line"><span class="bullet">    -</span> defense space.html / defense space.png&lt;防御空间.html / 防御空间.png&gt;</span><br><span class="line"><span class="bullet">-</span> new systems&lt;新系统&gt;</span><br><span class="line"><span class="bullet">  -</span> predicted systems.xlsx&lt;预测的系统.xlsx&gt;</span><br><span class="line"><span class="bullet">  -</span> <span class="emphasis">*.faa&lt;*</span>.faa&gt;* fasta files of all the new systems genes separated by system* 所有新系统基因按系统分开的fasta文件</span><br><span class="line"><span class="bullet">  -</span> domains<span class="language-xml"><span class="tag">&lt;<span class="name">domains</span>&gt;</span></span>* all raw domains found in new systems* 在新系统中找到的所有原始domains</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Peng Guo
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://peng-guo.github.io/2023/11/24/Bioinformatics3/" title="现代生物信息学论文阅读（03）">http://peng-guo.github.io/2023/11/24/Bioinformatics3/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag"># 自然语言处理</a>
+              <a href="/tags/%E5%BE%AE%E7%94%9F%E7%89%A9%E5%9F%BA%E5%9B%A0%E7%BB%84/" rel="tag"># 微生物基因组</a>
+              <a href="/tags/%E5%9F%BA%E5%9B%A0%E5%8A%9F%E8%83%BD%E9%A2%84%E6%B5%8B/" rel="tag"># 基因功能预测</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/30/Bioinformatics2/" rel="prev" title="现代生物信息学论文阅读（02）">
+                  <i class="fa fa-chevron-left"></i> 现代生物信息学论文阅读（02）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Peng Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"per_page":true,"single_dollars":false,"double_dollars":true,"max_timeout":2,"tags":"none","mhchem":true,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
