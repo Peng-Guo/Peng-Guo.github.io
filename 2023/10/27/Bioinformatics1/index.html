@@ -114,7 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">阅读思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">这篇文章做了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是多目标优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E5%8E%BB%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E8%A7%A3%E5%86%B3"><span class="nav-number">1.1.2.</span> <span class="nav-text">过去为什么没有解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcmg%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">1.2.</span> <span class="nav-text">MCMG是如何实现的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#conditional-transformer"><span class="nav-number">1.2.1.</span> <span class="nav-text">conditional transformer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#knowledge-distillation"><span class="nav-number">1.2.2.</span> <span class="nav-text">knowledge distillation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reinforcement-learning"><span class="nav-number">1.2.3.</span> <span class="nav-text">reinforcement learning</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E7%96%91%E9%97%AE"><span class="nav-number">2.</span> <span class="nav-text">提出疑问</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">阅读思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">这篇文章做了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是多目标优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E5%8E%BB%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E8%A7%A3%E5%86%B3"><span class="nav-number">1.1.2.</span> <span class="nav-text">过去为什么没有解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCMG%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">1.2.</span> <span class="nav-text">MCMG是如何实现的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#conditional-transformer"><span class="nav-number">1.2.1.</span> <span class="nav-text">conditional transformer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#knowledge-distillation"><span class="nav-number">1.2.2.</span> <span class="nav-text">knowledge distillation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reinforcement-learning"><span class="nav-number">1.2.3.</span> <span class="nav-text">reinforcement learning</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E7%96%91%E9%97%AE"><span class="nav-number">2.</span> <span class="nav-text">提出疑问</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -243,99 +243,74 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><strong>Multi-constraint molecular generation based on conditional
-transformer, knowledge distillation and reinforcement
-learning</strong></p>
-<p><a
-target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-021-00403-1">https://www.nature.com/articles/s42256-021-00403-1</a></p>
-<p>Nature Machine Intelligence   18 October 2021</p>
-<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现<多约束下药物分子的生成></p>
+    <div class="post-body" itemprop="articleBody"><p><strong>Multi-constraint molecular generation based on conditional transformer, knowledge distillation and reinforcement learning</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-021-00403-1">https://www.nature.com/articles/s42256-021-00403-1</a></p>
+<p>Nature Machine Intelligence &emsp; 18 October 2021</p>
+<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现&lt;多约束下药物分子的生成&gt;</p>
 <span id="more"></span>
-<h1 id="阅读思路">阅读思路</h1>
-<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
-<p>提出Multi-constraint Molecular
-Generation（MCMG)）方法，解决药物分子生成领域中的<strong>多目标优化问题</strong></p>
-<h3 id="什么是多目标优化问题">什么是多目标优化问题</h3>
-<p>在寻找新的药物分子时需要满足多个特定条件或性质（目标），例如：</p>
+<h1 id="阅读思路"><a href="#阅读思路" class="headerlink" title="阅读思路"></a>阅读思路</h1><h2 id="这篇文章做了什么"><a href="#这篇文章做了什么" class="headerlink" title="这篇文章做了什么"></a>这篇文章做了什么</h2><p>提出Multi-constraint Molecular Generation（MCMG)）方法，解决药物分子生成领域中的<strong>多目标优化问题</strong></p>
+<h3 id="什么是多目标优化问题"><a href="#什么是多目标优化问题" class="headerlink" title="什么是多目标优化问题"></a>什么是多目标优化问题</h3><p>在寻找新的药物分子时需要满足多个特定条件或性质（目标），例如：</p>
 <ul>
 <li>目标1: 具有靶标结合特异性</li>
 <li>目标2: 具有药物样性（Drug-likeness）</li>
 <li>目标3: 毒性低，合成方法可行经济……</li>
 </ul>
-<h3 id="过去为什么没有解决">过去为什么没有解决</h3>
-<p>==没有很读懂==</p>
-<ol type="1">
-<li><strong>序列生成模型（Sequence Generation Models）：</strong>
-使用循环神经网络（RNNs）等序列生成模型，这些模型能够学习生成分子的序列（如SMILES表示法），但这些方法通常没有考虑到多个目标的约束。</li>
-<li><strong>变分自编码器（Variational Autoencoders，VAEs）：</strong>
-VAEs 是一种生成模型，它可以学习数据的潜在表示。在分子生成中，VAEs
-被用来生成具有相似潜在表示的分子。然而，在多目标优化问题中，这种方法通常需要进一步的技术来处理多重约束。</li>
-<li><strong>强化学习（Reinforcement Learning，RL）：</strong>
-强化学习可以被用于优化序列生成模型，使生成的分子满足特定的目标。在分子生成中，RL
-被用来引导生成模型生成符合特定性质的分子。然而，RL
-在高维空间中寻找合适的分子结构是非常耗时的，尤其是在多重目标的情况下。</li>
-<li><strong>迁移学习（Transfer Learning）：</strong>
-有时，科研人员使用迁移学习的方法，将从一个数据集（通常是已知的活性化合物集合）学到的知识迁移到另一个数据集上，以提高新分子生成的效率。然而，这种方法可能导致模型陷入局部最优解，生成的分子与迁移学习的数据集相似度较高。</li>
-<li><strong>条件生成模型（Conditional Generation Models）：</strong>
-引入条件信息，如分子的一些特定特征或性质，用于生成符合特定条件的分子。这种方法可以使生成模型在生成分子时受到额外的约束，但处理多个条件的复杂情况仍然是挑战。</li>
+<h3 id="过去为什么没有解决"><a href="#过去为什么没有解决" class="headerlink" title="过去为什么没有解决"></a>过去为什么没有解决</h3><p>==没有很读懂==</p>
+<ol>
+<li><strong>序列生成模型（Sequence Generation Models）：</strong> 使用循环神经网络（RNNs）等序列生成模型，这些模型能够学习生成分子的序列（如SMILES表示法），但这些方法通常没有考虑到多个目标的约束。</li>
+<li><strong>变分自编码器（Variational Autoencoders，VAEs）：</strong> VAEs 是一种生成模型，它可以学习数据的潜在表示。在分子生成中，VAEs 被用来生成具有相似潜在表示的分子。然而，在多目标优化问题中，这种方法通常需要进一步的技术来处理多重约束。</li>
+<li><strong>强化学习（Reinforcement Learning，RL）：</strong> 强化学习可以被用于优化序列生成模型，使生成的分子满足特定的目标。在分子生成中，RL 被用来引导生成模型生成符合特定性质的分子。然而，RL 在高维空间中寻找合适的分子结构是非常耗时的，尤其是在多重目标的情况下。</li>
+<li><strong>迁移学习（Transfer Learning）：</strong> 有时，科研人员使用迁移学习的方法，将从一个数据集（通常是已知的活性化合物集合）学到的知识迁移到另一个数据集上，以提高新分子生成的效率。然而，这种方法可能导致模型陷入局部最优解，生成的分子与迁移学习的数据集相似度较高。</li>
+<li><strong>条件生成模型（Conditional Generation Models）：</strong> 引入条件信息，如分子的一些特定特征或性质，用于生成符合特定条件的分子。这种方法可以使生成模型在生成分子时受到额外的约束，但处理多个条件的复杂情况仍然是挑战。</li>
 </ol>
-<h2 id="mcmg是如何实现的">MCMG是如何实现的</h2>
-<p>MCMG 由<strong>conditional transformer（CT
-条件变换器）</strong>，<strong>knowledge distillation （KD
-知识蒸馏）</strong>和<strong>reinforcement learning（RL
-强化学习）</strong>三部分组成</p>
+<h2 id="MCMG是如何实现的"><a href="#MCMG是如何实现的" class="headerlink" title="MCMG是如何实现的"></a>MCMG是如何实现的</h2><p>MCMG 由<strong>conditional transformer（CT 条件变换器）</strong>，<strong>knowledge distillation （KD 知识蒸馏）</strong>和<strong>reinforcement learning（RL 强化学习）</strong>三部分组成</p>
 <ul>
-<li>CT 构建<生成模型>，学习<结构和性质之间的关系></li>
+<li>CT 构建&lt;生成模型&gt;，学习&lt;结构和性质之间的关系&gt;</li>
 <li>KD 降低模型复杂度</li>
-<li>RL 进行模型微调，实现多目标优化，增加<生成分子的结构多样性></li>
+<li>RL 进行模型微调，实现多目标优化，增加&lt;生成分子的结构多样性&gt;</li>
 </ul>
-<h3 id="conditional-transformer">conditional transformer</h3>
-<p>是基于Transformer架构的一种变体，引入了条件信息。在生成分子（的字符）的每一步前，会根据条件信息计算下一个字符的概率分布，并生成符合条件的分子序列。</p>
+<h3 id="conditional-transformer"><a href="#conditional-transformer" class="headerlink" title="conditional transformer"></a>conditional transformer</h3><p>是基于Transformer架构的一种变体，引入了条件信息。在生成分子（的字符）的每一步前，会根据条件信息计算下一个字符的概率分布，并生成符合条件的分子序列。</p>
 <p><conditional transformer最后构建得到的模型>能够将&lt;输入的条件信息（例如分子的特定性质或结构特征）&gt;与&lt;输出的分子结构（SMILES表示法）&gt;关联起来。当给定特定条件信息时，模型能够生成符合这些条件的分子结构（SMILES字符串），在后续的强化学习中使用。</p>
-<p>相较MCMG，semi-MCMG训练先验模型（Prior
-Model）时只进行了部分条件的约束，例如 QED（quantitative estimate of
-druglikeness） 和 SA（synthetic
-accessibility）等计算量相对小的条件，而没有引入其他约束条件，比如生物活性。通过限制约束条件的数量，希望生成更大多样性的分子集合。</p>
-<h3 id="knowledge-distillation">knowledge distillation</h3>
-<p>是一种用于训练轻量级神经网络模型的技术。能够将一个大型复制模型的知识转移到一个小型简单的模型中，从而使小型模型同时具备高性能和高计算/内存效率。</p>
-<ol type="1">
+<p>相较MCMG，semi-MCMG训练先验模型（Prior Model）时只进行了部分条件的约束，例如 QED（quantitative estimate of druglikeness） 和 SA（synthetic accessibility）等计算量相对小的条件，而没有引入其他约束条件，比如生物活性。通过限制约束条件的数量，希望生成更大多样性的分子集合。</p>
+<h3 id="knowledge-distillation"><a href="#knowledge-distillation" class="headerlink" title="knowledge distillation"></a>knowledge distillation</h3><p>是一种用于训练轻量级神经网络模型的技术。能够将一个大型复制模型的知识转移到一个小型简单的模型中，从而使小型模型同时具备高性能和高计算/内存效率。</p>
+<ol>
 <li>训练教师网络（Teacher Network）</li>
 <li>定义软目标（Soft Targets），通常为教师网络的输出概率分布</li>
-<li>训练学生网络（Student
-Network），使用反向传播算法/梯度下降算法调整权重，使其接近软目标分布</li>
+<li>训练学生网络（Student Network），使用反向传播算法/梯度下降算法调整权重，使其接近软目标分布</li>
 </ol>
-<p>在文章中，使用了两种蒸馏模型：蒸馏似然性（Distilled
-Likelihood，DL）和蒸馏分子（Distilled Molecules，DM）。</p>
+<p>在文章中，使用了两种蒸馏模型：蒸馏似然性（Distilled Likelihood，DL）和蒸馏分子（Distilled Molecules，DM）。</p>
 <ul>
 <li><p>DL（MCMGL）</p>
-<p>使用一个三层的门控循环单元（Gated Recurrent
-Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
-<p>学习从先验模型生成的分子的似然性分布，使得学生模型更能够生成类似于先验模型的分子。这样，学生模型可以更好地模仿先验模型的行为。</p></li>
+<p>使用一个三层的门控循环单元（Gated Recurrent Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
+<p>学习从先验模型生成的分子的似然性分布，使得学生模型更能够生成类似于先验模型的分子。这样，学生模型可以更好地模仿先验模型的行为。</p>
+</li>
 <li><p>DM（MCMGM）</p>
 <p>直接使用了先验模型生成的一百万个分子作为训练集（生成时引入了温度效应），然后使用相同结构的RNN来学习这些分子的似然性分布，模型无法学习到先验模型的确切似然函数。</p>
-<p>使用先验模型生成的分子集合作为训练数据，并引入温度效应扩大模型的搜索空间，使得学生模型在生成分子时具有更大的多样性。</p></li>
+<p>使用先验模型生成的分子集合作为训练数据，并引入温度效应扩大模型的搜索空间，使得学生模型在生成分子时具有更大的多样性。</p>
+</li>
 </ul>
-<h3 id="reinforcement-learning">reinforcement learning</h3>
-<p>是一种通过智能体（Agent）与环境（Environment）之间相互作用来学习最优行为的机器学习方法。这种学习方式是模拟人类和动物学习的过程，通过试错来获取经验并根据奖励信号调整行为，从而在面对未知环境时获得最大的累积奖励。</p>
+<h3 id="reinforcement-learning"><a href="#reinforcement-learning" class="headerlink" title="reinforcement learning"></a>reinforcement learning</h3><p>是一种通过智能体（Agent）与环境（Environment）之间相互作用来学习最优行为的机器学习方法。这种学习方式是模拟人类和动物学习的过程，通过试错来获取经验并根据奖励信号调整行为，从而在面对未知环境时获得最大的累积奖励。</p>
 <p>想要更深刻地理解强化学习，一些关于机器学习最基础的知识是必不可少的。根据模型训练时接受的监督数量和类型，可以将机器学习分为以下四种类型：</p>
-<ol type="1">
+<ol>
 <li><p>监督学习</p>
 <p>特点：训练数据有标签（包含自变量和因变量）</p>
-<p>常见算法：KNN、Logistic回归、SVM、决策树、随机森林</p></li>
+<p>常见算法：KNN、Logistic回归、SVM、决策树、随机森林</p>
+</li>
 <li><p>非监督学习</p>
 <p>特点：训练数据无标签（只有自变量，没有因变量）</p>
-<p>典型案例：聚类（K-means、DBSCAN、最大期望算法）、降维（PCA）、异常检测（Apriori、Eclat）</p></li>
+<p>典型案例：聚类（K-means、DBSCAN、最大期望算法）、降维（PCA）、异常检测（Apriori、Eclat）</p>
+</li>
 <li><p>半监督学习</p>
 <p>特点：训练数据大量未标记，少量标记</p>
-<p>典型案例：人物照片识别（？）、深度信念网络（DBN）</p></li>
-<li><p>强化学习 特点：没有数据，只有智能体和环境。</p>
-<p>步骤：智能体观察环境 – 选择行动策略 – 执行策略 – 环境给予奖励/惩罚 –
-智能体升级策略 – RETURN</p>
-<p>案例：AlphaGo</p></li>
+<p>典型案例：人物照片识别（？）、深度信念网络（DBN）</p>
+</li>
+<li><p>强化学习<br>特点：没有数据，只有智能体和环境。</p>
+<p>步骤：智能体观察环境 – 选择行动策略 – 执行策略 – 环境给予奖励/惩罚 – 智能体升级策略 – RETURN</p>
+<p>案例：AlphaGo</p>
+</li>
 </ol>
 <p>在这篇文章中，强化学习的模型不断生成新的药物分子，药物分子的生物活性越高，给予的奖励也就越高。根据反馈不断调整生成策略，最终得到高效的、符合多重约束的药物分子。</p>
-<h1 id="提出疑问">提出疑问</h1>
-
+<h1 id="提出疑问"><a href="#提出疑问" class="headerlink" title="提出疑问"></a>提出疑问</h1>
     </div>
 
     
