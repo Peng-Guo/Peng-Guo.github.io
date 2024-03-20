@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Peng&#39;s Blog</title>
+  <title>Homepage</title>
   <icon>http://peng-guo.github.io/icon.png</icon>
   
   <link href="http://peng-guo.github.io/atom.xml" rel="self"/>
@@ -107,7 +107,7 @@
     <link href="http://peng-guo.github.io/2023/10/07/Synecology1/"/>
     <id>http://peng-guo.github.io/2023/10/07/Synecology1/</id>
     <published>2023-10-07T14:30:00.000Z</published>
-    <updated>2023-10-29T03:37:56.020Z</updated>
+    <updated>2024-03-18T16:28:29.918Z</updated>
     
     
     <summary type="html">&lt;p&gt;本文是&lt;strong&gt;群体生态学&lt;/strong&gt;（Synecology）课程&lt;strong&gt;种群遗传学&lt;/strong&gt;章节课程作业，本文主要对影响种群遗传多样性的因素进行简单的建模模拟和理论分析。&lt;/p&gt;</summary>
