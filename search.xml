@@ -1,141 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>现代生物信息学论文阅读（02）</title>
-    <url>/2023/10/30/Bioinformatics2/</url>
-    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data</strong></p>
-<p><a href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
-<p>Nature Machine Intelligence &emsp; 26 September 2022</p>
-<p>基于scRNA-seq数据，使用scBERT预训练模型，对&lt;细胞类型&gt;进行注释</p>
-<span id="more"></span>
-<h1 id="阅读思路"><a href="#阅读思路" class="headerlink" title="阅读思路"></a>阅读思路</h1><h2 id="这篇文章做了什么"><a href="#这篇文章做了什么" class="headerlink" title="这篇文章做了什么"></a>这篇文章做了什么</h2><p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
-<h3 id="为什么要进行细胞类型的注释"><a href="#为什么要进行细胞类型的注释" class="headerlink" title="为什么要进行细胞类型的注释"></a>为什么要进行细胞类型的注释</h3><p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
-<h3 id="scBERT是如何实现的"><a href="#scBERT是如何实现的" class="headerlink" title="scBERT是如何实现的"></a>scBERT是如何实现的</h3><p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
-<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
-<h4 id="什么是BERT"><a href="#什么是BERT" class="headerlink" title="什么是BERT"></a>什么是BERT</h4><p>BERT（Bidirectional Encoder Representations from Transformers）是一种基于Transformer架构的预训练语言模型。</p>
-<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
-<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
-<ul>
-<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p>
-</li>
-<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p>
-</li>
-</ul>
-<h4 id="BERT预训练中如何实现双向学习"><a href="#BERT预训练中如何实现双向学习" class="headerlink" title="BERT预训练中如何实现双向学习"></a>BERT预训练中如何实现双向学习</h4><ol>
-<li>Transformer</li>
-</ol>
-<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer 是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT 的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
-<ol>
-<li>MLM</li>
-</ol>
-<p>BERT 使用了MLM（Masked Language Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
-<h3 id="scBERT有什么优势"><a href="#scBERT有什么优势" class="headerlink" title="scBERT有什么优势"></a>scBERT有什么优势</h3><ol>
-<li><p><strong>嵌入设计</strong>：</p>
-<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
-<ul>
-<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
-</ul>
-<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
-<ul>
-<li>基因嵌入（Gene Embedding）：</li>
-</ul>
-<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p>
-</li>
-<li><p><strong>基因级别的解释性</strong>：</p>
-<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p>
-</li>
-<li><p><strong>对抗批次效应</strong>：</p>
-<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p>
-</li>
-<li><p><strong>对新细胞类型的发现</strong>：</p>
-<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p>
-</li>
-<li><p><strong>跨数据集和器官的通用性</strong>：</p>
-<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p>
-</li>
-</ol>
-<h1 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h1>]]></content>
-      <categories>
-        <category>现代生物信息学</category>
-        <category>论文速读</category>
-      </categories>
-      <tags>
-        <tag>细胞类型注释</tag>
-        <tag>scRNA-seq</tag>
-        <tag>BERT预训练</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>现代生物信息学论文阅读（01）</title>
     <url>/2023/10/27/Bioinformatics1/</url>
-    <content><![CDATA[<p><strong>Multi-constraint molecular generation based on conditional transformer, knowledge distillation and reinforcement learning</strong></p>
-<p><a href="https://www.nature.com/articles/s42256-021-00403-1">https://www.nature.com/articles/s42256-021-00403-1</a></p>
-<p>Nature Machine Intelligence &emsp; 18 October 2021</p>
-<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现&lt;多约束下药物分子的生成&gt;</p>
+    <content><![CDATA[<p><strong>Multi-constraint molecular generation based on conditional
+transformer, knowledge distillation and reinforcement
+learning</strong></p>
+<p><a
+href="https://www.nature.com/articles/s42256-021-00403-1">https://www.nature.com/articles/s42256-021-00403-1</a></p>
+<p>Nature Machine Intelligence   18 October 2021</p>
+<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现<多约束下药物分子的生成></p>
 <span id="more"></span>
-<h1 id="阅读思路"><a href="#阅读思路" class="headerlink" title="阅读思路"></a>阅读思路</h1><h2 id="这篇文章做了什么"><a href="#这篇文章做了什么" class="headerlink" title="这篇文章做了什么"></a>这篇文章做了什么</h2><p>提出Multi-constraint Molecular Generation（MCMG)）方法，解决药物分子生成领域中的<strong>多目标优化问题</strong></p>
-<h3 id="什么是多目标优化问题"><a href="#什么是多目标优化问题" class="headerlink" title="什么是多目标优化问题"></a>什么是多目标优化问题</h3><p>在寻找新的药物分子时需要满足多个特定条件或性质（目标），例如：</p>
+<h1 id="阅读思路">阅读思路</h1>
+<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
+<p>提出Multi-constraint Molecular
+Generation（MCMG)）方法，解决药物分子生成领域中的<strong>多目标优化问题</strong></p>
+<h3 id="什么是多目标优化问题">什么是多目标优化问题</h3>
+<p>在寻找新的药物分子时需要满足多个特定条件或性质（目标），例如：</p>
 <ul>
 <li>目标1: 具有靶标结合特异性</li>
 <li>目标2: 具有药物样性（Drug-likeness）</li>
 <li>目标3: 毒性低，合成方法可行经济……</li>
 </ul>
-<h3 id="过去为什么没有解决"><a href="#过去为什么没有解决" class="headerlink" title="过去为什么没有解决"></a>过去为什么没有解决</h3><p>==没有很读懂==</p>
-<ol>
-<li><strong>序列生成模型（Sequence Generation Models）：</strong> 使用循环神经网络（RNNs）等序列生成模型，这些模型能够学习生成分子的序列（如SMILES表示法），但这些方法通常没有考虑到多个目标的约束。</li>
-<li><strong>变分自编码器（Variational Autoencoders，VAEs）：</strong> VAEs 是一种生成模型，它可以学习数据的潜在表示。在分子生成中，VAEs 被用来生成具有相似潜在表示的分子。然而，在多目标优化问题中，这种方法通常需要进一步的技术来处理多重约束。</li>
-<li><strong>强化学习（Reinforcement Learning，RL）：</strong> 强化学习可以被用于优化序列生成模型，使生成的分子满足特定的目标。在分子生成中，RL 被用来引导生成模型生成符合特定性质的分子。然而，RL 在高维空间中寻找合适的分子结构是非常耗时的，尤其是在多重目标的情况下。</li>
-<li><strong>迁移学习（Transfer Learning）：</strong> 有时，科研人员使用迁移学习的方法，将从一个数据集（通常是已知的活性化合物集合）学到的知识迁移到另一个数据集上，以提高新分子生成的效率。然而，这种方法可能导致模型陷入局部最优解，生成的分子与迁移学习的数据集相似度较高。</li>
-<li><strong>条件生成模型（Conditional Generation Models）：</strong> 引入条件信息，如分子的一些特定特征或性质，用于生成符合特定条件的分子。这种方法可以使生成模型在生成分子时受到额外的约束，但处理多个条件的复杂情况仍然是挑战。</li>
+<h3 id="过去为什么没有解决">过去为什么没有解决</h3>
+<p>==没有很读懂==</p>
+<ol type="1">
+<li><strong>序列生成模型（Sequence Generation Models）：</strong>
+使用循环神经网络（RNNs）等序列生成模型，这些模型能够学习生成分子的序列（如SMILES表示法），但这些方法通常没有考虑到多个目标的约束。</li>
+<li><strong>变分自编码器（Variational Autoencoders，VAEs）：</strong>
+VAEs 是一种生成模型，它可以学习数据的潜在表示。在分子生成中，VAEs
+被用来生成具有相似潜在表示的分子。然而，在多目标优化问题中，这种方法通常需要进一步的技术来处理多重约束。</li>
+<li><strong>强化学习（Reinforcement Learning，RL）：</strong>
+强化学习可以被用于优化序列生成模型，使生成的分子满足特定的目标。在分子生成中，RL
+被用来引导生成模型生成符合特定性质的分子。然而，RL
+在高维空间中寻找合适的分子结构是非常耗时的，尤其是在多重目标的情况下。</li>
+<li><strong>迁移学习（Transfer Learning）：</strong>
+有时，科研人员使用迁移学习的方法，将从一个数据集（通常是已知的活性化合物集合）学到的知识迁移到另一个数据集上，以提高新分子生成的效率。然而，这种方法可能导致模型陷入局部最优解，生成的分子与迁移学习的数据集相似度较高。</li>
+<li><strong>条件生成模型（Conditional Generation Models）：</strong>
+引入条件信息，如分子的一些特定特征或性质，用于生成符合特定条件的分子。这种方法可以使生成模型在生成分子时受到额外的约束，但处理多个条件的复杂情况仍然是挑战。</li>
 </ol>
-<h2 id="MCMG是如何实现的"><a href="#MCMG是如何实现的" class="headerlink" title="MCMG是如何实现的"></a>MCMG是如何实现的</h2><p>MCMG 由<strong>conditional transformer（CT 条件变换器）</strong>，<strong>knowledge distillation （KD 知识蒸馏）</strong>和<strong>reinforcement learning（RL 强化学习）</strong>三部分组成</p>
+<h2 id="mcmg是如何实现的">MCMG是如何实现的</h2>
+<p>MCMG 由<strong>conditional transformer（CT
+条件变换器）</strong>，<strong>knowledge distillation （KD
+知识蒸馏）</strong>和<strong>reinforcement learning（RL
+强化学习）</strong>三部分组成</p>
 <ul>
-<li>CT 构建&lt;生成模型&gt;，学习&lt;结构和性质之间的关系&gt;</li>
+<li>CT 构建<生成模型>，学习<结构和性质之间的关系></li>
 <li>KD 降低模型复杂度</li>
-<li>RL 进行模型微调，实现多目标优化，增加&lt;生成分子的结构多样性&gt;</li>
+<li>RL 进行模型微调，实现多目标优化，增加<生成分子的结构多样性></li>
 </ul>
-<h3 id="conditional-transformer"><a href="#conditional-transformer" class="headerlink" title="conditional transformer"></a>conditional transformer</h3><p>是基于Transformer架构的一种变体，引入了条件信息。在生成分子（的字符）的每一步前，会根据条件信息计算下一个字符的概率分布，并生成符合条件的分子序列。</p>
+<h3 id="conditional-transformer">conditional transformer</h3>
+<p>是基于Transformer架构的一种变体，引入了条件信息。在生成分子（的字符）的每一步前，会根据条件信息计算下一个字符的概率分布，并生成符合条件的分子序列。</p>
 <p><conditional transformer最后构建得到的模型>能够将&lt;输入的条件信息（例如分子的特定性质或结构特征）&gt;与&lt;输出的分子结构（SMILES表示法）&gt;关联起来。当给定特定条件信息时，模型能够生成符合这些条件的分子结构（SMILES字符串），在后续的强化学习中使用。</p>
-<p>相较MCMG，semi-MCMG训练先验模型（Prior Model）时只进行了部分条件的约束，例如 QED（quantitative estimate of druglikeness） 和 SA（synthetic accessibility）等计算量相对小的条件，而没有引入其他约束条件，比如生物活性。通过限制约束条件的数量，希望生成更大多样性的分子集合。</p>
-<h3 id="knowledge-distillation"><a href="#knowledge-distillation" class="headerlink" title="knowledge distillation"></a>knowledge distillation</h3><p>是一种用于训练轻量级神经网络模型的技术。能够将一个大型复制模型的知识转移到一个小型简单的模型中，从而使小型模型同时具备高性能和高计算/内存效率。</p>
-<ol>
+<p>相较MCMG，semi-MCMG训练先验模型（Prior
+Model）时只进行了部分条件的约束，例如 QED（quantitative estimate of
+druglikeness） 和 SA（synthetic
+accessibility）等计算量相对小的条件，而没有引入其他约束条件，比如生物活性。通过限制约束条件的数量，希望生成更大多样性的分子集合。</p>
+<h3 id="knowledge-distillation">knowledge distillation</h3>
+<p>是一种用于训练轻量级神经网络模型的技术。能够将一个大型复制模型的知识转移到一个小型简单的模型中，从而使小型模型同时具备高性能和高计算/内存效率。</p>
+<ol type="1">
 <li>训练教师网络（Teacher Network）</li>
 <li>定义软目标（Soft Targets），通常为教师网络的输出概率分布</li>
-<li>训练学生网络（Student Network），使用反向传播算法/梯度下降算法调整权重，使其接近软目标分布</li>
+<li>训练学生网络（Student
+Network），使用反向传播算法/梯度下降算法调整权重，使其接近软目标分布</li>
 </ol>
-<p>在文章中，使用了两种蒸馏模型：蒸馏似然性（Distilled Likelihood，DL）和蒸馏分子（Distilled Molecules，DM）。</p>
+<p>在文章中，使用了两种蒸馏模型：蒸馏似然性（Distilled
+Likelihood，DL）和蒸馏分子（Distilled Molecules，DM）。</p>
 <ul>
 <li><p>DL（MCMGL）</p>
-<p>使用一个三层的门控循环单元（Gated Recurrent Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
-<p>学习从先验模型生成的分子的似然性分布，使得学生模型更能够生成类似于先验模型的分子。这样，学生模型可以更好地模仿先验模型的行为。</p>
-</li>
+<p>使用一个三层的门控循环单元（Gated Recurrent
+Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
+<p>学习从先验模型生成的分子的似然性分布，使得学生模型更能够生成类似于先验模型的分子。这样，学生模型可以更好地模仿先验模型的行为。</p></li>
 <li><p>DM（MCMGM）</p>
 <p>直接使用了先验模型生成的一百万个分子作为训练集（生成时引入了温度效应），然后使用相同结构的RNN来学习这些分子的似然性分布，模型无法学习到先验模型的确切似然函数。</p>
-<p>使用先验模型生成的分子集合作为训练数据，并引入温度效应扩大模型的搜索空间，使得学生模型在生成分子时具有更大的多样性。</p>
-</li>
+<p>使用先验模型生成的分子集合作为训练数据，并引入温度效应扩大模型的搜索空间，使得学生模型在生成分子时具有更大的多样性。</p></li>
 </ul>
-<h3 id="reinforcement-learning"><a href="#reinforcement-learning" class="headerlink" title="reinforcement learning"></a>reinforcement learning</h3><p>是一种通过智能体（Agent）与环境（Environment）之间相互作用来学习最优行为的机器学习方法。这种学习方式是模拟人类和动物学习的过程，通过试错来获取经验并根据奖励信号调整行为，从而在面对未知环境时获得最大的累积奖励。</p>
+<h3 id="reinforcement-learning">reinforcement learning</h3>
+<p>是一种通过智能体（Agent）与环境（Environment）之间相互作用来学习最优行为的机器学习方法。这种学习方式是模拟人类和动物学习的过程，通过试错来获取经验并根据奖励信号调整行为，从而在面对未知环境时获得最大的累积奖励。</p>
 <p>想要更深刻地理解强化学习，一些关于机器学习最基础的知识是必不可少的。根据模型训练时接受的监督数量和类型，可以将机器学习分为以下四种类型：</p>
-<ol>
+<ol type="1">
 <li><p>监督学习</p>
 <p>特点：训练数据有标签（包含自变量和因变量）</p>
-<p>常见算法：KNN、Logistic回归、SVM、决策树、随机森林</p>
-</li>
+<p>常见算法：KNN、Logistic回归、SVM、决策树、随机森林</p></li>
 <li><p>非监督学习</p>
 <p>特点：训练数据无标签（只有自变量，没有因变量）</p>
-<p>典型案例：聚类（K-means、DBSCAN、最大期望算法）、降维（PCA）、异常检测（Apriori、Eclat）</p>
-</li>
+<p>典型案例：聚类（K-means、DBSCAN、最大期望算法）、降维（PCA）、异常检测（Apriori、Eclat）</p></li>
 <li><p>半监督学习</p>
 <p>特点：训练数据大量未标记，少量标记</p>
-<p>典型案例：人物照片识别（？）、深度信念网络（DBN）</p>
-</li>
-<li><p>强化学习<br>特点：没有数据，只有智能体和环境。</p>
-<p>步骤：智能体观察环境 – 选择行动策略 – 执行策略 – 环境给予奖励/惩罚 – 智能体升级策略 – RETURN</p>
-<p>案例：AlphaGo</p>
-</li>
+<p>典型案例：人物照片识别（？）、深度信念网络（DBN）</p></li>
+<li><p>强化学习 特点：没有数据，只有智能体和环境。</p>
+<p>步骤：智能体观察环境 – 选择行动策略 – 执行策略 – 环境给予奖励/惩罚 –
+智能体升级策略 – RETURN</p>
+<p>案例：AlphaGo</p></li>
 </ol>
 <p>在这篇文章中，强化学习的模型不断生成新的药物分子，药物分子的生物活性越高，给予的奖励也就越高。根据反馈不断调整生成策略，最终得到高效的、符合多重约束的药物分子。</p>
-<h1 id="提出疑问"><a href="#提出疑问" class="headerlink" title="提出疑问"></a>提出疑问</h1>]]></content>
+<h1 id="提出疑问">提出疑问</h1>
+]]></content>
       <categories>
         <category>现代生物信息学</category>
         <category>论文速读</category>
@@ -147,62 +107,135 @@
       </tags>
   </entry>
   <entry>
+    <title>现代生物信息学论文阅读（02）</title>
+    <url>/2023/10/30/Bioinformatics2/</url>
+    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for
+cell type annotation of single-cell RNA-seq data</strong></p>
+<p><a
+href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
+<p>Nature Machine Intelligence   26 September 2022</p>
+<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
+<span id="more"></span>
+<h1 id="阅读思路">阅读思路</h1>
+<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
+<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
+<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
+<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
+<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
+<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
+<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
+<h4 id="什么是bert">什么是BERT</h4>
+<p>BERT（Bidirectional Encoder Representations from
+Transformers）是一种基于Transformer架构的预训练语言模型。</p>
+<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
+<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
+<ul>
+<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
+<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
+</ul>
+<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
+<ol type="1">
+<li>Transformer</li>
+</ol>
+<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
+是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
+的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
+<ol start="2" type="1">
+<li>MLM</li>
+</ol>
+<p>BERT 使用了MLM（Masked Language
+Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
+<h3 id="scbert有什么优势">scBERT有什么优势</h3>
+<ol type="1">
+<li><p><strong>嵌入设计</strong>：</p>
+<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
+<ul>
+<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
+</ul>
+<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
+<ul>
+<li>基因嵌入（Gene Embedding）：</li>
+</ul>
+<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
+<li><p><strong>基因级别的解释性</strong>：</p>
+<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
+<li><p><strong>对抗批次效应</strong>：</p>
+<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
+<li><p><strong>对新细胞类型的发现</strong>：</p>
+<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
+<li><p><strong>跨数据集和器官的通用性</strong>：</p>
+<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
+</ol>
+<h1 id="提出问题">提出问题</h1>
+]]></content>
+      <categories>
+        <category>现代生物信息学</category>
+        <category>论文速读</category>
+      </categories>
+      <tags>
+        <tag>细胞类型注释</tag>
+        <tag>scRNA-seq</tag>
+        <tag>BERT预训练</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>现代生物信息学论文阅读（03）</title>
     <url>/2023/11/24/Bioinformatics3/</url>
     <content><![CDATA[<p>本文为<strong>基因组与蛋白组学</strong>课程<strong>论文分享</strong>阅读笔记。</p>
 <p>论文信息如下：</p>
-<p><strong>Deciphering microbial gene function using natural language processing</strong></p>
-<p><a href="https://www.nature.com/articles/s41467-022-33397-4">https://www.nature.com/articles/s41467-022-33397-4</a></p>
-<p>Nature Communication &emsp; 29 September 2022</p>
+<p><strong>Deciphering microbial gene function using natural language
+processing</strong></p>
+<p><a
+href="https://www.nature.com/articles/s41467-022-33397-4">https://www.nature.com/articles/s41467-022-33397-4</a></p>
+<p>Nature Communication   29 September 2022</p>
 <p>使用基因组数据集建立基因语料库，通过机器学习的方法对基因进行分类和功能预测</p>
 <span id="more"></span>
-<hr>
-<h1 id="假设基础"><a href="#假设基础" class="headerlink" title="假设基础"></a>假设基础</h1><p>在原核生物中，具有协同功能的基因通常在基因组中成簇存在 e.g., CRISPR-Cas系统</p>
+<hr />
+<h1 id="假设基础">假设基础</h1>
+<p>在原核生物中，具有协同功能的基因通常在基因组中成簇存在 e.g.,
+CRISPR-Cas系统</p>
 <p>在NLP中，常常根据上下文（context）来推断词（target）含义</p>
-<p>基因家族 $\rightarrow$ 词</p>
-<p>基因组 $\rightarrow$ 语句</p>
-<p>（蛋白质）功能 $\rightarrow$ 语义</p>
-<hr>
-<h1 id="实现过程（Methods）"><a href="#实现过程（Methods）" class="headerlink" title="实现过程（Methods）"></a>实现过程（Methods）</h1><ol>
-<li><p>获取基因组和宏基因组数据</p>
-</li>
-<li><p>过滤<strong>contigs</strong> with little contextual data on the gene level</p>
-</li>
+<p>基因家族 <span class="math inline">\(\rightarrow\)</span> 词</p>
+<p>基因组 <span class="math inline">\(\rightarrow\)</span> 语句</p>
+<p>（蛋白质）功能 <span class="math inline">\(\rightarrow\)</span>
+语义</p>
+<hr />
+<h1 id="实现过程methods">实现过程（Methods）</h1>
+<ol type="1">
+<li><p>获取基因组和宏基因组数据</p></li>
+<li><p>过滤<strong>contigs</strong> with little contextual data on the
+gene level</p></li>
 <li><p>使用prodigal预测基因，并使用Prokka pipline进行初始基因注释</p>
-<ol>
+<ol type="1">
 <li>对于基因组：选取存在Uniprot非冗余蛋白组的基因组</li>
 <li>对于宏基因组：使用BBMAP删除高度相似的contigs</li>
-</ol>
-</li>
-<li><p>最终得到11119550个contigs上编码的394374454个基因</p>
-</li>
+</ol></li>
+<li><p>最终得到11119550个contigs上编码的394374454个基因</p></li>
 <li><p>基于KO生成功能注释的参考</p>
-<ol>
+<ol type="1">
 <li>从KEGG下载来自24307个KO的17107806个蛋白质</li>
 <li>使用mmseqs2对每个KO中的蛋白质进行子聚类</li>
 <li>使用MAFFT对含有5个以上蛋白的子簇进行对齐</li>
 <li>使用HMMer根据对齐结果构建KO HMM数据库（隐马尔可夫模型）</li>
-</ol>
-</li>
+</ol></li>
 <li><p>使用上述HMM数据库扫描由上述非冗余的contigs编码的蛋白质，构建基因语料库，大小为360039110个基因，有563589个词代表</p>
-<ol>
-<li>对于与KO HMM显著匹配的蛋白质，给予标识符KXXXX.YY（KXXXX为KEGG的KO，YY是子簇索引）</li>
-<li>对于没有KO数据库映射的蛋白质，若其与&lt;使用DIAMOND在NCBI的非冗余蛋白质数据库中搜索了每个假设簇的代表&gt;相比具有较高的同源性，则认为假设簇的注释可以被可靠地迁移到该蛋白质上</li>
-<li>对于均没有匹配的蛋白质，认为其为“假设蛋白质”，根据氨基酸序列相似性进行迭代聚类<ol>
+<ol type="1">
+<li>对于与KO
+HMM显著匹配的蛋白质，给予标识符KXXXX.YY（KXXXX为KEGG的KO，YY是子簇索引）</li>
+<li>对于没有KO数据库映射的蛋白质，若其与<使用DIAMOND在NCBI的非冗余蛋白质数据库中搜索了每个假设簇的代表>相比具有较高的同源性，则认为假设簇的注释可以被可靠地迁移到该蛋白质上</li>
+<li>对于均没有匹配的蛋白质，认为其为“假设蛋白质”，根据氨基酸序列相似性进行迭代聚类
+<ol type="1">
 <li>使用CD-HIT对蛋白质进行聚类，得到每一类的代表</li>
 <li>使用mmseqs2将上一步的代表聚类为基因家族</li>
 <li>给予每个假设蛋白唯一的标识符“hypo.clst.ZZZZ”</li>
-</ol>
-</li>
-</ol>
-</li>
+</ol></li>
+</ol></li>
 <li><p>使用无监督的学习方式将语料库中的每个基因家族表示为“embedding”（向量化表示）</p>
 <p>word2vec架构 + skip-gram模型</p>
 <p>基于单层神经网络的学习</p>
-<p>以&lt;预测给定单词的邻近单词&gt;的正确率作为损失函数</p>
-</li>
-<li><p>基于embedding进行分类（采用&lt;四层DNN&gt;<SVM模型>&lt;随机森林&gt;<GBDT梯度提升分类>）。具体分为以下功能类别：</p>
-<ol>
+<p>以<预测给定单词的邻近单词>的正确率作为损失函数</p></li>
+<li><p>基于embedding进行分类（采用<四层DNN><SVM模型><随机森林><GBDT梯度提升分类>）。具体分为以下功能类别：</p>
+<ol type="1">
 <li>氨基糖和核苷酸糖代谢（312个基因）</li>
 <li>苯甲酸盐代谢（168个基因）</li>
 <li>能量代谢（209个基因）</li>
@@ -212,33 +245,37 @@
 <li>核糖体（489 个基因）</li>
 <li>分泌系统（1617 个基因）</li>
 <li>双组分系统（1174 个基因）</li>
+</ol></li>
+<li><p>与其他广泛使用的基于序列的远程搜索方法进行比较，使用交叉验证来评估分类模型的性能</p></li>
 </ol>
-</li>
-<li>与其他广泛使用的基于序列的远程搜索方法进行比较，使用交叉验证来评估分类模型的性能</li>
-</ol>
-<hr>
-<h1 id="结果发现（Results）"><a href="#结果发现（Results）" class="headerlink" title="结果发现（Results）"></a>结果发现（Results）</h1><ol>
-<li><p>==图1==&lt;被注释的基因&gt;在语料库中占比大，但聚类成基因家族后，只占语料库中基因家族的7.8%</p>
-<ol>
-<li>&lt;微生物核心功能的特征基因&gt;聚集成相对少但大的基因家族</li>
+<hr />
+<h1 id="结果发现results">结果发现（Results）</h1>
+<ol type="1">
+<li><p>==图1==<被注释的基因>在语料库中占比大，但聚类成基因家族后，只占语料库中基因家族的7.8%</p>
+<ol type="1">
+<li><微生物核心功能的特征基因>聚集成相对少但大的基因家族</li>
 <li>微生物的大部分遗传多样性没有得到很好的注释</li>
-</ol>
-</li>
-<li><p>==图2==（在根据环境聚类下）具有相似功能的基因往往聚集在一起，但是有些&lt;同一基因家族的基因&gt;彼此远离：具有不同的功能 e.g. <em>cas4</em>家族的基因同时具有CRISPR相关和非相关基因</p>
-</li>
-<li><p>==图3==对于一些典型的多基因共同完成的基因功能，该模型体现出很高的预测性能（e.g. 分泌系统，原核防御系统，氧化磷酸化）；而氨基糖代谢等功能提供上下文信息少，会阻碍正确分类</p>
-<p>$\frac1{\text{F1 score}}=\frac{\frac1{准确率}+\frac1{召回率}}2,\ 准确率=\frac{真阳}{真阳+假阳},\ 召回率=\frac{真阳}{真阳+假阴}$</p>
-</li>
+</ol></li>
+<li><p>==图2==（在根据环境聚类下）具有相似功能的基因往往聚集在一起，但是有些<同一基因家族的基因>彼此远离：具有不同的功能
+e.g. <em>cas4</em>家族的基因同时具有CRISPR相关和非相关基因</p></li>
+<li><p>==图3==对于一些典型的多基因共同完成的基因功能，该模型体现出很高的预测性能（e.g.
+分泌系统，原核防御系统，氧化磷酸化）；而氨基糖代谢等功能提供上下文信息少，会阻碍正确分类</p>
+<p><span class="math inline">\(\frac1{\text{F1
+score}}=\frac{\frac1{准确率}+\frac1{召回率}}2,\
+准确率=\frac{真阳}{真阳+假阳},\
+召回率=\frac{真阳}{真阳+假阴}\)</span></p></li>
 <li><p>==图4==实现对假设蛋白对应基因的功能预测。</p>
 <p>在&lt;一些新发现的，尚未注释，与训练数据无同源性的原核防御系统的基因&gt;上进行验证，正确率高达98.6%</p>
 <p>同时还发现另外的40247个未表征的基因家族与防御系统相关，说明防御系统还存在着巨大的发现可能</p>
-<p>除了防御系统外，分泌系统和双组分系统等功能类别也显示出很高的发现潜力</p>
-</li>
+<p>除了防御系统外，分泌系统和双组分系统等功能类别也显示出很高的发现潜力</p></li>
 </ol>
-<hr>
-<h1 id="技术文档说明（README）"><a href="#技术文档说明（README）" class="headerlink" title="技术文档说明（README）"></a>技术文档说明（README）</h1><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># genomic-nlp</span></span><br><span class="line"></span><br><span class="line">该存储库包含用于编译和分析论文中介绍的“生物语料库”的代码：</span><br><span class="line"></span><br><span class="line"><span class="strong">**利用自然语言处理解读微生物基因功能**</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 获取数据</span></span><br><span class="line"><span class="emphasis">*注意：*</span> 数据将存储在Zenodo数据库中并分配永久的DOI。与此同时，请不要使用下面的下载说明，而转到[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)。</span><br><span class="line"></span><br><span class="line">从Zenodo数据库下载数据文件。</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 单击存储库顶部的Zenodo链接，或使用[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)下载数据zip文件。</span><br><span class="line"><span class="bullet">2.</span> 或者，使用命令行如下：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">mkdir data</span></span><br><span class="line"><span class="code">cd data</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">wget https://zenodo.org/record/XXX/files/models_and_data.tar.gz?download=1</span></span><br><span class="line"><span class="code">tar -zxvf models_and_data.tar.gz</span></span><br><span class="line"><span class="code">mv data/* ./</span></span><br><span class="line"><span class="code">rm models_and_data.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 设置工作环境</span></span><br><span class="line">首先，设置Python环境和依赖项。</span><br><span class="line"><span class="section">#### 使用pip</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python3 -m venv env</span></span><br><span class="line"><span class="code">source env/bin/activate</span></span><br><span class="line"><span class="code">pip install -r requirements.txt</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 使用conda</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">conda env create -f environment.yml</span></span><br><span class="line"><span class="code">conda activate g2v-env</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">此设置在Python 3.7上进行了测试。所有必需程序的版本在<span class="code">`requirements.txt`</span>（对于pip）和<span class="code">`environment.yml`</span>（对于conda）中都有。</span><br><span class="line"></span><br><span class="line"><span class="section">### 代码可用性</span></span><br><span class="line">用于训练word2vec模型、提取其嵌入和功能分类器的源代码可以通过pip下载：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">pip install genomic-embeddings</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 训练好的基因注释嵌入</span></span><br><span class="line">在整个基因组语料库上训练的word2vec模型可在<span class="code">`models_and_data`</span>中作为gensim模型获得。</span><br><span class="line">要在下游分析中进一步使用它们，请设置您的工作环境并加载模型。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">model_path = model_and_data/gene2vec_w5_v300_tf24_annotation_extended/gene2vec_w5_v300_tf24_annotation_extended_2021-10-03.w2v</span></span><br><span class="line"><span class="code">gene_embeddings = Embeddings.load_embeddings(model_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">从这里开始，您可以使用[<span class="string">gensim api</span>](<span class="link">https://radimrehurek.com/gensim/models/word2vec.html</span>)提取单词嵌入、计算单词之间的距离等。例如：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">gene_embeddings.wv[&quot;K09140.2&quot;]</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 二维嵌入空间</span></span><br><span class="line">经过UMAP降维的基因嵌入可作为pickle文件获得。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">embeddings_2d_rep_path = &quot;model_and_data/gene2vec_w5_v300_tf24_annotation_extended/words_umap_2021-10-03&quot;</span></span><br><span class="line"><span class="code">embeddings_2d = Embeddings.get_2d_mapping(embeddings_2d_rep_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类器</span></span><br><span class="line">要重新训练所有功能分类器/生成性能图：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic_embeddings.models import NNClf</span></span><br><span class="line"><span class="code">from genomic_embeddings.data import Embedding</span></span><br><span class="line"><span class="code">from genomic_embeddings.plot import ModelPlots</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">metadata_path = &#x27;/models_and_data/metadata.csv&#x27;</span></span><br><span class="line"><span class="code">labels = [&#x27;Prokaryotic defense system&#x27;,&#x27;Ribosome&#x27;,&#x27;Secretion system&#x27;] # 举例标签</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 加载嵌入</span></span><br><span class="line"><span class="code">emb = Embedding(mdl=model_path, metadata=metadata_path, labels=labels)</span></span><br><span class="line"><span class="code">emb.process_data_pipeline(label=&#x27;label&#x27;, q=&#x27;&#x27;, add_other=True)</span></span><br><span class="line"><span class="code">X, y = emb.data.drop(columns=[&#x27;label&#x27;]).values, emb.data[&#x27;label&#x27;].values</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 分类</span></span><br><span class="line"><span class="code">clf = NNClf(X=X, y=y, out_dir=&#x27;./&#x27;)</span></span><br><span class="line"><span class="code">clf.classification_pipeline(&#x27;labe&#x27;, alias=&#x27;DNN&#x27;)</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 绘图 </span></span><br><span class="line"><span class="code">plotter = ModelPlots(mdl=clf)</span></span><br><span class="line"><span class="code">plotter.plot_precision_recall()</span></span><br><span class="line"><span class="code">plotter.plot_roc()</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类模型验证</span></span><br><span class="line">功能分类验证位于：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span>。</span><br><span class="line">要重新运行验证并生成AUC和AUPR图，请运行以下脚本：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python scripts/classify.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata PATH_TO_METADATA</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">`metadata.csv`</span>文件可以在<span class="code">`models_and_data`</span>中找到。</span><br><span class="line">运行此脚本将生成文件夹下的所有数据：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 对所有假设蛋白进行功能分类</span></span><br><span class="line">语料库中所有假设蛋白的所有预测都可以在此处找到：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl`</span></span><br><span class="line"></span><br><span class="line">要将文件加载为表格，请在Python中运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import </span></span><br><span class="line"><span class="code">preds_path = &quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;</span></span><br><span class="line"><span class="code">preds = get_functional_prediction(preds_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">或者，使用以下替代方法：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import pandas as pd</span></span><br><span class="line"><span class="code">table = pd.read_pickle(&quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要<span class="strong">**重新生成**</span>模型预测，请运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data/gene2vec_w5_v300_tf24_annotation_extended/</span></span><br><span class="line"><span class="code">python scripts/predict_hypothetical.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata ../metadata.csv</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 重新训练使用语料库的词嵌入</span></span><br><span class="line">可以使用以下脚本执行具有不同参数的词嵌入的重新训练：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 首先，转到<span class="code">`models_and_data`</span>文件夹并提取语料库文件：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data </span></span><br><span class="line"><span class="code">tar -zxvf corpus.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 训练模型：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python src/gene2vec.py --input &#x27;corpus/*.txt&#x27;</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要更改算法的特定参数，请运行</span><br><span class="line"><span class="code">`python src/gene2vec.py --help`</span> 并相应地配置。</span><br><span class="line"></span><br><span class="line"><span class="section">### 运行时间</span></span><br><span class="line">模型加载、结果生成和分析脚本预计将在几秒钟到4-5分钟之间运行。</span><br><span class="line">语言模型和降维的重新训练可能需要使用20个CPU长达10小时。</span><br><span class="line"></span><br><span class="line"><span class="section">### 论文图形可重现性</span></span><br><span class="line">所有论文图形（不包括插图）均可作为jupyter笔记本提供。</span><br><span class="line">要在计算机上运行笔记本，请转到<span class="code">`figures/`</span>并在命令行中键入<span class="code">`jupyter notebook`</span>。</span><br><span class="line">笔记本<span class="code">`paper_figures.ipynb`</span>将在您的本地计算机上可用。</span><br><span class="line"></span><br><span class="line"><span class="emphasis">*注意：*</span> 运行笔记本需要<span class="code">`models_and_data`</span>文件夹，请根据需要配置路径。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="补充文件详情（models-and-data）"><a href="#补充文件详情（models-and-data）" class="headerlink" title="补充文件详情（models_and_data）"></a>补充文件详情（models_and_data）</h1><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> corpus.tar.gz&lt;语料库.tar.gz&gt;</span><br><span class="line"><span class="bullet">-</span> corpus .txt files&lt;语料库文本文件&gt;</span><br><span class="line"><span class="bullet">-</span> figures data.csv&lt;图像数据.csv&gt;- 用于图像生成的数据</span><br><span class="line"><span class="bullet">-</span> word to label.csv&lt;词到标签.csv&gt;- 用于分类的词到标签的映射</span><br><span class="line"><span class="bullet">-</span> include.txt<span class="language-xml"><span class="tag">&lt;<span class="name">include.txt</span>&gt;</span></span>- 包含在语料库中的contigs列表（内部使用）</span><br><span class="line"><span class="bullet">-</span> metadata.csv&lt;元数据.csv&gt;- 基因注释的元数据</span><br><span class="line"><span class="bullet">-</span> hypothetical in NR predictions by class.xlsx<span class="language-xml"><span class="tag">&lt;<span class="name">NR数据库中假设的</span> <span class="attr">hits</span> <span class="attr">按类别分类的预测.xlsx</span>&gt;</span></span>- NCBI的NR蛋白数据库的假设 hits 预测，按类别分类</span><br><span class="line"><span class="bullet">-</span> taxonomy and origins&lt;分类和起源&gt;- 样本的分类和起源信息</span><br><span class="line"><span class="bullet">-</span> cross validation&lt;交叉验证&gt;- 模型和性能</span><br><span class="line"><span class="bullet">  -</span> 5foldcv/&lt;5折交叉验证&gt;/</span><br><span class="line"><span class="bullet">  -</span> LOTGOCV<span class="language-xml"><span class="tag">&lt;<span class="name">LOTGOCV</span>&gt;</span></span></span><br><span class="line"><span class="bullet">    -</span> label/paper model/&lt;标签/论文模型&gt;/</span><br><span class="line"><span class="bullet">    -</span> /...</span><br><span class="line"><span class="bullet">-</span> gene2vec w5 v300 tf24 annotation extended&lt;基因嵌入模型 w5 v300 tf24 注释扩展&gt;- 完整语料库的嵌入模型</span><br><span class="line"><span class="bullet">  -</span> gene2vec w5 v300 tf24 annotation extended 2021<span class="emphasis">*10*</span>03.w2v<span class="language-xml"><span class="tag">&lt;<span class="name">gene2vec</span> <span class="attr">w5</span> <span class="attr">v300</span> <span class="attr">tf24</span> <span class="attr">注释扩展</span> <span class="attr">2021</span>*<span class="attr">10</span>*<span class="attr">03.w2v</span>&gt;</span></span></span><br><span class="line"><span class="bullet">  -</span> /...</span><br><span class="line"><span class="bullet">  -</span> predictions&lt;预测&gt;</span><br><span class="line"><span class="bullet">    -</span> hypothetical space.png&lt;假设空间.png&gt;</span><br><span class="line"><span class="bullet">    -</span> space by class&lt;按类别分的空间&gt; * the space color coded by class* 按类别着色的空间</span><br><span class="line"><span class="bullet">    -</span> label&lt;标签&gt; * classifiers model evaluation by functional categories selected.* 按选择的功能类别评估的分类器模型</span><br><span class="line"><span class="bullet">-</span> benchmark and optimization/&lt;基准和优化&gt; * benchmark and optimization accuracy summary* 基准和优化的准确性摘要</span><br><span class="line"><span class="bullet">-</span> rarefaction&lt;稀疏性&gt; * rarefaction analysis .pkl files* 稀疏性分析的.pkl文件</span><br><span class="line"><span class="bullet">-</span> novel defense mapping&lt;新防御映射&gt;</span><br><span class="line"><span class="bullet">  -</span> word mapping to novel defense systems&lt;单词映射到新防御系统&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical hmm predictions.csv&lt;防御假设hmm预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical system predictions.csv&lt;防御假设系统预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> all samples hmmsearch hits.pkl&lt;所有样本的hmmsearch hits.pkl&gt; * HMMs mapping of all unannotated words* 所有未注释单词的HMM映射</span><br><span class="line"><span class="bullet">    -</span> defense space.html / defense space.png&lt;防御空间.html / 防御空间.png&gt;</span><br><span class="line"><span class="bullet">-</span> new systems&lt;新系统&gt;</span><br><span class="line"><span class="bullet">  -</span> predicted systems.xlsx&lt;预测的系统.xlsx&gt;</span><br><span class="line"><span class="bullet">  -</span> <span class="emphasis">*.faa&lt;*</span>.faa&gt;* fasta files of all the new systems genes separated by system* 所有新系统基因按系统分开的fasta文件</span><br><span class="line"><span class="bullet">  -</span> domains<span class="language-xml"><span class="tag">&lt;<span class="name">domains</span>&gt;</span></span>* all raw domains found in new systems* 在新系统中找到的所有原始domains</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="技术文档说明readme">技术文档说明（README）</h1>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># genomic-nlp</span></span><br><span class="line"></span><br><span class="line">该存储库包含用于编译和分析论文中介绍的“生物语料库”的代码：</span><br><span class="line"></span><br><span class="line"><span class="strong">**利用自然语言处理解读微生物基因功能**</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 获取数据</span></span><br><span class="line"><span class="emphasis">*注意：*</span> 数据将存储在Zenodo数据库中并分配永久的DOI。与此同时，请不要使用下面的下载说明，而转到[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)。</span><br><span class="line"></span><br><span class="line">从Zenodo数据库下载数据文件。</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 单击存储库顶部的Zenodo链接，或使用[<span class="string">此链接</span>](<span class="link">http://tiny.cc/eb6ouz</span>)下载数据zip文件。</span><br><span class="line"><span class="bullet">2.</span> 或者，使用命令行如下：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">mkdir data</span></span><br><span class="line"><span class="code">cd data</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">wget https://zenodo.org/record/XXX/files/models_and_data.tar.gz?download=1</span></span><br><span class="line"><span class="code">tar -zxvf models_and_data.tar.gz</span></span><br><span class="line"><span class="code">mv data/* ./</span></span><br><span class="line"><span class="code">rm models_and_data.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 设置工作环境</span></span><br><span class="line">首先，设置Python环境和依赖项。</span><br><span class="line"><span class="section">#### 使用pip</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python3 -m venv env</span></span><br><span class="line"><span class="code">source env/bin/activate</span></span><br><span class="line"><span class="code">pip install -r requirements.txt</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 使用conda</span></span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">conda env create -f environment.yml</span></span><br><span class="line"><span class="code">conda activate g2v-env</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">此设置在Python 3.7上进行了测试。所有必需程序的版本在<span class="code">`requirements.txt`</span>（对于pip）和<span class="code">`environment.yml`</span>（对于conda）中都有。</span><br><span class="line"></span><br><span class="line"><span class="section">### 代码可用性</span></span><br><span class="line">用于训练word2vec模型、提取其嵌入和功能分类器的源代码可以通过pip下载：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">pip install genomic-embeddings</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 训练好的基因注释嵌入</span></span><br><span class="line">在整个基因组语料库上训练的word2vec模型可在<span class="code">`models_and_data`</span>中作为gensim模型获得。</span><br><span class="line">要在下游分析中进一步使用它们，请设置您的工作环境并加载模型。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">model_path = model_and_data/gene2vec_w5_v300_tf24_annotation_extended/gene2vec_w5_v300_tf24_annotation_extended_2021-10-03.w2v</span></span><br><span class="line"><span class="code">gene_embeddings = Embeddings.load_embeddings(model_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">从这里开始，您可以使用[<span class="string">gensim api</span>](<span class="link">https://radimrehurek.com/gensim/models/word2vec.html</span>)提取单词嵌入、计算单词之间的距离等。例如：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">gene_embeddings.wv[&quot;K09140.2&quot;]</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 二维嵌入空间</span></span><br><span class="line">经过UMAP降维的基因嵌入可作为pickle文件获得。</span><br><span class="line"></span><br><span class="line">在Python中：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic-embeddings import Embeddings</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">embeddings_2d_rep_path = &quot;model_and_data/gene2vec_w5_v300_tf24_annotation_extended/words_umap_2021-10-03&quot;</span></span><br><span class="line"><span class="code">embeddings_2d = Embeddings.get_2d_mapping(embeddings_2d_rep_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类器</span></span><br><span class="line">要重新训练所有功能分类器/生成性能图：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">from genomic_embeddings.models import NNClf</span></span><br><span class="line"><span class="code">from genomic_embeddings.data import Embedding</span></span><br><span class="line"><span class="code">from genomic_embeddings.plot import ModelPlots</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">metadata_path = &#x27;/models_and_data/metadata.csv&#x27;</span></span><br><span class="line"><span class="code">labels = [&#x27;Prokaryotic defense system&#x27;,&#x27;Ribosome&#x27;,&#x27;Secretion system&#x27;] # 举例标签</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 加载嵌入</span></span><br><span class="line"><span class="code">emb = Embedding(mdl=model_path, metadata=metadata_path, labels=labels)</span></span><br><span class="line"><span class="code">emb.process_data_pipeline(label=&#x27;label&#x27;, q=&#x27;&#x27;, add_other=True)</span></span><br><span class="line"><span class="code">X, y = emb.data.drop(columns=[&#x27;label&#x27;]).values, emb.data[&#x27;label&#x27;].values</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 分类</span></span><br><span class="line"><span class="code">clf = NNClf(X=X, y=y, out_dir=&#x27;./&#x27;)</span></span><br><span class="line"><span class="code">clf.classification_pipeline(&#x27;labe&#x27;, alias=&#x27;DNN&#x27;)</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"># 绘图 </span></span><br><span class="line"><span class="code">plotter = ModelPlots(mdl=clf)</span></span><br><span class="line"><span class="code">plotter.plot_precision_recall()</span></span><br><span class="line"><span class="code">plotter.plot_roc()</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 功能分类模型验证</span></span><br><span class="line">功能分类验证位于：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span>。</span><br><span class="line">要重新运行验证并生成AUC和AUPR图，请运行以下脚本：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python scripts/classify.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata PATH_TO_METADATA</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">`metadata.csv`</span>文件可以在<span class="code">`models_and_data`</span>中找到。</span><br><span class="line">运行此脚本将生成文件夹下的所有数据：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions`</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 对所有假设蛋白进行功能分类</span></span><br><span class="line">语料库中所有假设蛋白的所有预测都可以在此处找到：</span><br><span class="line"><span class="code">`models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl`</span></span><br><span class="line"></span><br><span class="line">要将文件加载为表格，请在Python中运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import </span></span><br><span class="line"><span class="code">preds_path = &quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;</span></span><br><span class="line"><span class="code">preds = get_functional_prediction(preds_path)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">或者，使用以下替代方法：</span><br><span class="line"></span><br><span class="line"><span class="code">```python</span></span><br><span class="line"><span class="code">import pandas as pd</span></span><br><span class="line"><span class="code">table = pd.read_pickle(&quot;models_and_data/gene2vec_w5_v300_tf24_annotation_extended/predictions/hypothetical_predictions.pkl&quot;)</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要<span class="strong">**重新生成**</span>模型预测，请运行：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data/gene2vec_w5_v300_tf24_annotation_extended/</span></span><br><span class="line"><span class="code">python scripts/predict_hypothetical.py --model PATH_TO_W2V_MDL --output PATH_TO_OUT_DIR --metadata ../metadata.csv</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 重新训练使用语料库的词嵌入</span></span><br><span class="line">可以使用以下脚本执行具有不同参数的词嵌入的重新训练：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 首先，转到<span class="code">`models_and_data`</span>文件夹并提取语料库文件：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">cd models_and_data </span></span><br><span class="line"><span class="code">tar -zxvf corpus.tar.gz</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 训练模型：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">python src/gene2vec.py --input &#x27;corpus/*.txt&#x27;</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">要更改算法的特定参数，请运行</span><br><span class="line"><span class="code">`python src/gene2vec.py --help`</span> 并相应地配置。</span><br><span class="line"></span><br><span class="line"><span class="section">### 运行时间</span></span><br><span class="line">模型加载、结果生成和分析脚本预计将在几秒钟到4-5分钟之间运行。</span><br><span class="line">语言模型和降维的重新训练可能需要使用20个CPU长达10小时。</span><br><span class="line"></span><br><span class="line"><span class="section">### 论文图形可重现性</span></span><br><span class="line">所有论文图形（不包括插图）均可作为jupyter笔记本提供。</span><br><span class="line">要在计算机上运行笔记本，请转到<span class="code">`figures/`</span>并在命令行中键入<span class="code">`jupyter notebook`</span>。</span><br><span class="line">笔记本<span class="code">`paper_figures.ipynb`</span>将在您的本地计算机上可用。</span><br><span class="line"></span><br><span class="line"><span class="emphasis">*注意：*</span> 运行笔记本需要<span class="code">`models_and_data`</span>文件夹，请根据需要配置路径。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr />
+<h1
+id="补充文件详情models_and_data">补充文件详情（models_and_data）</h1>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> corpus.tar.gz&lt;语料库.tar.gz&gt;</span><br><span class="line"><span class="bullet">-</span> corpus .txt files&lt;语料库文本文件&gt;</span><br><span class="line"><span class="bullet">-</span> figures data.csv&lt;图像数据.csv&gt;- 用于图像生成的数据</span><br><span class="line"><span class="bullet">-</span> word to label.csv&lt;词到标签.csv&gt;- 用于分类的词到标签的映射</span><br><span class="line"><span class="bullet">-</span> include.txt<span class="language-xml"><span class="tag">&lt;<span class="name">include.txt</span>&gt;</span></span>- 包含在语料库中的contigs列表（内部使用）</span><br><span class="line"><span class="bullet">-</span> metadata.csv&lt;元数据.csv&gt;- 基因注释的元数据</span><br><span class="line"><span class="bullet">-</span> hypothetical in NR predictions by class.xlsx<span class="language-xml"><span class="tag">&lt;<span class="name">NR数据库中假设的</span> <span class="attr">hits</span> <span class="attr">按类别分类的预测.xlsx</span>&gt;</span></span>- NCBI的NR蛋白数据库的假设 hits 预测，按类别分类</span><br><span class="line"><span class="bullet">-</span> taxonomy and origins&lt;分类和起源&gt;- 样本的分类和起源信息</span><br><span class="line"><span class="bullet">-</span> cross validation&lt;交叉验证&gt;- 模型和性能</span><br><span class="line"><span class="bullet">  -</span> 5foldcv/&lt;5折交叉验证&gt;/</span><br><span class="line"><span class="bullet">  -</span> LOTGOCV<span class="language-xml"><span class="tag">&lt;<span class="name">LOTGOCV</span>&gt;</span></span></span><br><span class="line"><span class="bullet">    -</span> label/paper model/&lt;标签/论文模型&gt;/</span><br><span class="line"><span class="bullet">    -</span> /...</span><br><span class="line"><span class="bullet">-</span> gene2vec w5 v300 tf24 annotation extended&lt;基因嵌入模型 w5 v300 tf24 注释扩展&gt;- 完整语料库的嵌入模型</span><br><span class="line"><span class="bullet">  -</span> gene2vec w5 v300 tf24 annotation extended 2021<span class="emphasis">*10*</span>03.w2v<span class="language-xml"><span class="tag">&lt;<span class="name">gene2vec</span> <span class="attr">w5</span> <span class="attr">v300</span> <span class="attr">tf24</span> <span class="attr">注释扩展</span> <span class="attr">2021</span>*<span class="attr">10</span>*<span class="attr">03.w2v</span>&gt;</span></span></span><br><span class="line"><span class="bullet">  -</span> /...</span><br><span class="line"><span class="bullet">  -</span> predictions&lt;预测&gt;</span><br><span class="line"><span class="bullet">    -</span> hypothetical space.png&lt;假设空间.png&gt;</span><br><span class="line"><span class="bullet">    -</span> space by class&lt;按类别分的空间&gt; * the space color coded by class* 按类别着色的空间</span><br><span class="line"><span class="bullet">    -</span> label&lt;标签&gt; * classifiers model evaluation by functional categories selected.* 按选择的功能类别评估的分类器模型</span><br><span class="line"><span class="bullet">-</span> benchmark and optimization/&lt;基准和优化&gt; * benchmark and optimization accuracy summary* 基准和优化的准确性摘要</span><br><span class="line"><span class="bullet">-</span> rarefaction&lt;稀疏性&gt; * rarefaction analysis .pkl files* 稀疏性分析的.pkl文件</span><br><span class="line"><span class="bullet">-</span> novel defense mapping&lt;新防御映射&gt;</span><br><span class="line"><span class="bullet">  -</span> word mapping to novel defense systems&lt;单词映射到新防御系统&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical hmm predictions.csv&lt;防御假设hmm预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> defense hypothetical system predictions.csv&lt;防御假设系统预测.csv&gt;</span><br><span class="line"><span class="bullet">    -</span> all samples hmmsearch hits.pkl&lt;所有样本的hmmsearch hits.pkl&gt; * HMMs mapping of all unannotated words* 所有未注释单词的HMM映射</span><br><span class="line"><span class="bullet">    -</span> defense space.html / defense space.png&lt;防御空间.html / 防御空间.png&gt;</span><br><span class="line"><span class="bullet">-</span> new systems&lt;新系统&gt;</span><br><span class="line"><span class="bullet">  -</span> predicted systems.xlsx&lt;预测的系统.xlsx&gt;</span><br><span class="line"><span class="bullet">  -</span> <span class="emphasis">*.faa&lt;*</span>.faa&gt;* fasta files of all the new systems genes separated by system* 所有新系统基因按系统分开的fasta文件</span><br><span class="line"><span class="bullet">  -</span> domains<span class="language-xml"><span class="tag">&lt;<span class="name">domains</span>&gt;</span></span>* all raw domains found in new systems* 在新系统中找到的所有原始domains</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>现代生物信息学</category>
@@ -255,49 +292,103 @@
     <url>/2023/10/07/Synecology1/</url>
     <content><![CDATA[<p>本文是<strong>群体生态学</strong>（Synecology）课程<strong>种群遗传学</strong>章节课程作业，本文主要对影响种群遗传多样性的因素进行简单的建模模拟和理论分析。</p>
 <span id="more"></span>
-<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性$^\text{[1]}$。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传多样性最主要的因素。</p>
-<p>在分析各个因素对于种群遗传多样性的影响前，本文首先引入哈代-温伯格平衡（Hardy-Weinberg equilibrium）。哈代-温伯格平衡作为遗传学中的一个基本概念，描述了一个不进化的、封闭的种群内，基因型和等位基因频率保持稳定的状态。这意味着在没有突变、选择、迁移和随机效应的影响下，种群内的遗传结构将保持不变。</p>
+<h1 id="引言">引言</h1>
+<p>一个物种的不同个体在遗传上不完全相同，这一特点具体表现为DNA序列的差异。这些差异共同形成了一个物种的遗传多样性<span
+class="math inline">\(^\text{[1]}\)</span>。遗传多样性是生物多样性中的一个重要组成部分。在种群中，遗传多样性可以作为种群进化、适应能力和生存能力的一个评价指标。根据生态学和遗传学领域长期的研究结果显示，影响种群遗传多样性的因素大致可以分为以下几种：漂变、突变、近交、选择和迁移。其中自然选择是影响遗传多样性最主要的因素。</p>
+<p>在分析各个因素对于种群遗传多样性的影响前，本文首先引入哈代-温伯格平衡（Hardy-Weinberg
+equilibrium）。哈代-温伯格平衡作为遗传学中的一个基本概念，描述了一个不进化的、封闭的种群内，基因型和等位基因频率保持稳定的状态。这意味着在没有突变、选择、迁移和随机效应的影响下，种群内的遗传结构将保持不变。</p>
 <p>一般情况下，种群实现哈代-温伯格平衡需满足以下几个条件：</p>
-<ol>
+<ol type="1">
 <li>种群规模足够大：种群的规模必须足够大，随机漂变的影响可以忽略不计。</li>
 <li>个体之间随机交配：每个个体都有相同的机会与种群中的其他个体进行交配。</li>
 <li>不发生突变：没有新的等位基因通过突变引入。</li>
-<li>不存在选择作用： 所有基因型的个体在生存和繁殖上具有相同的成功率。</li>
+<li>不存在选择作用：
+所有基因型的个体在生存和繁殖上具有相同的成功率。</li>
 <li>种群封闭无迁移： 种群与外部种群没有迁入或迁出。</li>
 </ol>
 <p>哈代-温伯格平衡作为一种理想的遗传平衡状态，其基本思想在于：在确定的基因频率下，基因型频率应仅由概率论决定。哈代-温伯格平衡向我们提供了一个判断观察到的基因型频率是否受到外部因素干扰的基准。如果观察到的基因型频率与哈代-温伯格平衡的预期频率相符，则可以认为该种群在遗传上是稳定的。如果存在偏离，则可以推断该种群可能受到了突变、选择、迁移或漂变等因素的影响。</p>
-<h1 id="模型模拟"><a href="#模型模拟" class="headerlink" title="模型模拟"></a>模型模拟</h1><p>接下来本文将具体分析影响种群遗传多样性的因素，并通过解析作用机制探究种群基因型频率如何偏移哈代-温伯格平衡。为简化模型，在以下的探讨中，对遗传多样性的分析聚焦于微进化，仅考虑同一营养级的一到两个物种。</p>
-<h2 id="1-遗传漂变（Drift）"><a href="#1-遗传漂变（Drift）" class="headerlink" title="1. 遗传漂变（Drift）"></a>1. 遗传漂变（Drift）</h2><p>遗传漂变是指某一个等位基因在群体中受随机因素影响出现了世代传递的波动，它的产生的本质原因是因某一群体中个体系列的适应度有着变异的特性， 并随机产生不同数量的后代，即不是所有的等位基因传递到下一代的频率都一样， 这个频率在世代传递中会有随机的波动出现$^\text{[2]}$。</p>
+<h1 id="模型模拟">模型模拟</h1>
+<p>接下来本文将具体分析影响种群遗传多样性的因素，并通过解析作用机制探究种群基因型频率如何偏移哈代-温伯格平衡。为简化模型，在以下的探讨中，对遗传多样性的分析聚焦于微进化，仅考虑同一营养级的一到两个物种。</p>
+<h2 id="遗传漂变drift">1. 遗传漂变（Drift）</h2>
+<p>遗传漂变是指某一个等位基因在群体中受随机因素影响出现了世代传递的波动，它的产生的本质原因是因某一群体中个体系列的适应度有着变异的特性，
+并随机产生不同数量的后代，即不是所有的等位基因传递到下一代的频率都一样，
+这个频率在世代传递中会有随机的波动出现<span
+class="math inline">\(^\text{[2]}\)</span>。</p>
 <p>遗传漂变在不同的小鼠种群中发生程度不同，但其发生相当普遍和频繁。在实验室小鼠饲养繁育过程中，由于种群数量相对较少，遗传漂变导致基因多样性降低的概率大大增加。通过对实验室小鼠繁育过程进行建模如下，设定小鼠种群大小为20，种群中存在较为稀少的基因A，其基因频率为0.25，得到繁殖过程中该基因频率变化图如下图所示。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 定义等位基因</span></span><br><span class="line">allele <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;A&quot;</span><span class="punctuation">,</span><span class="string">&quot;B&quot;</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 建立迭代函数:</span></span><br><span class="line"><span class="comment">## Ne (数值)种群大小</span></span><br><span class="line"><span class="comment">## generation (数值)繁殖代数</span></span><br><span class="line"><span class="comment">## p1 (数值)初始基因频率</span></span><br><span class="line">Drift <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>Ne<span class="punctuation">,</span> generation<span class="punctuation">,</span> p1<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  p <span class="operator">&lt;-</span> numeric<span class="punctuation">(</span><span class="punctuation">)</span></span><br><span class="line">  p<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> p1</span><br><span class="line">  </span><br><span class="line">  <span class="comment">## for循环迭代</span></span><br><span class="line">  <span class="keyword">for</span> <span class="punctuation">(</span>t <span class="keyword">in</span> <span class="number">1</span><span class="operator">:</span>generation<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    freq <span class="operator">&lt;-</span> sample<span class="punctuation">(</span>allele<span class="punctuation">,</span> <span class="number">2</span><span class="operator">*</span>Ne<span class="punctuation">,</span> replace <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span> </span><br><span class="line">                   prob <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>p<span class="punctuation">[</span>t<span class="punctuation">]</span><span class="punctuation">,</span> <span class="number">1</span> <span class="operator">-</span> p<span class="punctuation">[</span>t<span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">    numP <span class="operator">&lt;-</span> table<span class="punctuation">(</span>freq<span class="punctuation">)</span><span class="punctuation">[</span><span class="string">&quot;A&quot;</span><span class="punctuation">]</span></span><br><span class="line">    numP <span class="operator">&lt;-</span> ifelse<span class="punctuation">(</span><span class="built_in">is.na</span><span class="punctuation">(</span>numP<span class="punctuation">)</span><span class="punctuation">,</span><span class="number">0</span><span class="punctuation">,</span> numP<span class="punctuation">)</span></span><br><span class="line">    p<span class="punctuation">[</span>t<span class="operator">+</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> numP<span class="operator">/</span><span class="punctuation">(</span><span class="number">2</span><span class="operator">*</span>Ne<span class="punctuation">)</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 设置图像字体并绘制</span></span><br><span class="line">  par<span class="punctuation">(</span>family <span class="operator">=</span> <span class="string">&quot;Times&quot;</span><span class="punctuation">,</span> </span><br><span class="line">      cex <span class="operator">=</span> <span class="number">1.2</span><span class="punctuation">,</span></span><br><span class="line">      font.main <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line">  plot<span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span>generation<span class="punctuation">,</span> p<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span>generation<span class="punctuation">]</span><span class="punctuation">,</span> </span><br><span class="line">       type <span class="operator">=</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span></span><br><span class="line">       xlab <span class="operator">=</span> <span class="string">&quot;Generation&quot;</span><span class="punctuation">,</span> </span><br><span class="line">       ylab <span class="operator">=</span> <span class="string">&quot;p(A)&quot;</span><span class="punctuation">,</span></span><br><span class="line">       main <span class="operator">=</span> paste<span class="punctuation">(</span><span class="string">&quot;Ne =&quot;</span><span class="punctuation">,</span> Ne<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">       font.main <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 函数应用</span></span><br><span class="line">Drift<span class="punctuation">(</span><span class="number">20</span><span class="punctuation">,</span><span class="number">50</span><span class="punctuation">,</span><span class="number">0.25</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot1.jpeg" class="" title="plot1">
 <p>根据图像，可以发现随着世代更迭，基因A的频率呈现下降趋势。在繁殖至30-40代左右时，基因A完全被其等位基因B取代。如果将种群大小增加至60，得到基因A频率变化图又如下图所示。可以发现基因A在更长的代数中均维持在了一个较好的频率水平上。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line">Drift<span class="punctuation">(</span><span class="number">60</span><span class="punctuation">,</span><span class="number">100</span><span class="punctuation">,</span><span class="number">0.25</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot2.jpeg" class="" title="plot2">
-<p>综合以上模型模拟结果，对遗传漂变的机制以及影响进行分析：遗传漂变是由于随机性事件引起的，在规模较大的种群中， 不同基因型的个体， 后代数量的波动对基因频率影响较小，漂变速度也相对慢很多，随着世代更迭基因频率趋于平衡。但在规模较小的种群遗传漂变的速度很快， 某些等位基因随着世代更迭逐渐消失， 导致种群迅速偏离原来的哈代-温伯格平衡状态，从而降低了遗传多样性。</p>
-<h2 id="2-基因迁移（Migration）"><a href="#2-基因迁移（Migration）" class="headerlink" title="2. 基因迁移（Migration）"></a>2. 基因迁移（Migration）</h2><p>基因迁移是指个体或基因从一个种群迁移到另一个种群，增加了群体基因的多样性，保持了种群的遗传多样性。在进化遗传学中，基因迁移更多地被称为基因流（Gene Flow），是群体产生进化的一个重要因素$^\text{[3]}$。基因流会影响群体间的相似性或特征，基因流会使出现在一个群体中的基因带给另一个群体，基因流越大，群体间的相似性越大。如果基因流是发生进化的惟一形式的话，它会导致不同群体的基因频率趋于一致，且这种频率分布是符合哈代-温伯格平衡状态的。</p>
-<p>当迁移发生在很大的陆地和很小的岛屿之间，而且基因流方向主要是从陆地到岛屿。由于陆地足够大，从岛屿到陆地的基因流不足以影响陆地的等位基因频率，因而可以忽略。那么岛屿上等位基因频率的变化仅由岛屿和陆地间等位基因频率差异的大小和迁移个体的数量（迁移速率）决定。这种非常简单的迁移模型被称为岛陆模型（Island Mainland Model）。</p>
-<h3 id="岛陆模型"><a href="#岛陆模型" class="headerlink" title="岛陆模型"></a>岛陆模型</h3><p>最为著名的一个岛陆模型就是海湾格斑蝴蝶（Euphydryas editha bayensis）$^\text{[4]}$。在1987年，整个蝴蝶种群占据了一个面积约为2000 ha的大斑块（约有$10^6$个成年蝴蝶）和9个面积为1-250 ha的小斑块（约有10-250个成年蝴蝶）。而在整个区域中共有27个可供蝴蝶繁殖的生境，但仅有与大斑块相邻的这9个斑块上才有蝴蝶繁殖。这种分布格局正是由于该种蝴蝶的扩散作用造成的。据该文献分析，在单位时间内迁移到给定斑块的概率为 $I = e^{-D/D’}$，其中 $D$ 是源地到目标斑块的距离，$D’$ 是物种特有的扩散常数，代表成功迁移个体的平均移动距离。文章通过对现有数据的拟合得到了最佳拟合 $D’$ 为1.7 km。在本文的模型中，直接使用最后计算得到的迁移速率 $I = 0.0668$ 进行模拟。</p>
+<p>综合以上模型模拟结果，对遗传漂变的机制以及影响进行分析：遗传漂变是由于随机性事件引起的，在规模较大的种群中，
+不同基因型的个体，
+后代数量的波动对基因频率影响较小，漂变速度也相对慢很多，随着世代更迭基因频率趋于平衡。但在规模较小的种群遗传漂变的速度很快，
+某些等位基因随着世代更迭逐渐消失，
+导致种群迅速偏离原来的哈代-温伯格平衡状态，从而降低了遗传多样性。</p>
+<h2 id="基因迁移migration">2. 基因迁移（Migration）</h2>
+<p>基因迁移是指个体或基因从一个种群迁移到另一个种群，增加了群体基因的多样性，保持了种群的遗传多样性。在进化遗传学中，基因迁移更多地被称为基因流（Gene
+Flow），是群体产生进化的一个重要因素<span
+class="math inline">\(^\text{[3]}\)</span>。基因流会影响群体间的相似性或特征，基因流会使出现在一个群体中的基因带给另一个群体，基因流越大，群体间的相似性越大。如果基因流是发生进化的惟一形式的话，它会导致不同群体的基因频率趋于一致，且这种频率分布是符合哈代-温伯格平衡状态的。</p>
+<p>当迁移发生在很大的陆地和很小的岛屿之间，而且基因流方向主要是从陆地到岛屿。由于陆地足够大，从岛屿到陆地的基因流不足以影响陆地的等位基因频率，因而可以忽略。那么岛屿上等位基因频率的变化仅由岛屿和陆地间等位基因频率差异的大小和迁移个体的数量（迁移速率）决定。这种非常简单的迁移模型被称为岛陆模型（Island
+Mainland Model）。</p>
+<h3 id="岛陆模型">岛陆模型</h3>
+<p>最为著名的一个岛陆模型就是海湾格斑蝴蝶（Euphydryas editha
+bayensis）<span
+class="math inline">\(^\text{[4]}\)</span>。在1987年，整个蝴蝶种群占据了一个面积约为2000
+ha的大斑块（约有<span
+class="math inline">\(10^6\)</span>个成年蝴蝶）和9个面积为1-250
+ha的小斑块（约有10-250个成年蝴蝶）。而在整个区域中共有27个可供蝴蝶繁殖的生境，但仅有与大斑块相邻的这9个斑块上才有蝴蝶繁殖。这种分布格局正是由于该种蝴蝶的扩散作用造成的。据该文献分析，在单位时间内迁移到给定斑块的概率为
+<span class="math inline">\(I = e^{-D/D&#39;}\)</span>，其中 <span
+class="math inline">\(D\)</span> 是源地到目标斑块的距离，<span
+class="math inline">\(D&#39;\)</span>
+是物种特有的扩散常数，代表成功迁移个体的平均移动距离。文章通过对现有数据的拟合得到了最佳拟合
+<span class="math inline">\(D&#39;\)</span> 为1.7
+km。在本文的模型中，直接使用最后计算得到的迁移速率 <span
+class="math inline">\(I = 0.0668\)</span> 进行模拟。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 设定相关参数</span></span><br><span class="line">pX &lt;- <span class="number">1</span>        <span class="comment"># 大斑块的基因频率</span></span><br><span class="line">pY &lt;- <span class="number">0</span>        <span class="comment"># 小斑块的基因频率</span></span><br><span class="line">m &lt;- <span class="number">0.0668</span>    <span class="comment"># 基因迁移速率</span></span><br><span class="line">G &lt;- <span class="number">200</span>      <span class="comment"># 繁殖代数</span></span><br><span class="line">p &lt;- pY        <span class="comment"># 繁殖初始基因频率</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## for循环进行迭代</span></span><br><span class="line"><span class="keyword">for</span>( t <span class="keyword">in</span> <span class="number">2</span>:G)&#123;</span><br><span class="line">  p[t] &lt;- p[t-<span class="number">1</span>] * (<span class="number">1</span>-m) + pX * m  <span class="comment">#迭代公式，当代频率=上一代频率+迁入-迁出</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">## 绘制图像可视化</span></span><br><span class="line">par(family = <span class="string">&quot;Times&quot;</span>)    <span class="comment"># 设置绘图字体</span></span><br><span class="line">plot(<span class="number">1</span>:G, p,             <span class="comment"># 绘制曲线图</span></span><br><span class="line">     <span class="built_in">type</span> = <span class="string">&quot;l&quot;</span>,</span><br><span class="line">     xlab = <span class="string">&quot;Generation&quot;</span>)   </span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot3.jpeg" class="" title="plot3">
 <p>基因流对于种群基因频率的稳定影响很大。当基因流水平较高时，即不同群体之间的迁移率较高时，来自另一群体的大量个体在一群体中随机交配进行繁殖，在当前群体中哈迪-温伯格平衡就被建立起来。而低水平的基因流不能完全表现这种特征，但它和自然选择、遗传漂变一样会影响种群遗传多样性。</p>
-<p>在上述的海湾格斑蝴蝶（Euphydryas editha bayensis）模型中，迁移速率 $I$ 与源地到目标斑块的距离 $D$ 有着显著的相关关系。根据文章中提供的距离数据，本文选用了三个由不同距离计算得到的迁移速率 $I = 0.0668 \text{ or } 0.0293 \text{ or } 0.0096$ 进行模拟，得到结果如下所示。</p>
+<p>在上述的海湾格斑蝴蝶（Euphydryas editha bayensis）模型中，迁移速率
+<span class="math inline">\(I\)</span> 与源地到目标斑块的距离 <span
+class="math inline">\(D\)</span>
+有着显著的相关关系。根据文章中提供的距离数据，本文选用了三个由不同距离计算得到的迁移速率
+<span class="math inline">\(I = 0.0668 \text{ or } 0.0293 \text{ or }
+0.0096\)</span> 进行模拟，得到结果如下所示。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line">library<span class="punctuation">(</span>ggplot2<span class="punctuation">)</span>    <span class="comment"># 加载ggplot2绘图包</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 定义函数 MigrationMutiFreq</span></span><br><span class="line"><span class="comment">## 函数参数解释:</span></span><br><span class="line"><span class="comment">## G (数值)繁殖代数</span></span><br><span class="line"><span class="comment">## M (向量)不同迁移率的集合</span></span><br><span class="line"><span class="comment">## P (向量)大斑块和小斑块的初始基因频率 默认为(1,0)</span></span><br><span class="line">MigrationMutiFreq <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>G<span class="punctuation">,</span> M<span class="punctuation">,</span></span><br><span class="line">                              P <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span><span class="number">0</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  </span><br><span class="line">  results <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>Rate <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span>M<span class="punctuation">,</span> each <span class="operator">=</span> G<span class="punctuation">)</span><span class="punctuation">,</span>    </span><br><span class="line">                        Generation <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span>G<span class="punctuation">,</span> times <span class="operator">=</span> <span class="built_in">length</span><span class="punctuation">(</span>M<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">  p <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="punctuation">)</span></span><br><span class="line">  i <span class="operator">&lt;-</span> 1</span><br><span class="line">  <span class="keyword">for</span> <span class="punctuation">(</span>m <span class="keyword">in</span> M<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    p<span class="punctuation">[</span>i<span class="punctuation">]</span> <span class="operator">&lt;-</span> P<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span></span><br><span class="line">    i <span class="operator">=</span> i <span class="operator">+</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> <span class="punctuation">(</span>g <span class="keyword">in</span> <span class="number">2</span><span class="operator">:</span>G<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">      p<span class="punctuation">[</span>i<span class="punctuation">]</span> <span class="operator">=</span> p<span class="punctuation">[</span>i<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span><span class="operator">*</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>m<span class="punctuation">)</span> <span class="operator">+</span> P<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="operator">*</span>m</span><br><span class="line">      i <span class="operator">=</span> i <span class="operator">+</span> <span class="number">1</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  results<span class="punctuation">[</span><span class="string">&quot;p&quot;</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> p                       <span class="comment"># 向results中添加列p</span></span><br><span class="line">  results<span class="operator">$</span>Rate <span class="operator">&lt;-</span> factor<span class="punctuation">(</span>results<span class="operator">$</span>Rate<span class="punctuation">)</span>    <span class="comment"># 将results中列Rate转化为Factor</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">## 绘制曲线图</span></span><br><span class="line">  ggplot<span class="punctuation">(</span>results<span class="punctuation">,</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> Generation<span class="punctuation">,</span> y <span class="operator">=</span> p<span class="punctuation">,</span> color <span class="operator">=</span> Rate<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">    geom_line<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">    theme<span class="punctuation">(</span>text <span class="operator">=</span> element_text<span class="punctuation">(</span>size<span class="operator">=</span><span class="number">11</span><span class="punctuation">,</span> family<span class="operator">=</span><span class="string">&quot;serif&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 设定相关参数</span></span><br><span class="line">M <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">.0668</span><span class="punctuation">,</span><span class="number">.0293</span><span class="punctuation">,</span><span class="number">.0096</span><span class="punctuation">)</span>    <span class="comment"># 不同迁移率的集合</span></span><br><span class="line">G <span class="operator">&lt;-</span> 800                      <span class="comment"># 繁殖代数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 函数应用</span></span><br><span class="line">MigrationMutiFreq<span class="punctuation">(</span>G<span class="punctuation">,</span> M<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot4.jpeg" class="" title="plot4">
 <p>根据上述模拟结果可以发现，迁移率越高的小斑块越容易达到哈迪-温伯格平衡。这一结论也与文献中记载的蝴蝶分布情况吻合。</p>
-<h3 id="邻里模型"><a href="#邻里模型" class="headerlink" title="邻里模型"></a>邻里模型</h3><p>当一个大群体中存在很多子群体，子群体之间彼此连接，形成许多相互接壤的邻里。由于个体从出生到性成熟整个期间内所能移动的距离有限，从而根据个体间能够随机交配的范围限制，将群体划分为许多邻里。每个邻里就是其中个体能够有效的随机交配的区域，每个邻里就相当于一个小群体。由于邻里间彼此是连接的，邻近的邻里间迁移的可能性要比相距较远的邻里间大得多，这导致不同邻里之间的迁移速率不同。这种模型称为邻里模型（Neighborhood Model），在一些研究中也被称为距离隔离模型（Isolation-By-Distance Model）。</p>
-<p>同样以上述提到的海湾格斑蝴蝶为例，蝴蝶种群占据了大斑块后，通过迁移向其他几个小斑块上迁移，同时在这9个小斑块上也存在着灭绝和再定居的周转。本文选用了上文岛陆模型中的三个小斑块迁移20代后的基因频率作为初始频率 $P = 0.167 \text{ or } 0.432 \text{ or } 0.731$ ，通过各小斑块的相互距离计算得到的迁移速率 $I = 0.0028 \text{ or } 0.0528 \text{ or } 0.0163$ 进行模拟，得到结果如下所示。</p>
+<h3 id="邻里模型">邻里模型</h3>
+<p>当一个大群体中存在很多子群体，子群体之间彼此连接，形成许多相互接壤的邻里。由于个体从出生到性成熟整个期间内所能移动的距离有限，从而根据个体间能够随机交配的范围限制，将群体划分为许多邻里。每个邻里就是其中个体能够有效的随机交配的区域，每个邻里就相当于一个小群体。由于邻里间彼此是连接的，邻近的邻里间迁移的可能性要比相距较远的邻里间大得多，这导致不同邻里之间的迁移速率不同。这种模型称为邻里模型（Neighborhood
+Model），在一些研究中也被称为距离隔离模型（Isolation-By-Distance
+Model）。</p>
+<p>同样以上述提到的海湾格斑蝴蝶为例，蝴蝶种群占据了大斑块后，通过迁移向其他几个小斑块上迁移，同时在这9个小斑块上也存在着灭绝和再定居的周转。本文选用了上文岛陆模型中的三个小斑块迁移20代后的基因频率作为初始频率
+<span class="math inline">\(P = 0.167 \text{ or } 0.432 \text{ or }
+0.731\)</span> ，通过各小斑块的相互距离计算得到的迁移速率 <span
+class="math inline">\(I = 0.0028 \text{ or } 0.0528 \text{ or }
+0.0163\)</span> 进行模拟，得到结果如下所示。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 定义函数 Migration</span></span><br><span class="line"><span class="comment">## 函数参数解释:</span></span><br><span class="line"><span class="comment">## G (数值)繁殖代数</span></span><br><span class="line"><span class="comment">## P (向量)各斑块初始基因频率 斑块依次为 X Y Z</span></span><br><span class="line"><span class="comment">## G (向量)各斑块之间基因迁移频率 依次为 X-Y X-Z Y-Z</span></span><br><span class="line">Migration <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>G<span class="punctuation">,</span> P<span class="punctuation">,</span> M<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  X <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>P<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">  Y <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>P<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">  Z <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>P<span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">## 计算迁入迁出数量</span></span><br><span class="line">  <span class="keyword">for</span> <span class="punctuation">(</span>g <span class="keyword">in</span> <span class="number">2</span><span class="operator">:</span>G<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    XmXY <span class="operator">&lt;-</span> X<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">    XmXZ <span class="operator">&lt;-</span> X<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span></span><br><span class="line">    YmXY <span class="operator">&lt;-</span> Y<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">    YmYZ <span class="operator">&lt;-</span> Y<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span></span><br><span class="line">    ZmXZ <span class="operator">&lt;-</span> Z<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span></span><br><span class="line">    ZmYZ <span class="operator">&lt;-</span> Z<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">*</span> M<span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span></span><br><span class="line">    </span><br><span class="line">    X<span class="punctuation">[</span>g<span class="punctuation">]</span> <span class="operator">&lt;-</span> X<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">+</span> YmXY <span class="operator">+</span> ZmXZ <span class="operator">-</span> XmXY <span class="operator">-</span> XmXZ</span><br><span class="line">    Y<span class="punctuation">[</span>g<span class="punctuation">]</span> <span class="operator">&lt;-</span> Y<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">+</span> XmXY <span class="operator">+</span> ZmYZ <span class="operator">-</span> YmXY <span class="operator">-</span> YmYZ</span><br><span class="line">    Z<span class="punctuation">[</span>g<span class="punctuation">]</span> <span class="operator">&lt;-</span> Z<span class="punctuation">[</span>g<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">+</span> XmXZ <span class="operator">+</span> YmYZ <span class="operator">-</span> ZmXZ <span class="operator">-</span> ZmYZ</span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">## 创建结果数据表 results</span></span><br><span class="line">  <span class="comment">## 数据表列解释:</span></span><br><span class="line">  <span class="comment">## Generation 代数</span></span><br><span class="line">  <span class="comment">## Frequency 基因频率</span></span><br><span class="line">  <span class="comment">## Island 斑块名称</span></span><br><span class="line">  results <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>Generation <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span>G<span class="punctuation">,</span> times <span class="operator">=</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span> </span><br><span class="line">                        Frequency <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>X<span class="punctuation">,</span> Y<span class="punctuation">,</span> Z<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                        Island <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;X&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Z&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> each <span class="operator">=</span> G<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">## 绘制图像可视化</span></span><br><span class="line">  ggplot<span class="punctuation">(</span>results<span class="punctuation">,</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> Generation<span class="punctuation">,</span> y <span class="operator">=</span> Frequency<span class="punctuation">,</span> color <span class="operator">=</span> Island<span class="punctuation">)</span><span class="punctuation">)</span><span class="operator">+</span></span><br><span class="line">    geom_line<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">    theme<span class="punctuation">(</span>text <span class="operator">=</span> element_text<span class="punctuation">(</span>size<span class="operator">=</span><span class="number">11</span><span class="punctuation">,</span> family<span class="operator">=</span><span class="string">&quot;serif&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 设定相关参数</span></span><br><span class="line">G <span class="operator">&lt;-</span> 200                          <span class="comment"># 繁殖代数</span></span><br><span class="line">P <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0.167</span><span class="punctuation">,</span> <span class="number">0.432</span><span class="punctuation">,</span> <span class="number">0.731</span><span class="punctuation">)</span>       <span class="comment"># 初始基因频率分别为 X Y Z</span></span><br><span class="line">M <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0.0028</span><span class="punctuation">,</span> <span class="number">0.0528</span><span class="punctuation">,</span> <span class="number">0.0163</span><span class="punctuation">)</span>    <span class="comment"># 迁移率分别为 X-Y X-Z Y-Z</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##函数应用</span></span><br><span class="line">Migration<span class="punctuation">(</span>G<span class="punctuation">,</span> P<span class="punctuation">,</span> M<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot5.jpeg" class="" title="plot5">
 <p>上述结果显示，在不考虑其他斑块与这三个斑块的迁移，这三个斑块的基因频率最后将趋于稳定，达到相同的哈迪-温伯格平衡。</p>
-<p>总的来说，迁移是一种影响空间分离群体之间遗传差异、生殖隔离和物种形成的重要效应$^\text{[5]}$，迁移会使不同群体之间的等位基因的差异减小。例如一个基因有两个等位基因分别固定在两个种群中，低水平的基因流不足以改变这个布局。但如果大量个体从一群体迁移到另一群体，甚至它们在不同环境下，自然选择也起作用时，高水平的基因流会掩盖其他进化形式，使两个群体趋于相似。群体间相似性减少了等位基因的频率在不同群体的差异，使群体之间趋于一致。</p>
-<h2 id="3-突变作用（Mutation）"><a href="#3-突变作用（Mutation）" class="headerlink" title="3. 突变作用（Mutation）"></a>3. 突变作用（Mutation）</h2><p>突变是指基因组中的基因或DNA序列发生随机变化，引入了新的遗传变异，增加了遗传多样性。突变是遗传多样性产生的主要驱动力之一，它对生物种群的遗传结构和多样性产生深远影响。但是单独的突变发生时，往往对于种群遗传多样性的影响较小：一方面，根据中性进化学说，大部分的突变都是无害且无益；另一方面，当没有环境选择压力时，突变产生的新性状不易留存下来占据整个种群。</p>
-<p>在下面的分析中，本文选择癌细胞分裂的情景建立突变模型。癌是一个进化过程的结果，其出现的先决条件是单个细胞发生多重突变（multiple mutations），而且不同于其他突变，大多数癌细胞的产生能够增强局部细胞适合度，因此癌症的发展可以被看作是一种破坏性进化（destructive evolution）$^\text{[6]}$。在本模型中，不考虑癌细胞的增殖优势以及其固定概率，仅对均匀区室内细胞群的一个特定致癌基因突变的动力学特征进行模拟。假定该器官区室内的细胞初始均为发生突变，所有细胞每天发生一次分裂，每$10^{6}$次细胞分裂发生一次突变，每次突变有$1.2×10^{-3}$的概率发生有效的致癌基因突变（即致癌基因的活化率为$1.2×10^{-9}$），突变后不被修复或清除，得到模拟结果如下。</p>
+<p>总的来说，迁移是一种影响空间分离群体之间遗传差异、生殖隔离和物种形成的重要效应<span
+class="math inline">\(^\text{[5]}\)</span>，迁移会使不同群体之间的等位基因的差异减小。例如一个基因有两个等位基因分别固定在两个种群中，低水平的基因流不足以改变这个布局。但如果大量个体从一群体迁移到另一群体，甚至它们在不同环境下，自然选择也起作用时，高水平的基因流会掩盖其他进化形式，使两个群体趋于相似。群体间相似性减少了等位基因的频率在不同群体的差异，使群体之间趋于一致。</p>
+<h2 id="突变作用mutation">3. 突变作用（Mutation）</h2>
+<p>突变是指基因组中的基因或DNA序列发生随机变化，引入了新的遗传变异，增加了遗传多样性。突变是遗传多样性产生的主要驱动力之一，它对生物种群的遗传结构和多样性产生深远影响。但是单独的突变发生时，往往对于种群遗传多样性的影响较小：一方面，根据中性进化学说，大部分的突变都是无害且无益；另一方面，当没有环境选择压力时，突变产生的新性状不易留存下来占据整个种群。</p>
+<p>在下面的分析中，本文选择癌细胞分裂的情景建立突变模型。癌是一个进化过程的结果，其出现的先决条件是单个细胞发生多重突变（multiple
+mutations），而且不同于其他突变，大多数癌细胞的产生能够增强局部细胞适合度，因此癌症的发展可以被看作是一种破坏性进化（destructive
+evolution）<span
+class="math inline">\(^\text{[6]}\)</span>。在本模型中，不考虑癌细胞的增殖优势以及其固定概率，仅对均匀区室内细胞群的一个特定致癌基因突变的动力学特征进行模拟。假定该器官区室内的细胞初始均为发生突变，所有细胞每天发生一次分裂，每<span
+class="math inline">\(10^{6}\)</span>次细胞分裂发生一次突变，每次突变有<span
+class="math inline">\(1.2×10^{-3}\)</span>的概率发生有效的致癌基因突变（即致癌基因的活化率为<span
+class="math inline">\(1.2×10^{-9}\)</span>），突变后不被修复或清除，得到模拟结果如下。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 建立函数 Mutation</span></span><br><span class="line"><span class="comment">## 函数参数解释:</span></span><br><span class="line"><span class="comment">## p1 (数值)种群初始基因频率</span></span><br><span class="line"><span class="comment">## P  (向量)等位基因突变概率</span></span><br><span class="line"><span class="comment">## T  (向量)总代数 每轮次突变发生所需代数</span></span><br><span class="line">Mutation <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>p1<span class="punctuation">,</span> P<span class="punctuation">,</span> <span class="built_in">T</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  Time <span class="operator">&lt;-</span> seq<span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="built_in">T</span><span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="built_in">T</span><span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">  p <span class="operator">&lt;-</span> <span class="built_in">rep</span><span class="punctuation">(</span>p1<span class="punctuation">,</span> <span class="built_in">length</span><span class="punctuation">(</span>Time<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment"># for循环迭代计算基因频率</span></span><br><span class="line">  <span class="keyword">for</span> <span class="punctuation">(</span>i <span class="keyword">in</span> <span class="number">2</span><span class="operator">:</span><span class="built_in">length</span><span class="punctuation">(</span>Time<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    p<span class="punctuation">[</span>i<span class="punctuation">]</span> <span class="operator">&lt;-</span> <span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>P<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="operator">*</span>p<span class="punctuation">[</span>i<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">+</span> P<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="operator">*</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>p<span class="punctuation">[</span>i<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  par<span class="punctuation">(</span>family <span class="operator">=</span> <span class="string">&quot;Times&quot;</span><span class="punctuation">)</span></span><br><span class="line">  plot<span class="punctuation">(</span>Time<span class="punctuation">,</span> p<span class="punctuation">,</span></span><br><span class="line">       cex <span class="operator">=</span> <span class="number">0.2</span><span class="punctuation">,</span></span><br><span class="line">       xlab <span class="operator">=</span> <span class="string">&quot;Time (× 1000 days)&quot;</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 函数应用</span></span><br><span class="line">Mutation<span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span> <span class="number">0.12e-2</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">3000000</span><span class="punctuation">,</span> <span class="number">1000</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot6.jpeg" class="" title="plot6">
 <p>以上仅是对癌细胞进化动力学的简单模拟，但也能看出，在没有免疫系统作用的情况下，尽管致癌基因的活化率低，随着时间的推移，突变后的抑癌基因将占据整个细胞群。总的来说，突变对遗传多样性的影响是复杂的。它可以增加新的遗传变异，增加了种群内的遗传多样性。然而，突变也可能一些重要基因发生变异，有时可能导致有害突变的累积，从而减少种群的遗传多样性。</p>
-<h2 id="4-选择作用（Selection）"><a href="#4-选择作用（Selection）" class="headerlink" title="4. 选择作用（Selection）"></a>4. 选择作用（Selection）</h2><p>自然选择是指适应性特征的个体在繁殖中具有更高的生存和繁殖成功率。它导致适应性特征的基因频率增加，增加了种群的适应性，同时减少了非适应性特征的基因频率。选择通过改变种群成活率和交配率来该改变种群遗传多样性。在影响种群遗传多样性的各个因素中，选择的作用占据最主要的地位。</p>
-<p>对于微生物而言，选择过程包含环境选择和生物互作两个层面的内容$^\text{[7]}$。本文主要讨论其中的环境选择部分。大量研究发现微生物群落结构与各种生物和非生物因子及人类活动相关，例如细菌和真菌及其功能类群组成受到空间、土壤、植被、气候等因素的影响；古菌群落组成与土壤水分、养分和pH值等因素密切相关；病毒组成则与海拔、土壤pH值和钙含量等相关。根据作用方式的不同，环境选择对微生物群落的影响不同。例如，异质性选择（Heterogeneous  Selection）过程会导致微生物群落间组成差异变大，而同质性选择（Homogenous Selection）过程则会导致微生物群落间组成趋同。不管异质性选择还是同质性选择，通常认为环境选择对微生物群落的影响是确定性的过程。</p>
+<h2 id="选择作用selection">4. 选择作用（Selection）</h2>
+<p>自然选择是指适应性特征的个体在繁殖中具有更高的生存和繁殖成功率。它导致适应性特征的基因频率增加，增加了种群的适应性，同时减少了非适应性特征的基因频率。选择通过改变种群成活率和交配率来该改变种群遗传多样性。在影响种群遗传多样性的各个因素中，选择的作用占据最主要的地位。</p>
+<p>对于微生物而言，选择过程包含环境选择和生物互作两个层面的内容<span
+class="math inline">\(^\text{[7]}\)</span>。本文主要讨论其中的环境选择部分。大量研究发现微生物群落结构与各种生物和非生物因子及人类活动相关，例如细菌和真菌及其功能类群组成受到空间、土壤、植被、气候等因素的影响；古菌群落组成与土壤水分、养分和pH值等因素密切相关；病毒组成则与海拔、土壤pH值和钙含量等相关。根据作用方式的不同，环境选择对微生物群落的影响不同。例如，异质性选择（Heterogeneous
+Selection）过程会导致微生物群落间组成差异变大，而同质性选择（Homogenous
+Selection）过程则会导致微生物群落间组成趋同。不管异质性选择还是同质性选择，通常认为环境选择对微生物群落的影响是确定性的过程。</p>
 <p>本文对抗生素胁迫下耐药性细菌的产生进行模拟，假设细菌种群中因突变偶然产生耐药基因A，初始基因频率为0.2。首先进行无抗生素胁迫下的繁殖迭代模拟，令各基因型的适合度均为1，发现在该过程中，耐药基因始终处于较低的水平；然后再进行抗生素胁迫下的模拟，AA，AB和BB这三种基因型的频率分别为0.9，0.6和0.3。发现在最后的平衡中，耐药基因A处于优势，且占据了整个种群。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 建立函数 IterateSelection</span></span><br><span class="line"><span class="comment">## 函数参数解释:</span></span><br><span class="line"><span class="comment">## p0 (数值)初始基因A频率</span></span><br><span class="line"><span class="comment">## wAA (数值)AA的相对适合度 范围0-1</span></span><br><span class="line"><span class="comment">## wAB (数值)AB的相对适合度 范围0-1</span></span><br><span class="line"><span class="comment">## wBB (数值)BB的相对适合度 范围0-1</span></span><br><span class="line"><span class="comment">## G (数值)繁殖代数</span></span><br><span class="line">IterateSelection <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>p <span class="operator">=</span> <span class="number">0.5</span><span class="punctuation">,</span> G<span class="punctuation">,</span> wAA<span class="punctuation">,</span> wAB<span class="punctuation">,</span> wBB<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  freq <span class="operator">&lt;-</span> <span class="built_in">rep</span><span class="punctuation">(</span>p<span class="punctuation">,</span> G<span class="punctuation">)</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">for</span> <span class="punctuation">(</span>i <span class="keyword">in</span> <span class="number">2</span><span class="operator">:</span>G<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    pA <span class="operator">&lt;-</span> freq<span class="punctuation">[</span><span class="punctuation">(</span>i<span class="operator">-</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">]</span></span><br><span class="line">    pB <span class="operator">&lt;-</span> 1<span class="operator">-</span>pA</span><br><span class="line">    wpA <span class="operator">&lt;-</span> pA<span class="operator">^</span><span class="number">2</span> <span class="operator">*</span> wAA <span class="operator">+</span> pA <span class="operator">*</span> pB <span class="operator">*</span> wAB    <span class="comment"># 存活的基因A的相对频率</span></span><br><span class="line">    wpB <span class="operator">&lt;-</span> pB<span class="operator">^</span><span class="number">2</span> <span class="operator">*</span> wBB <span class="operator">+</span> pA <span class="operator">*</span> pB <span class="operator">*</span> wAB    <span class="comment"># 存活的基因B的相对频率</span></span><br><span class="line">    freq<span class="punctuation">[</span>i<span class="punctuation">]</span> <span class="operator">&lt;-</span> wpA <span class="operator">/</span> <span class="punctuation">(</span>wpA <span class="operator">+</span> wpB<span class="punctuation">)</span>         <span class="comment"># 计算基因A的新基因频率</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="built_in">return</span><span class="punctuation">(</span>freq<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 函数应用</span></span><br><span class="line">p <span class="operator">&lt;-</span> 0.2</span><br><span class="line">G <span class="operator">&lt;-</span> 20</span><br><span class="line">p1 <span class="operator">&lt;-</span> IterateSelection<span class="punctuation">(</span>p<span class="punctuation">,</span> G<span class="punctuation">,</span></span><br><span class="line">                       wAA <span class="operator">=</span> <span class="number">1.0</span><span class="punctuation">,</span> wAB <span class="operator">=</span> <span class="number">1.0</span><span class="punctuation">,</span> wBB <span class="operator">=</span> <span class="number">1.0</span><span class="punctuation">)</span></span><br><span class="line">p2 <span class="operator">&lt;-</span> IterateSelection<span class="punctuation">(</span>p<span class="punctuation">,</span> G<span class="punctuation">,</span></span><br><span class="line">                       wAA <span class="operator">=</span> <span class="number">0.9</span><span class="punctuation">,</span> wAB <span class="operator">=</span> <span class="number">0.6</span><span class="punctuation">,</span> wBB <span class="operator">=</span> <span class="number">0.3</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">results <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>Generation <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span>G<span class="punctuation">,</span> times <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span><span class="punctuation">,</span> </span><br><span class="line">                      Frequency <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>p1<span class="punctuation">,</span> p2<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                      Label <span class="operator">=</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;No Antibiotic&quot;</span><span class="punctuation">,</span> <span class="string">&quot;With Antibiotic&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> each <span class="operator">=</span> G<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">ggplot<span class="punctuation">(</span>results<span class="punctuation">,</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> Generation<span class="punctuation">,</span> y <span class="operator">=</span> Frequency<span class="punctuation">,</span> color <span class="operator">=</span> Label<span class="punctuation">)</span><span class="punctuation">)</span><span class="operator">+</span></span><br><span class="line">  geom_line<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">  theme<span class="punctuation">(</span>text <span class="operator">=</span> element_text<span class="punctuation">(</span>size<span class="operator">=</span><span class="number">11</span><span class="punctuation">,</span> family<span class="operator">=</span><span class="string">&quot;serif&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot7.jpeg" class="" title="plot7">
@@ -305,26 +396,43 @@
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line">p3 <span class="operator">&lt;-</span> IterateSelection<span class="punctuation">(</span>p <span class="operator">=</span> <span class="number">0.8</span><span class="punctuation">,</span> G <span class="operator">=</span> <span class="number">10</span><span class="punctuation">,</span> </span><br><span class="line">                        wAA <span class="operator">=</span><span class="number">1</span><span class="operator">/</span><span class="number">3</span><span class="punctuation">,</span> wAB <span class="operator">=</span><span class="number">1</span><span class="operator">/</span><span class="number">15</span><span class="punctuation">,</span> wBB <span class="operator">=</span> <span class="number">1.0</span><span class="punctuation">)</span></span><br><span class="line">plot<span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">,</span> p3<span class="punctuation">,</span> </span><br><span class="line">     type <span class="operator">=</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span> col <span class="operator">=</span> <span class="string">&quot;red&quot;</span><span class="punctuation">,</span> </span><br><span class="line">     xlab <span class="operator">=</span> <span class="string">&quot;Generation&quot;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="string">&quot;Frequency&quot;</span><span class="punctuation">,</span> ylim <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot8.jpeg" class="" title="plot8">
 <p>总而言之，种群进化中的选择综合作用于同一物种的个体间的适合度差异和初始基因频率。当不同基因型个体之间的适合度差异显著时，种群基因多样性受到削弱，不利于遗传多样性的维持；但当选择过程中不同基因初始频率相差相近，不同基因型个体的适合度差异不大时，产生稳定化机制，不同基因之间实现共存。</p>
-<h2 id="5-近交效应（Inbreeding）"><a href="#5-近交效应（Inbreeding）" class="headerlink" title="5. 近交效应（Inbreeding）"></a>5. 近交效应（Inbreeding）</h2><p>近交增加了相近亲缘个体间的交配频率，导致同一等位基因之间的结合频率增加，增加了纯合子基因型的频率，从而降低了遗传多样性。近交本质上是由于种群内的不完全交配导致的。在哈迪-温伯格平衡中，种群内随机交配，个体随机繁殖是非常重要的基础，而近交使得种群中哈迪-温伯格平衡发生偏移，改变了原有的遗传多样性。</p>
+<h2 id="近交效应inbreeding">5. 近交效应（Inbreeding）</h2>
+<p>近交增加了相近亲缘个体间的交配频率，导致同一等位基因之间的结合频率增加，增加了纯合子基因型的频率，从而降低了遗传多样性。近交本质上是由于种群内的不完全交配导致的。在哈迪-温伯格平衡中，种群内随机交配，个体随机繁殖是非常重要的基础，而近交使得种群中哈迪-温伯格平衡发生偏移，改变了原有的遗传多样性。</p>
 <p>本文针对近交中的一种极端情况，自交（即种群中相同基因型个体相互交配）展开分析。选用豌豆这一典型的自交植物进行模拟，其中AA基因型有250株，AB基因型有500株，BB基因型有350株。以近交系数作为衡量豌豆种群基因多样性的指标，得到模拟结果如下。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line">library<span class="punctuation">(</span><span class="string">&quot;gstudio&quot;</span><span class="punctuation">)</span>    <span class="comment"># 加载gstudio包</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 定义基因型</span></span><br><span class="line">AA <span class="operator">&lt;-</span> locus<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;A&quot;</span><span class="punctuation">,</span><span class="string">&quot;A&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">AB <span class="operator">&lt;-</span> locus<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;A&quot;</span><span class="punctuation">,</span><span class="string">&quot;B&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">BB <span class="operator">&lt;-</span> locus<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;B&quot;</span><span class="punctuation">,</span><span class="string">&quot;B&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 建立函数 Selfing</span></span><br><span class="line"><span class="comment">## 函数参数解释:</span></span><br><span class="line"><span class="comment">## data (数据表)种群基因数据</span></span><br><span class="line"><span class="comment">## G (数值)繁殖代数</span></span><br><span class="line"><span class="comment">## mode (类型)计算种群基因多样性的类别 详见?genetic_diversity中mode参数</span></span><br><span class="line">Selfing <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>data<span class="punctuation">,</span> G<span class="punctuation">,</span> </span><br><span class="line">                    mode <span class="operator">=</span> <span class="string">&quot;Fis&quot;</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="built_in">F</span> <span class="operator">&lt;-</span> numeric<span class="punctuation">(</span><span class="punctuation">)</span></span><br><span class="line">  <span class="keyword">for</span><span class="punctuation">(</span>t <span class="keyword">in</span> <span class="number">0</span><span class="operator">:</span>G<span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="built_in">F</span><span class="punctuation">[</span>t<span class="operator">+</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> genetic_diversity<span class="punctuation">(</span>data<span class="punctuation">,</span> mode <span class="operator">=</span> mode<span class="punctuation">)</span><span class="operator">$</span>Fis<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">    data <span class="operator">&lt;-</span> mate<span class="punctuation">(</span>data<span class="punctuation">,</span> data<span class="punctuation">,</span> N <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  par<span class="punctuation">(</span>family <span class="operator">=</span> <span class="string">&quot;Times&quot;</span><span class="punctuation">)</span></span><br><span class="line">  plot<span class="punctuation">(</span><span class="number">0</span><span class="operator">:</span><span class="number">15</span><span class="punctuation">,</span> <span class="built_in">F</span><span class="punctuation">,</span> </span><br><span class="line">       type <span class="operator">=</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span></span><br><span class="line">       xlab <span class="operator">=</span> <span class="string">&quot;Generation&quot;</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 创建种群基因数据</span></span><br><span class="line">pop <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>ID <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">1100</span><span class="punctuation">,</span></span><br><span class="line">                  Locus1 <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="built_in">rep</span><span class="punctuation">(</span>AA<span class="punctuation">,</span> <span class="number">250</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                             <span class="built_in">rep</span><span class="punctuation">(</span>AB<span class="punctuation">,</span> <span class="number">500</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                             <span class="built_in">rep</span><span class="punctuation">(</span>BB<span class="punctuation">,</span> <span class="number">350</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment">## 函数应用</span></span><br><span class="line">Selfing<span class="punctuation">(</span>pop<span class="punctuation">,</span> <span class="number">15</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot9.jpeg" class="" title="plot9">
 <p>从上述图像可看出，在每代均进行自交的前提下，近交系数F将在几代后很快地趋于1达到平衡。这一现象可以通过严谨的数学推导得到验证。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 数学推导近交下 近交系数 与 繁殖代数 的关系</span></span><br><span class="line">F0 <span class="operator">&lt;-</span> 0</span><br><span class="line"><span class="built_in">T</span> <span class="operator">&lt;-</span> 0<span class="operator">:</span><span class="number">15</span></span><br><span class="line"><span class="built_in">F</span> <span class="operator">&lt;-</span> 1 <span class="operator">-</span> <span class="number">0.5</span><span class="operator">^</span><span class="built_in">T</span> <span class="operator">*</span> <span class="punctuation">(</span><span class="number">1</span> <span class="operator">-</span> F0<span class="punctuation">)</span></span><br><span class="line">plot<span class="punctuation">(</span><span class="built_in">T</span><span class="punctuation">,</span> <span class="built_in">F</span><span class="punctuation">,</span> type <span class="operator">=</span> <span class="string">&quot;l&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot10.jpeg" class="" title="plot10">
-<p>若在近交过程中引入突变，假设每株豌豆均有$10^{-3}$的概率将A基因突变为B基因，再次进行模拟，结果如下。</p>
+<p>若在近交过程中引入突变，假设每株豌豆均有<span
+class="math inline">\(10^{-3}\)</span>的概率将A基因突变为B基因，再次进行模拟，结果如下。</p>
 <figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 定义相关参数</span></span><br><span class="line">G <span class="operator">&lt;-</span> 1<span class="operator">:</span><span class="number">100</span>    <span class="comment"># 繁殖代数</span></span><br><span class="line"><span class="built_in">F</span> <span class="operator">&lt;-</span> 1<span class="operator">/</span><span class="number">16</span>     <span class="comment"># 初始F</span></span><br><span class="line">mu <span class="operator">&lt;-</span> 1<span class="operator">/</span><span class="number">1000</span>  <span class="comment"># A到B的突变概率</span></span><br><span class="line">Ne <span class="operator">&lt;-</span> 10      <span class="comment"># 有效种群大小</span></span><br><span class="line"></span><br><span class="line">F0 <span class="operator">&lt;-</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">F</span><span class="punctuation">,</span><span class="number">100</span><span class="punctuation">)</span> <span class="comment"># 不考虑突变下的自交模型</span></span><br><span class="line">F1 <span class="operator">&lt;-</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">F</span><span class="punctuation">,</span><span class="number">100</span><span class="punctuation">)</span> <span class="comment"># 考虑突变发生的自交模型</span></span><br><span class="line"></span><br><span class="line">inc <span class="operator">&lt;-</span> 1<span class="operator">/</span><span class="punctuation">(</span><span class="number">2</span><span class="operator">*</span>Ne<span class="punctuation">)</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span><span class="punctuation">(</span> t <span class="keyword">in</span> <span class="number">2</span><span class="operator">:</span><span class="built_in">max</span><span class="punctuation">(</span>G<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">  F0<span class="punctuation">[</span>t<span class="punctuation">]</span> <span class="operator">&lt;-</span> inc <span class="operator">+</span> <span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>inc<span class="punctuation">)</span><span class="operator">*</span>F0<span class="punctuation">[</span>t<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">  F1<span class="punctuation">[</span>t<span class="punctuation">]</span> <span class="operator">&lt;-</span> <span class="punctuation">(</span>inc <span class="operator">+</span> <span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>inc<span class="punctuation">)</span><span class="operator">*</span>F1<span class="punctuation">[</span>t<span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span> <span class="operator">*</span> <span class="punctuation">(</span><span class="number">1</span><span class="operator">-</span>mu<span class="punctuation">)</span><span class="operator">^</span><span class="number">2</span> </span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 绘制图像可视化</span></span><br><span class="line">plot<span class="punctuation">(</span>G<span class="punctuation">,</span> F0<span class="punctuation">,</span> </span><br><span class="line">     col <span class="operator">=</span> <span class="string">&quot;red&quot;</span><span class="punctuation">,</span> ylim <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">     xlab <span class="operator">=</span> <span class="string">&quot;Generation&quot;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="string">&quot;F&quot;</span><span class="punctuation">)</span></span><br><span class="line">points<span class="punctuation">(</span>G<span class="punctuation">,</span> F1<span class="punctuation">,</span> col <span class="operator">=</span> <span class="string">&quot;blue&quot;</span><span class="punctuation">)</span> </span><br></pre></td></tr></table></figure>
 <img src="/2023/10/07/Synecology1/plot11.jpeg" class="" title="plot11">
 <p>根据模拟结果发现，相比不考虑突变的自交模型，考虑突变的模型在达到平衡后近交系数F的数值要稍低于前者，可见此时种群中仍保留着一部分的B基因，A基因未能占据全部种群，基因多样性有所提高。</p>
 <p>总的来说，近交是一种不利于种群遗传多样性的行为。但值得注意的是，近交仅改变种群基因杂合度，并不改变种群中等位基因的频率。通过近交，种群中个体之间的亲缘关系更为密切，使得相同基因型的频率增加，而杂合子基因型的频率减少。这意味着具有两个相同等位基因的个体比例增加，大大增加了遗传缺陷和疾病的风险，种群的适应性和生存能力也可能因此降低。</p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>综合以上内容，可以发现在影响种群遗传多样性的各种因素中：选择作用改变着种群的成活率和交配率，对遗传多样性的影响最为显著；遗传漂变则在小群体中表现得更为明显，更容易使珍稀基因被丢失；突变对于种群进化起着至关重要的作用，但往往需要选择和漂变等的配合；迁移往往发生在空间分离的群体内，当大量个体从一群体迁移到另一群体时，高水平的基因流会掩盖其他进化形式，使这两个群体趋于相似；而近交作为不完全随机交配的体现，不改变基因频率，只改变杂合度，也是最为常见的一种影响因素。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1] Ellegren, H., &amp; Galtier, N. (2016). Determinants of genetic diversity. <em>Nature Reviews Genetics</em>, <em>17</em>(7), 422-433.</p>
-<p>[2] 张大勇, &amp; 姜新华. (1999). 遗传多样性与濒危植物保护生物学研究进展. <em>生物多样性</em>, <em>7</em>(1), 31-37.</p>
-<p>[3] 曲若竹, 侯林, 吕红丽, &amp; 李海燕. (2004). 群体遗传结构中的基因流. <em>遗传</em>, <em>26</em>(3), 0-382.</p>
-<p>[4] Harrison, S., Murphy, D. D., &amp; Ehrlich, P. R. (1988). Distribution of the bay checkerspot butterfly, Euphydryas editha bayensis: evidence for a metapopulation model. <em>The American Naturalist</em>, <em>132</em>(3), 360-382.</p>
-<p>[5] Finston, T. L., &amp; Peck, S. B. (1995). Population structure and gene flow in Stomion: a species swarm of flightless beetles of the Galápagos Islands. <em>Heredity</em>, <em>75</em>(4), 390-397.</p>
-<p>[6] Nowak, M. A. (2006). <em>Evolutionary dynamics: exploring the equations of life</em>. Harvard university press.</p>
-<p>[7] 高程, &amp; 郭良栋. (2022). 微生物物种多样性, 群落构建与功能性状研究进展. <em>生物多样性</em>, <em>30</em>(10), 22429.</p>
+<h1 id="结论">结论</h1>
+<p>综合以上内容，可以发现在影响种群遗传多样性的各种因素中：选择作用改变着种群的成活率和交配率，对遗传多样性的影响最为显著；遗传漂变则在小群体中表现得更为明显，更容易使珍稀基因被丢失；突变对于种群进化起着至关重要的作用，但往往需要选择和漂变等的配合；迁移往往发生在空间分离的群体内，当大量个体从一群体迁移到另一群体时，高水平的基因流会掩盖其他进化形式，使这两个群体趋于相似；而近交作为不完全随机交配的体现，不改变基因频率，只改变杂合度，也是最为常见的一种影响因素。</p>
+<h1 id="参考文献">参考文献</h1>
+<p>[1] Ellegren, H., &amp; Galtier, N. (2016). Determinants of genetic
+diversity. <em>Nature Reviews Genetics</em>, <em>17</em>(7),
+422-433.</p>
+<p>[2] 张大勇, &amp; 姜新华. (1999).
+遗传多样性与濒危植物保护生物学研究进展. <em>生物多样性</em>,
+<em>7</em>(1), 31-37.</p>
+<p>[3] 曲若竹, 侯林, 吕红丽, &amp; 李海燕. (2004).
+群体遗传结构中的基因流. <em>遗传</em>, <em>26</em>(3), 0-382.</p>
+<p>[4] Harrison, S., Murphy, D. D., &amp; Ehrlich, P. R. (1988).
+Distribution of the bay checkerspot butterfly, Euphydryas editha
+bayensis: evidence for a metapopulation model. <em>The American
+Naturalist</em>, <em>132</em>(3), 360-382.</p>
+<p>[5] Finston, T. L., &amp; Peck, S. B. (1995). Population structure
+and gene flow in Stomion: a species swarm of flightless beetles of the
+Galápagos Islands. <em>Heredity</em>, <em>75</em>(4), 390-397.</p>
+<p>[6] Nowak, M. A. (2006). <em>Evolutionary dynamics: exploring the
+equations of life</em>. Harvard university press.</p>
+<p>[7] 高程, &amp; 郭良栋. (2022). 微生物物种多样性,
+群落构建与功能性状研究进展. <em>生物多样性</em>, <em>30</em>(10),
+22429.</p>
 ]]></content>
       <categories>
         <category>群体生态学</category>
