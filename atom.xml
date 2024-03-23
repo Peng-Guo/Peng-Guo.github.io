@@ -26,9 +26,11 @@
     
     <summary type="html">&lt;p&gt;本文为&lt;strong&gt;基因组与蛋白组学&lt;/strong&gt;课程&lt;strong&gt;论文分享&lt;/strong&gt;阅读笔记。&lt;/p&gt;
 &lt;p&gt;论文信息如下：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Deciphering microbial gene function using natural language processing&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.nature.com/articles/s41467-022-33397-4&quot;&gt;https://www.nature.com/articles/s41467-022-33397-4&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Nature Communication &amp;emsp; 29 September 2022&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Deciphering microbial gene function using natural language
+processing&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a
+href=&quot;https://www.nature.com/articles/s41467-022-33397-4&quot;&gt;https://www.nature.com/articles/s41467-022-33397-4&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Nature Communication   29 September 2022&lt;/p&gt;
 &lt;p&gt;使用基因组数据集建立基因语料库，通过机器学习的方法对基因进行分类和功能预测&lt;/p&gt;</summary>
     
     
@@ -54,10 +56,12 @@
     <updated>2023-10-30T12:15:05.629Z</updated>
     
     
-    <summary type="html">&lt;p&gt;&lt;strong&gt;scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.nature.com/articles/s42256-022-00534-z&quot;&gt;https://www.nature.com/articles/s42256-022-00534-z&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Nature Machine Intelligence &amp;emsp; 26 September 2022&lt;/p&gt;
-&lt;p&gt;基于scRNA-seq数据，使用scBERT预训练模型，对&amp;lt;细胞类型&amp;gt;进行注释&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;&lt;strong&gt;scBERT as a large-scale pretrained deep language model for
+cell type annotation of single-cell RNA-seq data&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a
+href=&quot;https://www.nature.com/articles/s42256-022-00534-z&quot;&gt;https://www.nature.com/articles/s42256-022-00534-z&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Nature Machine Intelligence   26 September 2022&lt;/p&gt;
+&lt;p&gt;基于scRNA-seq数据，使用scBERT预训练模型，对&lt;细胞类型&gt;进行注释&lt;/p&gt;</summary>
     
     
     
@@ -82,10 +86,13 @@
     <updated>2023-10-30T12:13:08.508Z</updated>
     
     
-    <summary type="html">&lt;p&gt;&lt;strong&gt;Multi-constraint molecular generation based on conditional transformer, knowledge distillation and reinforcement learning&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.nature.com/articles/s42256-021-00403-1&quot;&gt;https://www.nature.com/articles/s42256-021-00403-1&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Nature Machine Intelligence &amp;emsp; 18 October 2021&lt;/p&gt;
-&lt;p&gt;结合&amp;lt;条件transformer，知识蒸馏和强化学习&amp;gt;方法，实现&amp;lt;多约束下药物分子的生成&amp;gt;&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;&lt;strong&gt;Multi-constraint molecular generation based on conditional
+transformer, knowledge distillation and reinforcement
+learning&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a
+href=&quot;https://www.nature.com/articles/s42256-021-00403-1&quot;&gt;https://www.nature.com/articles/s42256-021-00403-1&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Nature Machine Intelligence   18 October 2021&lt;/p&gt;
+&lt;p&gt;结合&amp;lt;条件transformer，知识蒸馏和强化学习&amp;gt;方法，实现&lt;多约束下药物分子的生成&gt;&lt;/p&gt;</summary>
     
     
     
