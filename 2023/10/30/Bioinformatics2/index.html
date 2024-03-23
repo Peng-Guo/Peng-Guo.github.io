@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"peng-guo.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s42256-022-00534-z Nature Machine Intelligence   26 Septembe">
+    <meta name="description" content="scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s42256-022-00534-z Nature Machine Intelligence &amp;emsp; 26 Sep">
 <meta property="og:type" content="article">
 <meta property="og:title" content="现代生物信息学论文阅读（02）">
 <meta property="og:url" content="http://peng-guo.github.io/2023/10/30/Bioinformatics2/index.html">
 <meta property="og:site_name" content="Homepage">
-<meta property="og:description" content="scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s42256-022-00534-z Nature Machine Intelligence   26 Septembe">
+<meta property="og:description" content="scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data https:&#x2F;&#x2F;www.nature.com&#x2F;articles&#x2F;s42256-022-00534-z Nature Machine Intelligence &amp;emsp; 26 Sep">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-10-30T14:00:00.000Z">
 <meta property="article:modified_time" content="2023-10-30T12:15:05.629Z">
@@ -140,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">阅读思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">这篇文章做了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E7%BB%86%E8%83%9E%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.1.</span> <span class="nav-text">为什么要进行细胞类型的注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scbert%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">1.1.2.</span> <span class="nav-text">scBERT是如何实现的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFbert"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">什么是BERT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bert%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%90%91%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">BERT预训练中如何实现双向学习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scbert%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.3.</span> <span class="nav-text">scBERT有什么优势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">提出问题</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">阅读思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">这篇文章做了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E7%BB%86%E8%83%9E%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.1.</span> <span class="nav-text">为什么要进行细胞类型的注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scBERT%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">1.1.2.</span> <span class="nav-text">scBERT是如何实现的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFBERT"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">什么是BERT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%90%91%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">BERT预训练中如何实现双向学习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scBERT%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.3.</span> <span class="nav-text">scBERT有什么优势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">提出问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -271,44 +271,33 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><strong>scBERT as a large-scale pretrained deep language model for
-cell type annotation of single-cell RNA-seq data</strong></p>
-<p><a
-target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
-<p>Nature Machine Intelligence   26 September 2022</p>
-<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
+    <div class="post-body" itemprop="articleBody"><p><strong>scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
+<p>Nature Machine Intelligence &emsp; 26 September 2022</p>
+<p>基于scRNA-seq数据，使用scBERT预训练模型，对&lt;细胞类型&gt;进行注释</p>
 <span id="more"></span>
-<h1 id="阅读思路">阅读思路</h1>
-<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
-<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
-<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
-<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
-<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
-<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
+<h1 id="阅读思路"><a href="#阅读思路" class="headerlink" title="阅读思路"></a>阅读思路</h1><h2 id="这篇文章做了什么"><a href="#这篇文章做了什么" class="headerlink" title="这篇文章做了什么"></a>这篇文章做了什么</h2><p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
+<h3 id="为什么要进行细胞类型的注释"><a href="#为什么要进行细胞类型的注释" class="headerlink" title="为什么要进行细胞类型的注释"></a>为什么要进行细胞类型的注释</h3><p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
+<h3 id="scBERT是如何实现的"><a href="#scBERT是如何实现的" class="headerlink" title="scBERT是如何实现的"></a>scBERT是如何实现的</h3><p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
 <p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
-<h4 id="什么是bert">什么是BERT</h4>
-<p>BERT（Bidirectional Encoder Representations from
-Transformers）是一种基于Transformer架构的预训练语言模型。</p>
+<h4 id="什么是BERT"><a href="#什么是BERT" class="headerlink" title="什么是BERT"></a>什么是BERT</h4><p>BERT（Bidirectional Encoder Representations from Transformers）是一种基于Transformer架构的预训练语言模型。</p>
 <p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
 <p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
 <ul>
-<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
-<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
+<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p>
+</li>
+<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p>
+</li>
 </ul>
-<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
-<ol type="1">
+<h4 id="BERT预训练中如何实现双向学习"><a href="#BERT预训练中如何实现双向学习" class="headerlink" title="BERT预训练中如何实现双向学习"></a>BERT预训练中如何实现双向学习</h4><ol>
 <li>Transformer</li>
 </ol>
-<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
-是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
-的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
-<ol start="2" type="1">
+<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer 是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT 的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
+<ol>
 <li>MLM</li>
 </ol>
-<p>BERT 使用了MLM（Masked Language
-Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
-<h3 id="scbert有什么优势">scBERT有什么优势</h3>
-<ol type="1">
+<p>BERT 使用了MLM（Masked Language Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
+<h3 id="scBERT有什么优势"><a href="#scBERT有什么优势" class="headerlink" title="scBERT有什么优势"></a>scBERT有什么优势</h3><ol>
 <li><p><strong>嵌入设计</strong>：</p>
 <p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
 <ul>
@@ -318,18 +307,22 @@ Model，掩盖语言模型）。在输入文本中，随机选择一些单词并
 <ul>
 <li>基因嵌入（Gene Embedding）：</li>
 </ul>
-<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
+<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p>
+</li>
 <li><p><strong>基因级别的解释性</strong>：</p>
-<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
+<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p>
+</li>
 <li><p><strong>对抗批次效应</strong>：</p>
-<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
+<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p>
+</li>
 <li><p><strong>对新细胞类型的发现</strong>：</p>
-<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
+<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p>
+</li>
 <li><p><strong>跨数据集和器官的通用性</strong>：</p>
-<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
+<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p>
+</li>
 </ol>
-<h1 id="提出问题">提出问题</h1>
-
+<h1 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h1>
     </div>
 
     
