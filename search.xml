@@ -107,78 +107,6 @@ Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
       </tags>
   </entry>
   <entry>
-    <title>现代生物信息学论文阅读（02）</title>
-    <url>/2023/10/30/Bioinformatics2/</url>
-    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for
-cell type annotation of single-cell RNA-seq data</strong></p>
-<p><a
-href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
-<p>Nature Machine Intelligence   26 September 2022</p>
-<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
-<span id="more"></span>
-<h1 id="阅读思路">阅读思路</h1>
-<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
-<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
-<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
-<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
-<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
-<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
-<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
-<h4 id="什么是bert">什么是BERT</h4>
-<p>BERT（Bidirectional Encoder Representations from
-Transformers）是一种基于Transformer架构的预训练语言模型。</p>
-<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
-<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
-<ul>
-<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
-<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
-</ul>
-<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
-<ol type="1">
-<li>Transformer</li>
-</ol>
-<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
-是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
-的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
-<ol start="2" type="1">
-<li>MLM</li>
-</ol>
-<p>BERT 使用了MLM（Masked Language
-Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
-<h3 id="scbert有什么优势">scBERT有什么优势</h3>
-<ol type="1">
-<li><p><strong>嵌入设计</strong>：</p>
-<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
-<ul>
-<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
-</ul>
-<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
-<ul>
-<li>基因嵌入（Gene Embedding）：</li>
-</ul>
-<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
-<li><p><strong>基因级别的解释性</strong>：</p>
-<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
-<li><p><strong>对抗批次效应</strong>：</p>
-<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
-<li><p><strong>对新细胞类型的发现</strong>：</p>
-<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
-<li><p><strong>跨数据集和器官的通用性</strong>：</p>
-<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
-</ol>
-<h1 id="提出问题">提出问题</h1>
-]]></content>
-      <categories>
-        <category>现代生物信息学</category>
-        <category>论文速读</category>
-      </categories>
-      <tags>
-        <tag>细胞类型注释</tag>
-        <tag>scRNA-seq</tag>
-        <tag>BERT预训练</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>现代生物信息学论文阅读（03）</title>
     <url>/2023/11/24/Bioinformatics3/</url>
     <content><![CDATA[<p>本文为<strong>基因组与蛋白组学</strong>课程<strong>论文分享</strong>阅读笔记。</p>
@@ -441,6 +369,78 @@ equations of life</em>. Harvard university press.</p>
         <tag>种群遗传学</tag>
         <tag>模型模拟</tag>
         <tag>R语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>现代生物信息学论文阅读（02）</title>
+    <url>/2023/10/30/Bioinformatics2/</url>
+    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for
+cell type annotation of single-cell RNA-seq data</strong></p>
+<p><a
+href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
+<p>Nature Machine Intelligence   26 September 2022</p>
+<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
+<span id="more"></span>
+<h1 id="阅读思路">阅读思路</h1>
+<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
+<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
+<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
+<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
+<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
+<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
+<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
+<h4 id="什么是bert">什么是BERT</h4>
+<p>BERT（Bidirectional Encoder Representations from
+Transformers）是一种基于Transformer架构的预训练语言模型。</p>
+<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
+<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
+<ul>
+<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
+<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
+</ul>
+<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
+<ol type="1">
+<li>Transformer</li>
+</ol>
+<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
+是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
+的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
+<ol start="2" type="1">
+<li>MLM</li>
+</ol>
+<p>BERT 使用了MLM（Masked Language
+Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
+<h3 id="scbert有什么优势">scBERT有什么优势</h3>
+<ol type="1">
+<li><p><strong>嵌入设计</strong>：</p>
+<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
+<ul>
+<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
+</ul>
+<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
+<ul>
+<li>基因嵌入（Gene Embedding）：</li>
+</ul>
+<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
+<li><p><strong>基因级别的解释性</strong>：</p>
+<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
+<li><p><strong>对抗批次效应</strong>：</p>
+<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
+<li><p><strong>对新细胞类型的发现</strong>：</p>
+<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
+<li><p><strong>跨数据集和器官的通用性</strong>：</p>
+<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
+</ol>
+<h1 id="提出问题">提出问题</h1>
+]]></content>
+      <categories>
+        <category>现代生物信息学</category>
+        <category>论文速读</category>
+      </categories>
+      <tags>
+        <tag>细胞类型注释</tag>
+        <tag>scRNA-seq</tag>
+        <tag>BERT预训练</tag>
       </tags>
   </entry>
 </search>
