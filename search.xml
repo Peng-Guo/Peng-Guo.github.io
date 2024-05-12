@@ -107,6 +107,78 @@ Unit，GRU）来学习从先验模型生成的128个分子的似然性。</p>
       </tags>
   </entry>
   <entry>
+    <title>现代生物信息学论文阅读（02）</title>
+    <url>/2023/10/30/Bioinformatics2/</url>
+    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for
+cell type annotation of single-cell RNA-seq data</strong></p>
+<p><a
+href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
+<p>Nature Machine Intelligence   26 September 2022</p>
+<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
+<span id="more"></span>
+<h1 id="阅读思路">阅读思路</h1>
+<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
+<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
+<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
+<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
+<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
+<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
+<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
+<h4 id="什么是bert">什么是BERT</h4>
+<p>BERT（Bidirectional Encoder Representations from
+Transformers）是一种基于Transformer架构的预训练语言模型。</p>
+<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
+<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
+<ul>
+<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
+<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
+</ul>
+<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
+<ol type="1">
+<li>Transformer</li>
+</ol>
+<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
+是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
+的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
+<ol start="2" type="1">
+<li>MLM</li>
+</ol>
+<p>BERT 使用了MLM（Masked Language
+Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
+<h3 id="scbert有什么优势">scBERT有什么优势</h3>
+<ol type="1">
+<li><p><strong>嵌入设计</strong>：</p>
+<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
+<ul>
+<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
+</ul>
+<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
+<ul>
+<li>基因嵌入（Gene Embedding）：</li>
+</ul>
+<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
+<li><p><strong>基因级别的解释性</strong>：</p>
+<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
+<li><p><strong>对抗批次效应</strong>：</p>
+<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
+<li><p><strong>对新细胞类型的发现</strong>：</p>
+<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
+<li><p><strong>跨数据集和器官的通用性</strong>：</p>
+<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
+</ol>
+<h1 id="提出问题">提出问题</h1>
+]]></content>
+      <categories>
+        <category>现代生物信息学</category>
+        <category>论文速读</category>
+      </categories>
+      <tags>
+        <tag>细胞类型注释</tag>
+        <tag>scRNA-seq</tag>
+        <tag>BERT预训练</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>现代生物信息学论文阅读（03）</title>
     <url>/2023/11/24/Bioinformatics3/</url>
     <content><![CDATA[<p>本文为<strong>基因组与蛋白组学</strong>课程<strong>论文分享</strong>阅读笔记。</p>
@@ -372,75 +444,80 @@ equations of life</em>. Harvard university press.</p>
       </tags>
   </entry>
   <entry>
-    <title>现代生物信息学论文阅读（02）</title>
-    <url>/2023/10/30/Bioinformatics2/</url>
-    <content><![CDATA[<p><strong>scBERT as a large-scale pretrained deep language model for
-cell type annotation of single-cell RNA-seq data</strong></p>
-<p><a
-href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
-<p>Nature Machine Intelligence   26 September 2022</p>
-<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
-<span id="more"></span>
-<h1 id="阅读思路">阅读思路</h1>
-<h2 id="这篇文章做了什么">这篇文章做了什么</h2>
-<p>开发了一种名为scBERT的新型预训练深度学习模型，用于单细胞RNA测序（scRNA-seq）数据的细胞类型注释。</p>
-<h3 id="为什么要进行细胞类型的注释">为什么要进行细胞类型的注释</h3>
-<p>在单细胞RNA测序领域，准确的细胞类型注释对于疾病研究和肿瘤微环境研究至关重要。然而，现有的细胞类型注释方法往往受限于缺乏精心筛选的标记基因列表、批次效应处理不当以及难以利用潜在的基因-基因相互作用信息，这些问题限制了模型的泛化能力和稳健性。</p>
-<h3 id="scbert是如何实现的">scBERT是如何实现的</h3>
-<p>在BERT模型的基础上，开发的一个基于深度神经网络的预训练模型。</p>
-<p>使用了大量未标记的scRNA-seq数据进行预训练，然后在新的有标签的scRNA-seq数据上进行监督微调，以实现细胞类型注释任务。</p>
-<h4 id="什么是bert">什么是BERT</h4>
-<p>BERT（Bidirectional Encoder Representations from
-Transformers）是一种基于Transformer架构的预训练语言模型。</p>
-<p><strong>特点：</strong>能够双向（即前向和后向）学习文本序列的上下文表示。实现更好地理解单词在上下文中的含义。</p>
-<p><strong>结构：</strong>BERT模型分为两个阶段：预训练和微调。</p>
+    <title>Omp Data Analysis Report</title>
+    <url>/2024/05/13/Omp-Data-Analysis-Report/</url>
+    <content><![CDATA[<h1 id="数据获取">数据获取</h1>
+<h2 id="数据筛选">数据筛选</h2>
+<h3 id="pipeline">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt</span><br><span class="line">grep <span class="string">&quot;Escherichia coli&quot;</span> assembly_summary.txt &gt; ecoli.all.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.all.txt</span><br><span class="line">&gt; 260227 ecoli.all.txt</span><br><span class="line"></span><br><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;$21 == &quot;na&quot; &#123;print $1 &quot;\t&quot; $20&#125;&#x27;</span> ecoli.all.txt &gt; ecoli.refseq.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.refseq.txt</span><br><span class="line">&gt; 37360 ecoli.refseq.txt</span><br><span class="line"></span><br><span class="line"><span class="built_in">head</span> -2 ecoli.refseq.txt</span><br><span class="line">&gt; GCA_002442165.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/165/GCA_002442165.1_ASM244216v1</span><br><span class="line">&gt; GCA_002442365.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/365/GCA_002442365.1_ASM244236v1</span><br></pre></td></tr></table></figure>
+<h2 id="数据下载">数据下载</h2>
+<h3 id="pipeline-1">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> ecoli.refseq.txt &gt; ecoli.ftp.list</span><br><span class="line"><span class="built_in">mkdir</span> ecoli_genome_gz</span><br><span class="line"><span class="built_in">cd</span> ecoli_genome_gz</span><br><span class="line">bash ../download.ftp.sh ../ecoli.ftp.list</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.gz.list</span><br></pre></td></tr></table></figure>
+<h3 id="script">Script</h3>
 <ul>
-<li><p>在预训练阶段，模型通过大规模的文本语料库进行无监督学习，学习单词的上下文表示。</p></li>
-<li><p>在模型微调阶段，模型使用带有标签的小规模数据集，例如文本分类或识别任务，对模型进行有监督的微调，使其适应特定任务。</p></li>
+<li>download.ftp.sh</li>
 </ul>
-<h4 id="bert预训练中如何实现双向学习">BERT预训练中如何实现双向学习</h4>
-<ol type="1">
-<li>Transformer</li>
-</ol>
-<p>BERT 使用了双向 Transformer 编码器，其中包含多个层。Transformer
-是一种基于Self-Attention的神经网络架构，它能够在输入序列中寻找全局依赖关系，而不受限于固定大小的局部区域。BERT
-的双向性来自于两个方向的Self-Attention机制，即前向Self-Attention和后向Self-Attention。</p>
-<ol start="2" type="1">
-<li>MLM</li>
-</ol>
-<p>BERT 使用了MLM（Masked Language
-Model，掩盖语言模型）。在输入文本中，随机选择一些单词并将它们进行掩盖，模型的任务是预测被掩盖的单词。这种任务迫使模型学习单词的上下文表示，根据周围的单词来预测被掩盖的单词。</p>
-<h3 id="scbert有什么优势">scBERT有什么优势</h3>
-<ol type="1">
-<li><p><strong>嵌入设计</strong>：</p>
-<p>scBERT的嵌入设计将原始表达数据转换为离散值，并引入了基因嵌入（gene2vec）以捕捉基因的语义相似性。这种嵌入设计在处理原始表达数据时降低了噪音，同时保留了基因级别的解释性。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">link</span> <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	name=$(<span class="built_in">echo</span> <span class="variable">$link</span> | awk -F<span class="string">&#x27;/&#x27;</span> <span class="string">&#x27;&#123;print $NF &quot;_genomic.fna.gz&quot;&#125;&#x27;</span>)</span><br><span class="line">	wget <span class="string">&quot;<span class="variable">$&#123;link&#125;</span>/<span class="variable">$&#123;name&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h1 id="基因预测">基因预测</h1>
+<h2 id="数据解压">数据解压</h2>
+<h3 id="pipeline-2">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_genome_fasta</span><br><span class="line">bash ../ungz.sh ../ecoli.genome.gz.list ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">cd</span> ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.fasta.list</span><br></pre></td></tr></table></figure>
+<h3 id="script-1">Script</h3>
 <ul>
-<li>离散化表达嵌入（Discretized Expression Embedding）：</li>
+<li>ungz.sh</li>
 </ul>
-<p>BERT模型的输入为离散的标记（例如单词标记），而scRNA-seq数据是连续的基因表达量。scBERT引入了离散化表达嵌入，将基因表达数据使用离散化方法（例如分箱化）映射到离散的表达水平。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	path=<span class="string">&quot;<span class="variable">$2</span>/<span class="subst">$(basename $&#123;file&#125; .fna.gz)</span>.fasta&quot;</span></span><br><span class="line">	gunzip -c <span class="variable">$&#123;file&#125;</span> &gt; <span class="variable">$&#123;path&#125;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="基因预测-1">基因预测</h2>
+<h3 id="pipeline-3">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_gene_predict</span><br><span class="line">bash ../gene.predict.sh ../ecoli.genome.fasta.list ../ecoli_gene_predict</span><br></pre></td></tr></table></figure>
+<h3 id="script-2">Script</h3>
 <ul>
-<li>基因嵌入（Gene Embedding）：</li>
+<li>prodigal.sh</li>
 </ul>
-<p>与传统的文本数据不同，基因在scRNA-seq数据中具有独特的生物学意义。为了捕获基因的语义相似性，scBERT使用了预训练的基因嵌入（gene2vec），它将每个基因映射到一个唯一的嵌入向量。这样的设计使得scBERT能够理解基因之间的生物学关联，从而更好地捕捉基因间的相互作用。</p></li>
-<li><p><strong>基因级别的解释性</strong>：</p>
-<p>与传统方法不同，scBERT利用自注意机制。该机制允许模型根据每个基因的表达情况，赋予特定细胞中不同的基因不同的权重，用以进行细胞类型的注释。使研究人员能够了解模型是如何进行细胞类型注释的。</p></li>
-<li><p><strong>对抗批次效应</strong>：</p>
-<p>scBERT在预训练阶段学习了基因-基因的语法规则，有助于消除不同数据集之间的批次效应，提高了模型的泛化能力。</p></li>
-<li><p><strong>对新细胞类型的发现</strong>：</p>
-<p>scBERT不依赖于已知的标记基因，可以主动检测并区分新细胞类型，这为科学家发现未知细胞类型提供了可能性。</p></li>
-<li><p><strong>跨数据集和器官的通用性</strong>：</p>
-<p>在跨不同数据集和器官的任务中，scBERT表现出色，表明它对于处理不同来源、不同批次的数据具有很强的适应能力。</p></li>
-</ol>
-<h1 id="提出问题">提出问题</h1>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gff</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gene</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/protein</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	filename=<span class="variable">$&#123;file%.*&#125;</span></span><br><span class="line">	prodigal -i <span class="variable">$file</span> -o <span class="string">&quot;<span class="variable">$2</span>/gff/<span class="variable">$&#123;filename&#125;</span>.gff&quot;</span> -d <span class="string">&quot;<span class="variable">$2</span>/gene/<span class="variable">$&#123;filename&#125;</span>.gene.fasta&quot;</span> -a <span class="string">&quot;<span class="variable">$2</span>/protein/<span class="variable">$&#123;filename&#125;</span>.protein.fasta&quot;</span> -p single</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h1 id="blastp">blastp</h1>
+<h2 id="基因合并">基因合并</h2>
+<h3 id="pipeline-4">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../ecoli_gene_predict/protein</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.protein.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein &gt; ecoli.gene.protein.summary.fasta</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> gene</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein</span><br></pre></td></tr></table></figure>
+<h3 id="script-3">Script</h3>
+<ul>
+<li>combined.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$2</span>/<span class="variable">$&#123;file&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="下载参考序列">下载参考序列</h2>
+<h3 id="pipeline-5">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_db</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_db</span><br><span class="line">wget -O ompa.prot.ref https://rest.uniprot.org/uniprotkb/P0A910.fasta</span><br><span class="line">wget -O ompc.prot.ref https://rest.uniprot.org/uniprotkb/P06996.fasta</span><br><span class="line">wget -O ompf.prot.ref https://rest.uniprot.org/uniprotkb/P02931.fasta</span><br><span class="line"><span class="built_in">cat</span> omp*.prot.ref &gt;&gt; omp.prot.ref.fasta</span><br></pre></td></tr></table></figure>
+<h2 id="建库与运行">建库与运行</h2>
+<h3 id="pipeline-6">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">diamond makedb --<span class="keyword">in</span> omp.prot.ref.fasta --db omp.prot</span><br><span class="line">diamond blastp -d omp.prot -q ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta -o blastp.out</span><br></pre></td></tr></table></figure>
+<h1 id="序列筛选">序列筛选</h1>
+<h2 id="基因分类">基因分类</h2>
+<h3 id="pipeline-7">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_fasta</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_fasta</span><br><span class="line">bash ../gene.filter.sh omp.gene.list ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta &gt; omp.prot.fasta</span><br></pre></td></tr></table></figure>
+<p><a href="./omp.filter.python.html">Get
+<code>omp.gene.list</code></a></p>
+<h3 id="script-4">Script</h3>
+<ul>
+<li>gene.filter.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        awk <span class="string">&quot;/<span class="variable">$&#123;name&#125;</span> #/,/\\*/&quot;</span> <span class="string">&quot;<span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="基因去冗">基因去冗</h2>
+<h3 id="pipeline-8">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cd-hit -i omp.prot.fasta -o omp.uniq -c 1.0 -n 5 -d 0 -M 150000 -T 52 -aS 1.0 -aL 1.0 -g 1</span><br><span class="line">python omp.prot.freq.py omp.uniq.clstr omp.prot.freq</span><br><span class="line">grep -c <span class="string">&#x27;^1\s&#x27;</span> &gt; omp.prot.filted</span><br><span class="line">grep -Po <span class="string">&#x27;, \K[^at]*&#x27;</span> omp.prot.filted | sed <span class="string">&#x27;s/....$//&#x27;</span> &gt; omp.uniq.filted.list</span><br><span class="line">bash ../gene.filter.sh omp.uniq.filted.list ../ecoli_gene_predict/ecoli.gene.summary.fasta &gt; omp.gene.fasta</span><br></pre></td></tr></table></figure>
+<h3 id="script-5">Script</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sys, os</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    infile = sys.argv[<span class="number">1</span>] <span class="comment">#</span></span><br><span class="line">    outfile = sys.argv[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    repre_seqs = &#123;&#125;</span><br><span class="line">    seqids = &#123;&#125;</span><br><span class="line">    seqsamples = &#123;&#125;</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(infile, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> fin:</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> fin.readlines():</span><br><span class="line">            seqflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> l.startswith(<span class="string">&#x27;&gt;&#x27;</span>):</span><br><span class="line">                cluster = l.strip(<span class="string">&#x27;&gt;&#x27;</span>).strip(<span class="string">&#x27;\n&#x27;</span>).split(<span class="string">&quot; &quot;</span>)[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                seqid = l.split(<span class="string">&#x27;&gt;&#x27;</span>)[<span class="number">1</span>].split(<span class="string">&#x27;|&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                sampleid = seqid.split(<span class="string">&#x27;_&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(seqids) == <span class="number">0</span>:</span><br><span class="line">                    seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> cluster <span class="keyword">in</span> seqids.keys():</span><br><span class="line">                        seqids[cluster] = seqids[cluster] + <span class="string">&#x27;,&#x27;</span> + seqid</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&quot;*&quot;</span> <span class="keyword">in</span> l:</span><br><span class="line">                    repre_seqs[cluster] = seqid</span><br><span class="line"></span><br><span class="line">    outdf = pd.DataFrame(&#123;<span class="string">&#x27;Cluster&#x27;</span>:<span class="built_in">list</span>(seqids.keys()), <span class="string">&#x27;represent_seqid&#x27;</span>:<span class="built_in">list</span>(repre_seqs.values()), <span class="string">&#x27;seqid&#x27;</span>:<span class="built_in">list</span>(seqids.values())&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#outdf = pd.merge(outdf, summarydf, on = &#x27;represent_seqid&#x27;, how = &#x27;left&#x27;)</span></span><br><span class="line"></span><br><span class="line">    outdf.to_csv(outfile, sep = <span class="string">&#x27;\t&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="snp分析">SNP分析</h1>
+<h2 id="生成vcf">生成VCF</h2>
+<h3 id="pipeline-9">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_snp</span><br><span class="line"><span class="built_in">cd</span> ../omp_snp</span><br><span class="line">bash snp.sh ompa.gene.ref ompa.gene.fasta ./ompa/ompa</span><br></pre></td></tr></table></figure>
+<h3 id="script-6">Script</h3>
+<ul>
+<li>snp.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">minimap2 -ax asm20 <span class="variable">$1</span> <span class="variable">$2</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span></span><br><span class="line">samtools view -S -b <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span></span><br><span class="line">samtools <span class="built_in">sort</span> <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span> -o <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span></span><br><span class="line">bcftools mpileup -Ou -f <span class="variable">$1</span> <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span> | bcftools call -<span class="built_in">mv</span> -Ov -o <span class="string">&quot;<span class="variable">$3</span>.vcf&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="建库与注释">建库与注释</h2>
+<h3 id="pipeline-10">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip</span><br><span class="line">unzip snpEff_latest_core.zip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> snpEff  <span class="comment">#进入 snpEff 目录下</span></span><br><span class="line"><span class="built_in">mkdir</span> data  <span class="comment">#新建 data 目录</span></span><br><span class="line"><span class="built_in">cd</span> data  <span class="comment">#进入 data 目录下，必须在该目录</span></span><br><span class="line"><span class="built_in">mkdir</span> genomes  <span class="comment">#新建 genomes 目录，用于建立 ecoli 目录中的 bin</span></span><br><span class="line"><span class="built_in">mkdir</span> ecoli  <span class="comment">#新建 ecoli 目录,对应物种名或后续软件调用的参数名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考基因序列放至 genomes 目录下并改名，改名对应 data 中的 ecoli 文件夹名</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.fna.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.fna snpEff/data/ecoli.fa</span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考注释放至 ecoli 文件夹中并一定改名为 gene.gff</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.gff.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.gff snpEff/data/genes.gff</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置 snpEff/snpEff.config 文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ecoli.genome:ecoli&quot;</span> &gt;&gt; snpEff.conf</span><br><span class="line"><span class="comment">#可配置 config 文件自定义 data 文件夹路径</span></span><br><span class="line"><span class="comment">#data_dir = PATH/TO/data/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#软件配置自动建立数据库，建立后文件夹 ecoli 中生成 snpEffectPredictor.bin 文件</span></span><br><span class="line">java -jar snpEff/snpEff.jar build -gff3 ecoli</span><br><span class="line"><span class="comment">#-gff3 对应为 ecoli 文件夹中注释文件的对应格式版本</span></span><br><span class="line"><span class="comment">#如果注释文件的格式版本在后缀名中无法体现，可通过 head 命令查看文件头信息获得</span></span><br><span class="line"><span class="comment">#head ecoli.gff</span></span><br><span class="line"><span class="comment">#ecoli 对应为 data 目录中的 ecoli 文件夹以及 genomes 目录中的 ecoli.fa 文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#配置完成后的目录结构，其他文件夹/结构不显示</span></span><br><span class="line">snpEff</span><br><span class="line">├── SnpSift.jar</span><br><span class="line">├── data</span><br><span class="line">│   ├── ecoli</span><br><span class="line">│   │   ├── genes.gff</span><br><span class="line">│   │   └── snpEffectPredictor.bin</span><br><span class="line">│   ├── genomes</span><br><span class="line">│   │   └── ecoli.fa</span><br><span class="line">├── examples/</span><br><span class="line">├── galaxy/</span><br><span class="line">├── scripts/</span><br><span class="line">├── snpEff.config</span><br><span class="line">└── snpEff.jar</span><br></pre></td></tr></table></figure>
 ]]></content>
-      <categories>
-        <category>现代生物信息学</category>
-        <category>论文速读</category>
-      </categories>
-      <tags>
-        <tag>细胞类型注释</tag>
-        <tag>scRNA-seq</tag>
-        <tag>BERT预训练</tag>
-      </tags>
   </entry>
 </search>

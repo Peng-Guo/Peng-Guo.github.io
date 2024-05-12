@@ -22,25 +22,27 @@
 <meta name="google-site-verification" content="BlibgT-ZAZNhIVckIHU2mdZpjtP996yZPIjFdh0o3WY" />
 
 
-    <meta name="description" content="Stay Hungry. Stay Foolish.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Homepage">
-<meta property="og:url" content="http://peng-guo.github.io/default-index/index.html">
+    <meta name="description" content="数据获取 数据筛选 Pipeline wget https:&#x2F;&#x2F;ftp.ncbi.nlm.nih.gov&#x2F;genomes&#x2F;genbank&#x2F;bacteria&#x2F;assembly_summary.txtgrep &quot;Escherichia coli&quot; assembly_summary.txt &gt; ecoli.all.txtwc -l ecoli.all.txt&gt; 26022">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Omp Data Analysis Report">
+<meta property="og:url" content="http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/index.html">
 <meta property="og:site_name" content="Homepage">
-<meta property="og:description" content="Stay Hungry. Stay Foolish.">
+<meta property="og:description" content="数据获取 数据筛选 Pipeline wget https:&#x2F;&#x2F;ftp.ncbi.nlm.nih.gov&#x2F;genomes&#x2F;genbank&#x2F;bacteria&#x2F;assembly_summary.txtgrep &quot;Escherichia coli&quot; assembly_summary.txt &gt; ecoli.all.txtwc -l ecoli.all.txt&gt; 26022">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-05-12T20:56:55.522Z">
+<meta property="article:modified_time" content="2024-05-12T21:01:31.917Z">
 <meta property="article:author" content="Peng Guo">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://peng-guo.github.io/default-index/">
+<link rel="canonical" href="http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"default-index/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/","path":"2024/05/13/Omp-Data-Analysis-Report/","title":"Omp Data Analysis Report"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Peng Guo (郭蓬) - Homepage</title>
+<title>Omp Data Analysis Report | Peng Guo - Blogs</title>
   
 
 
@@ -73,7 +75,7 @@
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <h1 class="site-title">Homepage</h1>
+      <p class="site-title">Homepage</p>
     </a>
   </div>
 
@@ -125,7 +127,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -138,6 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96"><span class="nav-number">1.</span> <span class="nav-text">数据获取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%AD%9B%E9%80%89"><span class="nav-number">1.1.</span> <span class="nav-text">数据筛选</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline"><span class="nav-number">1.1.1.</span> <span class="nav-text">Pipeline</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.2.</span> <span class="nav-text">数据下载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script"><span class="nav-number">1.2.2.</span> <span class="nav-text">Script</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E9%A2%84%E6%B5%8B"><span class="nav-number">2.</span> <span class="nav-text">基因预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%A3%E5%8E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">数据解压</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-2"><span class="nav-number">2.1.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">Script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E9%A2%84%E6%B5%8B-1"><span class="nav-number">2.2.</span> <span class="nav-text">基因预测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-3"><span class="nav-number">2.2.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-2"><span class="nav-number">2.2.2.</span> <span class="nav-text">Script</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#blastp"><span class="nav-number">3.</span> <span class="nav-text">blastp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E5%90%88%E5%B9%B6"><span class="nav-number">3.1.</span> <span class="nav-text">基因合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-4"><span class="nav-number">3.1.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-3"><span class="nav-number">3.1.2.</span> <span class="nav-text">Script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%8F%82%E8%80%83%E5%BA%8F%E5%88%97"><span class="nav-number">3.2.</span> <span class="nav-text">下载参考序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-5"><span class="nav-number">3.2.1.</span> <span class="nav-text">Pipeline</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E5%BA%93%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="nav-number">3.3.</span> <span class="nav-text">建库与运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-6"><span class="nav-number">3.3.1.</span> <span class="nav-text">Pipeline</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E7%AD%9B%E9%80%89"><span class="nav-number">4.</span> <span class="nav-text">序列筛选</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E5%88%86%E7%B1%BB"><span class="nav-number">4.1.</span> <span class="nav-text">基因分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-7"><span class="nav-number">4.1.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-4"><span class="nav-number">4.1.2.</span> <span class="nav-text">Script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E5%8E%BB%E5%86%97"><span class="nav-number">4.2.</span> <span class="nav-text">基因去冗</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-8"><span class="nav-number">4.2.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-5"><span class="nav-number">4.2.2.</span> <span class="nav-text">Script</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#snp%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">SNP分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90vcf"><span class="nav-number">5.1.</span> <span class="nav-text">生成VCF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-9"><span class="nav-number">5.1.1.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script-6"><span class="nav-number">5.1.2.</span> <span class="nav-text">Script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E5%BA%93%E4%B8%8E%E6%B3%A8%E9%87%8A"><span class="nav-number">5.2.</span> <span class="nav-text">建库与注释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-10"><span class="nav-number">5.2.1.</span> <span class="nav-text">Pipeline</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -187,16 +190,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -210,13 +214,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Homepage">
+      <meta itemprop="name" content="Omp Data Analysis Report | Homepage">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/13/Omp-Data-Analysis-Report/" class="post-title-link" itemprop="url">Omp Data Analysis Report</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Omp Data Analysis Report
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -254,8 +258,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="数据获取">数据获取</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="数据获取">数据获取</h1>
 <h2 id="数据筛选">数据筛选</h2>
 <h3 id="pipeline">Pipeline</h3>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt</span><br><span class="line">grep <span class="string">&quot;Escherichia coli&quot;</span> assembly_summary.txt &gt; ecoli.all.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.all.txt</span><br><span class="line">&gt; 260227 ecoli.all.txt</span><br><span class="line"></span><br><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;$21 == &quot;na&quot; &#123;print $1 &quot;\t&quot; $20&#125;&#x27;</span> ecoli.all.txt &gt; ecoli.refseq.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.refseq.txt</span><br><span class="line">&gt; 37360 ecoli.refseq.txt</span><br><span class="line"></span><br><span class="line"><span class="built_in">head</span> -2 ecoli.refseq.txt</span><br><span class="line">&gt; GCA_002442165.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/165/GCA_002442165.1_ASM244216v1</span><br><span class="line">&gt; GCA_002442365.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/365/GCA_002442365.1_ASM244236v1</span><br></pre></td></tr></table></figure>
@@ -328,7 +331,6 @@
 <h3 id="pipeline-10">Pipeline</h3>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip</span><br><span class="line">unzip snpEff_latest_core.zip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> snpEff  <span class="comment">#进入 snpEff 目录下</span></span><br><span class="line"><span class="built_in">mkdir</span> data  <span class="comment">#新建 data 目录</span></span><br><span class="line"><span class="built_in">cd</span> data  <span class="comment">#进入 data 目录下，必须在该目录</span></span><br><span class="line"><span class="built_in">mkdir</span> genomes  <span class="comment">#新建 genomes 目录，用于建立 ecoli 目录中的 bin</span></span><br><span class="line"><span class="built_in">mkdir</span> ecoli  <span class="comment">#新建 ecoli 目录,对应物种名或后续软件调用的参数名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考基因序列放至 genomes 目录下并改名，改名对应 data 中的 ecoli 文件夹名</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.fna.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.fna snpEff/data/ecoli.fa</span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考注释放至 ecoli 文件夹中并一定改名为 gene.gff</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.gff.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.gff snpEff/data/genes.gff</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置 snpEff/snpEff.config 文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ecoli.genome:ecoli&quot;</span> &gt;&gt; snpEff.conf</span><br><span class="line"><span class="comment">#可配置 config 文件自定义 data 文件夹路径</span></span><br><span class="line"><span class="comment">#data_dir = PATH/TO/data/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#软件配置自动建立数据库，建立后文件夹 ecoli 中生成 snpEffectPredictor.bin 文件</span></span><br><span class="line">java -jar snpEff/snpEff.jar build -gff3 ecoli</span><br><span class="line"><span class="comment">#-gff3 对应为 ecoli 文件夹中注释文件的对应格式版本</span></span><br><span class="line"><span class="comment">#如果注释文件的格式版本在后缀名中无法体现，可通过 head 命令查看文件头信息获得</span></span><br><span class="line"><span class="comment">#head ecoli.gff</span></span><br><span class="line"><span class="comment">#ecoli 对应为 data 目录中的 ecoli 文件夹以及 genomes 目录中的 ecoli.fa 文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#配置完成后的目录结构，其他文件夹/结构不显示</span></span><br><span class="line">snpEff</span><br><span class="line">├── SnpSift.jar</span><br><span class="line">├── data</span><br><span class="line">│   ├── ecoli</span><br><span class="line">│   │   ├── genes.gff</span><br><span class="line">│   │   └── snpEffectPredictor.bin</span><br><span class="line">│   ├── genomes</span><br><span class="line">│   │   └── ecoli.fa</span><br><span class="line">├── examples/</span><br><span class="line">├── galaxy/</span><br><span class="line">├── scripts/</span><br><span class="line">├── snpEff.config</span><br><span class="line">└── snpEff.jar</span><br></pre></td></tr></table></figure>
 
-      
     </div>
 
     
@@ -336,454 +338,35 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Written by:  </strong>guopeng
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/" title="Omp Data Analysis Report">http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
 </div>
 
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/11/24/Bioinformatics3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Homepage">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Homepage">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/24/Bioinformatics3/" class="post-title-link" itemprop="url">现代生物信息学论文阅读（03）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-11-24 12:00:00 / Modified: 17:52:30" itemprop="dateCreated datePublished" datetime="2023-11-24T12:00:00+08:00">2023-11-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">现代生物信息学</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count: </span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>9 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本文为<strong>基因组与蛋白组学</strong>课程<strong>论文分享</strong>阅读笔记。</p>
-<p>论文信息如下：</p>
-<p><strong>Deciphering microbial gene function using natural language
-processing</strong></p>
-<p><a
-target="_blank" rel="noopener" href="https://www.nature.com/articles/s41467-022-33397-4">https://www.nature.com/articles/s41467-022-33397-4</a></p>
-<p>Nature Communication   29 September 2022</p>
-<p>使用基因组数据集建立基因语料库，通过机器学习的方法对基因进行分类和功能预测</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/11/24/Bioinformatics3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/10/30/Bioinformatics2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Homepage">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Homepage">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/30/Bioinformatics2/" class="post-title-link" itemprop="url">现代生物信息学论文阅读（02）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-10-30 22:00:00 / Modified: 20:15:05" itemprop="dateCreated datePublished" datetime="2023-10-30T22:00:00+08:00">2023-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">现代生物信息学</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/%E8%AE%BA%E6%96%87%E9%80%9F%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文速读</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count: </span>
-      <span>1.2k</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>scBERT as a large-scale pretrained deep language model for
-cell type annotation of single-cell RNA-seq data</strong></p>
-<p><a
-target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-022-00534-z">https://www.nature.com/articles/s42256-022-00534-z</a></p>
-<p>Nature Machine Intelligence   26 September 2022</p>
-<p>基于scRNA-seq数据，使用scBERT预训练模型，对<细胞类型>进行注释</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/30/Bioinformatics2/#more" rel="contents">
-                Read more &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/24/Bioinformatics3/" rel="prev" title="现代生物信息学论文阅读（03）">
+                  <i class="fa fa-chevron-left"></i> 现代生物信息学论文阅读（03）
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/10/27/Bioinformatics1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Homepage">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Homepage">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/27/Bioinformatics1/" class="post-title-link" itemprop="url">现代生物信息学论文阅读（01）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-27 20:00:00" itemprop="dateCreated datePublished" datetime="2023-10-27T20:00:00+08:00">2023-10-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-30 20:13:08" itemprop="dateModified" datetime="2023-10-30T20:13:08+08:00">2023-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">现代生物信息学</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%B0%E4%BB%A3%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/%E8%AE%BA%E6%96%87%E9%80%9F%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文速读</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count: </span>
-      <span>1.8k</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>6 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>Multi-constraint molecular generation based on conditional
-transformer, knowledge distillation and reinforcement
-learning</strong></p>
-<p><a
-target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-021-00403-1">https://www.nature.com/articles/s42256-021-00403-1</a></p>
-<p>Nature Machine Intelligence   18 October 2021</p>
-<p>结合&lt;条件transformer，知识蒸馏和强化学习&gt;方法，实现<多约束下药物分子的生成></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/27/Bioinformatics1/#more" rel="contents">
-                Read more &raquo;
-              </a>
+            <div class="post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2023/10/07/Synecology1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Peng Guo">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Homepage">
-      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Homepage">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/07/Synecology1/" class="post-title-link" itemprop="url">关于种群遗传多样性影响因素的分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-07 22:30:00" itemprop="dateCreated datePublished" datetime="2023-10-07T22:30:00+08:00">2023-10-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-03-19 00:28:29" itemprop="dateModified" datetime="2024-03-19T00:28:29+08:00">2024-03-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BE%A4%E4%BD%93%E7%94%9F%E6%80%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">群体生态学</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count: </span>
-      <span>6.6k</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>22 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本文是<strong>群体生态学</strong>（Synecology）课程<strong>种群遗传学</strong>章节课程作业，本文主要对影响种群遗传多样性的因素进行简单的建模模拟和理论分析。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/07/Synecology1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          </div>
     </footer>
   </article>
 </div>
@@ -792,6 +375,8 @@ target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-021-
 
 
 
+
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -855,7 +440,7 @@ target="_blank" rel="noopener" href="https://www.nature.com/articles/s42256-021-
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"peng-guo","repo":"peng-guo.github.io","client_id":"a5ba94287287a0bfa00d","client_secret":"2c5b25433a43d4765832c493e904a1e4801433b4","admin_user":"peng-guo","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"fc92be684550ba1adc386d618d63d7fc"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"peng-guo","repo":"peng-guo.github.io","client_id":"a5ba94287287a0bfa00d","client_secret":"2c5b25433a43d4765832c493e904a1e4801433b4","admin_user":"peng-guo","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"610963a89c0b2deae3d388a798935347"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>

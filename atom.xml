@@ -6,7 +6,7 @@
   <link href="http://peng-guo.github.io/atom.xml" rel="self"/>
   
   <link href="http://peng-guo.github.io/"/>
-  <updated>2023-11-24T09:52:30.561Z</updated>
+  <updated>2024-05-12T21:01:31.917Z</updated>
   <id>http://peng-guo.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Omp Data Analysis Report</title>
+    <link href="http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/"/>
+    <id>http://peng-guo.github.io/2024/05/13/Omp-Data-Analysis-Report/</id>
+    <published>2024-05-12T20:56:55.522Z</published>
+    <updated>2024-05-12T21:01:31.917Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;数据获取&quot;&gt;数据获取&lt;/h1&gt;
+&lt;h2 id=&quot;数据筛选&quot;&gt;数据筛选&lt;/h2&gt;
+&lt;h3 id=&quot;pipeline&quot;&gt;Pipeline&lt;/h3&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>现代生物信息学论文阅读（03）</title>
