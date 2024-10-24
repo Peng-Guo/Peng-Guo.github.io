@@ -152,18 +152,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">Posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">Categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">Tags</span></a>
       </div>
   </nav>
@@ -188,6 +188,260 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://peng-guo.github.io/2024/10/24/Sequencing-Data-Analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Peng Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Homepage">
+      <meta itemprop="description" content="Stay Hungry. Stay Foolish.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Homepage">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/10/24/Sequencing-Data-Analysis/" class="post-title-link" itemprop="url">基因组测序数据分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-10-24 00:00:00 / Modified: 17:19:36" itemprop="dateCreated datePublished" datetime="2024-10-24T00:00:00+08:00">2024-10-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BB%84%E5%AD%A6%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">组学数据分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="测序数据的预备">测序数据的预备</h1>
+<p>首先对其中一个数据进行解压，查看其前十行内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gzip -dk input/2nd_1.fq.gz    <span class="comment"># -d 解压缩; -k 保留原文件; 输出文件默认与原文件在同一路径</span></span><br><span class="line"><span class="built_in">head</span> -n 8 input/2nd_1.fq      <span class="comment"># -n 查看的行数</span></span><br></pre></td></tr></table></figure>
+<p>输出前8行内容如下，符合fastaq文件的格式（每4行表示一条reads）：</p>
+<ul>
+<li><p>第一行：<span class="citation" data-cites="read">@read</span>
+ID，包含index序列及read1或read2标志；</p></li>
+<li><p>第二行：碱基序列，大写“ACGTN”；</p></li>
+<li><p>第三行：分隔符，“+”，将序列数据和质量数据分开；</p></li>
+<li><p>第四行：质量值序列，用ASCII码表示每个碱基的质量<span
+class="math inline">\(Q\)</span>，<span
+class="math inline">\(Q=-10\lg{P_{error}}\)</span>。</p></li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">@DP8480002502TRL1C001R00500000110/1</span><br><span class="line">CGCGTCCCGTATATGAGTATGGCCATATGCCAGGGCATCGCCAGCGGCCAGCGGCGGCAGATTATCCGGACTATAGAGATGCCCGTGGGTCAGGAACAGG</span><br><span class="line">+</span><br><span class="line">FFFF,8F,FF8FFFFFF8FFFFFF88FFFFFFF8,F,,FF,F8FFFFFF888FFFF,FF,8,F8FFFFF,FF8FFF,F,FFFFF8,FF88FF8,F,8F,F</span><br><span class="line">@DP8480002502TRL1C001R00500001071/1</span><br><span class="line">CTGGGCGGCGGAAATTACTCACTTTCAGCCACTTTTATTCAGGCATTTAAACCATGAGCCTTAACGCGAATTATCAGAAGTTAGAGCCAGGCGATGAGGT</span><br><span class="line">+</span><br><span class="line">FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,FFFFFF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8FF8FFF</span><br></pre></td></tr></table></figure>
+<h1 id="测序数据的过滤">测序数据的过滤</h1>
+<p>接下来对测序数据进行过滤，使用软件<a
+target="_blank" rel="noopener" href="https://github.com/OpenGene/fastp">fastp</a>对数据进行清洗，得到clean
+data。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># install fastp</span></span><br><span class="line">conda create -n fastp</span><br><span class="line">conda activate fastp</span><br><span class="line">conda install -c conda-forge -c bioconda fastp</span><br><span class="line"></span><br><span class="line"><span class="comment"># use fastp</span></span><br><span class="line"><span class="built_in">cd</span> output</span><br><span class="line"><span class="built_in">mkdir</span> fastp_out</span><br><span class="line">fastp -i ../input/2nd_1.fq.gz -I ../input/2nd_2.fq.gz -o fastp_out/2nd_1.out.fq.gz -O fastp_out/2nd_1.out.fq.gz    <span class="comment"># -i -I 双端测序结果; -o -O 对应的过滤结果</span></span><br></pre></td></tr></table></figure>
+<p>fastp输出结果均保存在<code>fastp_out</code>文件夹中，其中除了过滤后的序列，还有<code>fastp.html</code>展示了测序数据的质量。接下来对<code>fastp.html</code>文件中各项指标进行介绍：</p>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>FEATURES</th>
+<th>INTERPRETATION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Summary</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>General</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>fastp version</td>
+<td>使用的fastp的版本</td>
+</tr>
+<tr class="even">
+<td>sequencing</td>
+<td>测序数据的类型</td>
+</tr>
+<tr class="odd">
+<td>mean length before filtering</td>
+<td>过滤前insert的平均长度</td>
+</tr>
+<tr class="even">
+<td>length before filtering</td>
+<td>过滤后insert的平均长度</td>
+</tr>
+<tr class="odd">
+<td>duplication rate</td>
+<td>由完全相同的DNA片段形成的cluster占比</td>
+</tr>
+<tr class="even">
+<td>Insert size peak</td>
+<td>insert数量最多的片段大小</td>
+</tr>
+<tr class="odd">
+<td>Before/After filtering</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>total reads</td>
+<td>所有reads的数量</td>
+</tr>
+<tr class="odd">
+<td>total bases</td>
+<td>所有的碱基数量</td>
+</tr>
+<tr class="even">
+<td>Q20 bases</td>
+<td>错误的概率为1%的测序碱基</td>
+</tr>
+<tr class="odd">
+<td>Q30 bases</td>
+<td>错误的概率为0.1%的测序碱基</td>
+</tr>
+<tr class="even">
+<td>Filtering result</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>reads passed filters</td>
+<td>通过过滤的reads的数量</td>
+</tr>
+<tr class="even">
+<td>reads with low quality</td>
+<td>低质量reads的数量</td>
+</tr>
+<tr class="odd">
+<td>reads with too many N</td>
+<td>含过多未测定碱基的reads的数量</td>
+</tr>
+<tr class="even">
+<td>reads too short</td>
+<td>过短reads的数量</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Adapters</strong></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Occurrences</td>
+<td>不同长度的adapter的数量</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Insert size estimation</strong></td>
+<td>Insert size的估计值</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Before filtering</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>read quality</td>
+<td>read上每个位置的质量，应至少大于30且波动较小</td>
+</tr>
+<tr class="odd">
+<td>base contents</td>
+<td>read上每个位置的碱基出现频率，应A=T，C=G</td>
+</tr>
+<tr class="even">
+<td>KMER counting</td>
+<td>统计k-mer（k=5）的数量</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>==#Question==</p>
+<p>根据以上fastp过滤报告，总体上来看，经过过滤后数据质量有了些许改善，但提升并不显著。猜测测序数据已经过测序公司的清洗和过滤，质量已经由于fastp在统计k-mer时默认长度为5，且展示方式为灰度图，并不能直观地反映测序基因组的质量。因此使用jellyfish来对过滤前后基因组的k-mer进行更专业的分析。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># install jellyfish</span></span><br><span class="line"><span class="built_in">cd</span> ~/software</span><br><span class="line">wget https://github.com/gmarcais/Jellyfish/releases/download/v2.3.0/jellyfish-2.3.1.tar.gz</span><br><span class="line">tar -xzvf jellyfish-2.3.1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> jellyfish-2.3.1</span><br><span class="line">./configure --prefix=<span class="variable">$PWD</span></span><br><span class="line">make -j 4</span><br><span class="line">make instal</span><br><span class="line"></span><br><span class="line"><span class="comment"># use jellyfish</span></span><br><span class="line"><span class="comment"># -m 使用的k-mer的大小.若基因组大小为$X$, $m \approx \frac&#123;\log&#123;200x&#125;&#125;&#123;\log&#123;4&#125;&#125;$</span></span><br><span class="line"><span class="comment"># -s Hash的大小.若n个read每个有一个错误, $s \approx \frac&#123;x + n&#125;&#123;0.8&#125;$</span></span><br><span class="line"><span class="comment"># -t 使用的CPU线程数</span></span><br><span class="line"><span class="comment"># -o 输出的结果文件</span></span><br><span class="line"><span class="built_in">cd</span> output</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对过滤前的fastp文件进行kmer统计分析</span></span><br><span class="line">jellyfish count -C -m 19 -s 2748M -t 16 -o ./jellyfish_out/sample.raw.jf ../input/2nd_1.fq ../input/2nd_2.fq</span><br><span class="line">jellyfish histo -t 16 sample.raw.jf &gt; sample.raw.histo</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对过滤后的fastp文件进行kmer统计分析</span></span><br><span class="line">jellyfish count -C -m 19 -s 2748M -t 16 -o ./jellyfish_out/sample.clean.jf ./fastp_out/2nd_1.out.fq.gz ./fastp_out/2nd_2.out.fq.gz</span><br><span class="line">jellyfish histo -t 16 sample.clean.jf &gt; sample.clean.histo</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接下来对通过jellyfish得到的kmer频数分布数据进行可视化，采用r-base的绘图函数。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment"># create function</span></span><br><span class="line">kmerplot <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>histo<span class="punctuation">,</span> start<span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">    </span><br><span class="line">    par<span class="punctuation">(</span>family <span class="operator">=</span> <span class="string">&quot;Times&quot;</span><span class="punctuation">,</span> cex <span class="operator">=</span> <span class="number">1.2</span><span class="punctuation">,</span> font.main <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line">    </span><br><span class="line">    kmer <span class="operator">&lt;-</span> read.table<span class="punctuation">(</span>histo<span class="punctuation">)</span></span><br><span class="line">    len <span class="operator">&lt;-</span> <span class="built_in">length</span><span class="punctuation">(</span>hist_data<span class="operator">$</span>V1<span class="punctuation">)</span></span><br><span class="line">    x <span class="operator">&lt;-</span> hist_data<span class="operator">$</span>V1<span class="punctuation">[</span>start<span class="operator">:</span>len<span class="punctuation">]</span></span><br><span class="line">    y <span class="operator">&lt;-</span> hist_data<span class="operator">$</span>V2<span class="punctuation">[</span>start<span class="operator">:</span>len<span class="punctuation">]</span></span><br><span class="line">    </span><br><span class="line">    plot<span class="punctuation">(</span>x<span class="punctuation">,</span> y<span class="punctuation">,</span> main<span class="operator">=</span>histo<span class="punctuation">,</span></span><br><span class="line">         xlab <span class="operator">=</span> <span class="string">&#x27;Frequency&#x27;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="string">&#x27;Number&#x27;</span><span class="punctuation">,</span></span><br><span class="line">         type <span class="operator">=</span> <span class="string">&#x27;l&#x27;</span><span class="punctuation">,</span> col <span class="operator">=</span> <span class="string">&#x27;red&#x27;</span><span class="punctuation">)</span></span><br><span class="line">    </span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Draw and save the image</span></span><br><span class="line">svg<span class="punctuation">(</span><span class="string">&quot;kmer_plot.svg&quot;</span><span class="punctuation">,</span> width <span class="operator">=</span> <span class="number">10</span><span class="punctuation">,</span> height <span class="operator">=</span> <span class="number">6</span><span class="punctuation">)</span> </span><br><span class="line"></span><br><span class="line">layout<span class="punctuation">(</span>matrix<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span><span class="punctuation">,</span> nrow <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">kmerplot<span class="punctuation">(</span><span class="string">&quot;sample.raw.histo&quot;</span><span class="punctuation">,</span> <span class="number">100</span><span class="punctuation">)</span></span><br><span class="line">kmerplot<span class="punctuation">(</span><span class="string">&quot;sample.clean.histo&quot;</span><span class="punctuation">,</span> <span class="number">100</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">dev.off<span class="punctuation">(</span><span class="punctuation">)</span> </span><br></pre></td></tr></table></figure>
+<p>绘制得到的图像如__kmer_plot__所示。理论上对于不同物种的基因组，相同大小的kmer的频率具有相同的分布特征，且大致呈现高斯分布。根据下图可以看出，过滤前后fastq文件的kmer分布并没有发生较大的改变，且过滤前fastq文件的kmer频率分布已经非常清晰，不存在杂合峰和重复峰。因此可以基本确定测序公司已清洗过测序数据。</p>
+<p>==#Question==</p>
+<figure>
+<img src="./Sequencing-Data-Analysis/kmer_plot.svg" alt="kmer_plot" />
+<figcaption aria-hidden="true">kmer_plot</figcaption>
+</figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

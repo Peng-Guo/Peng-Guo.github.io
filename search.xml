@@ -288,6 +288,257 @@ id="补充文件详情models_and_data">补充文件详情（models_and_data）</
       </tags>
   </entry>
   <entry>
+    <title>Omp Data Analysis Report</title>
+    <url>/2024/05/13/Omp-Data-Analysis-Report/</url>
+    <content><![CDATA[<h1 id="数据获取">数据获取</h1>
+<h2 id="数据筛选">数据筛选</h2>
+<h3 id="pipeline">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt</span><br><span class="line">grep <span class="string">&quot;Escherichia coli&quot;</span> assembly_summary.txt &gt; ecoli.all.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.all.txt</span><br><span class="line">&gt; 260227 ecoli.all.txt</span><br><span class="line"></span><br><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;$21 == &quot;na&quot; &#123;print $1 &quot;\t&quot; $20&#125;&#x27;</span> ecoli.all.txt &gt; ecoli.refseq.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.refseq.txt</span><br><span class="line">&gt; 37360 ecoli.refseq.txt</span><br><span class="line"></span><br><span class="line"><span class="built_in">head</span> -2 ecoli.refseq.txt</span><br><span class="line">&gt; GCA_002442165.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/165/GCA_002442165.1_ASM244216v1</span><br><span class="line">&gt; GCA_002442365.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/365/GCA_002442365.1_ASM244236v1</span><br></pre></td></tr></table></figure>
+<h2 id="数据下载">数据下载</h2>
+<h3 id="pipeline-1">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> ecoli.refseq.txt &gt; ecoli.ftp.list</span><br><span class="line"><span class="built_in">mkdir</span> ecoli_genome_gz</span><br><span class="line"><span class="built_in">cd</span> ecoli_genome_gz</span><br><span class="line">bash ../download.ftp.sh ../ecoli.ftp.list</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.gz.list</span><br></pre></td></tr></table></figure>
+<h3 id="script">Script</h3>
+<ul>
+<li>download.ftp.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">link</span> <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	name=$(<span class="built_in">echo</span> <span class="variable">$link</span> | awk -F<span class="string">&#x27;/&#x27;</span> <span class="string">&#x27;&#123;print $NF &quot;_genomic.fna.gz&quot;&#125;&#x27;</span>)</span><br><span class="line">	wget <span class="string">&quot;<span class="variable">$&#123;link&#125;</span>/<span class="variable">$&#123;name&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h1 id="基因预测">基因预测</h1>
+<h2 id="数据解压">数据解压</h2>
+<h3 id="pipeline-2">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_genome_fasta</span><br><span class="line">bash ../ungz.sh ../ecoli.genome.gz.list ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">cd</span> ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.fasta.list</span><br></pre></td></tr></table></figure>
+<h3 id="script-1">Script</h3>
+<ul>
+<li>ungz.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	path=<span class="string">&quot;<span class="variable">$2</span>/<span class="subst">$(basename $&#123;file&#125; .fna.gz)</span>.fasta&quot;</span></span><br><span class="line">	gunzip -c <span class="variable">$&#123;file&#125;</span> &gt; <span class="variable">$&#123;path&#125;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="基因预测-1">基因预测</h2>
+<h3 id="pipeline-3">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_gene_predict</span><br><span class="line">bash ../gene.predict.sh ../ecoli.genome.fasta.list ../ecoli_gene_predict</span><br></pre></td></tr></table></figure>
+<h3 id="script-2">Script</h3>
+<ul>
+<li>prodigal.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gff</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gene</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/protein</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	filename=<span class="variable">$&#123;file%.*&#125;</span></span><br><span class="line">	prodigal -i <span class="variable">$file</span> -o <span class="string">&quot;<span class="variable">$2</span>/gff/<span class="variable">$&#123;filename&#125;</span>.gff&quot;</span> -d <span class="string">&quot;<span class="variable">$2</span>/gene/<span class="variable">$&#123;filename&#125;</span>.gene.fasta&quot;</span> -a <span class="string">&quot;<span class="variable">$2</span>/protein/<span class="variable">$&#123;filename&#125;</span>.protein.fasta&quot;</span> -p single</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h1 id="blastp">blastp</h1>
+<h2 id="基因合并">基因合并</h2>
+<h3 id="pipeline-4">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../ecoli_gene_predict/protein</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.protein.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein &gt; ecoli.gene.protein.summary.fasta</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> gene</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein</span><br></pre></td></tr></table></figure>
+<h3 id="script-3">Script</h3>
+<ul>
+<li>combined.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$2</span>/<span class="variable">$&#123;file&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="下载参考序列">下载参考序列</h2>
+<h3 id="pipeline-5">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_db</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_db</span><br><span class="line">wget -O ompa.prot.ref https://rest.uniprot.org/uniprotkb/P0A910.fasta</span><br><span class="line">wget -O ompc.prot.ref https://rest.uniprot.org/uniprotkb/P06996.fasta</span><br><span class="line">wget -O ompf.prot.ref https://rest.uniprot.org/uniprotkb/P02931.fasta</span><br><span class="line"><span class="built_in">cat</span> omp*.prot.ref &gt;&gt; omp.prot.ref.fasta</span><br></pre></td></tr></table></figure>
+<h2 id="建库与运行">建库与运行</h2>
+<h3 id="pipeline-6">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">diamond makedb --<span class="keyword">in</span> omp.prot.ref.fasta --db omp.prot</span><br><span class="line">diamond blastp -d omp.prot -q ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta -o blastp.out</span><br></pre></td></tr></table></figure>
+<h1 id="序列筛选">序列筛选</h1>
+<h2 id="基因分类">基因分类</h2>
+<h3 id="pipeline-7">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_fasta</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_fasta</span><br><span class="line">bash ../gene.filter.sh omp.gene.list ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta &gt; omp.prot.fasta</span><br></pre></td></tr></table></figure>
+<p><a href="./omp.filter.python.html">Get
+<code>omp.gene.list</code></a></p>
+<h3 id="script-4">Script</h3>
+<ul>
+<li>gene.filter.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        awk <span class="string">&quot;/<span class="variable">$&#123;name&#125;</span> #/,/\\*/&quot;</span> <span class="string">&quot;<span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="基因去冗">基因去冗</h2>
+<h3 id="pipeline-8">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cd-hit -i omp.prot.fasta -o omp.uniq -c 1.0 -n 5 -d 0 -M 150000 -T 52 -aS 1.0 -aL 1.0 -g 1</span><br><span class="line">python omp.prot.freq.py omp.uniq.clstr omp.prot.freq</span><br><span class="line">grep -c <span class="string">&#x27;^1\s&#x27;</span> &gt; omp.prot.filted</span><br><span class="line">grep -Po <span class="string">&#x27;, \K[^at]*&#x27;</span> omp.prot.filted | sed <span class="string">&#x27;s/....$//&#x27;</span> &gt; omp.uniq.filted.list</span><br><span class="line">bash ../gene.filter.sh omp.uniq.filted.list ../ecoli_gene_predict/ecoli.gene.summary.fasta &gt; omp.gene.fasta</span><br></pre></td></tr></table></figure>
+<h3 id="script-5">Script</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sys, os</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    infile = sys.argv[<span class="number">1</span>] <span class="comment">#</span></span><br><span class="line">    outfile = sys.argv[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    repre_seqs = &#123;&#125;</span><br><span class="line">    seqids = &#123;&#125;</span><br><span class="line">    seqsamples = &#123;&#125;</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(infile, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> fin:</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> fin.readlines():</span><br><span class="line">            seqflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> l.startswith(<span class="string">&#x27;&gt;&#x27;</span>):</span><br><span class="line">                cluster = l.strip(<span class="string">&#x27;&gt;&#x27;</span>).strip(<span class="string">&#x27;\n&#x27;</span>).split(<span class="string">&quot; &quot;</span>)[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                seqid = l.split(<span class="string">&#x27;&gt;&#x27;</span>)[<span class="number">1</span>].split(<span class="string">&#x27;|&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                sampleid = seqid.split(<span class="string">&#x27;_&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(seqids) == <span class="number">0</span>:</span><br><span class="line">                    seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> cluster <span class="keyword">in</span> seqids.keys():</span><br><span class="line">                        seqids[cluster] = seqids[cluster] + <span class="string">&#x27;,&#x27;</span> + seqid</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&quot;*&quot;</span> <span class="keyword">in</span> l:</span><br><span class="line">                    repre_seqs[cluster] = seqid</span><br><span class="line"></span><br><span class="line">    outdf = pd.DataFrame(&#123;<span class="string">&#x27;Cluster&#x27;</span>:<span class="built_in">list</span>(seqids.keys()), <span class="string">&#x27;represent_seqid&#x27;</span>:<span class="built_in">list</span>(repre_seqs.values()), <span class="string">&#x27;seqid&#x27;</span>:<span class="built_in">list</span>(seqids.values())&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#outdf = pd.merge(outdf, summarydf, on = &#x27;represent_seqid&#x27;, how = &#x27;left&#x27;)</span></span><br><span class="line"></span><br><span class="line">    outdf.to_csv(outfile, sep = <span class="string">&#x27;\t&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="snp分析">SNP分析</h1>
+<h2 id="生成vcf">生成VCF</h2>
+<h3 id="pipeline-9">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_snp</span><br><span class="line"><span class="built_in">cd</span> ../omp_snp</span><br><span class="line">bash snp.sh ompa.gene.ref ompa.gene.fasta ./ompa/ompa</span><br></pre></td></tr></table></figure>
+<h3 id="script-6">Script</h3>
+<ul>
+<li>snp.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">minimap2 -ax asm20 <span class="variable">$1</span> <span class="variable">$2</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span></span><br><span class="line">samtools view -S -b <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span></span><br><span class="line">samtools <span class="built_in">sort</span> <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span> -o <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span></span><br><span class="line">bcftools mpileup -Ou -f <span class="variable">$1</span> <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span> | bcftools call -<span class="built_in">mv</span> -Ov -o <span class="string">&quot;<span class="variable">$3</span>.vcf&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="建库与注释">建库与注释</h2>
+<h3 id="pipeline-10">Pipeline</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip</span><br><span class="line">unzip snpEff_latest_core.zip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> snpEff  <span class="comment">#进入 snpEff 目录下</span></span><br><span class="line"><span class="built_in">mkdir</span> data  <span class="comment">#新建 data 目录</span></span><br><span class="line"><span class="built_in">cd</span> data  <span class="comment">#进入 data 目录下，必须在该目录</span></span><br><span class="line"><span class="built_in">mkdir</span> genomes  <span class="comment">#新建 genomes 目录，用于建立 ecoli 目录中的 bin</span></span><br><span class="line"><span class="built_in">mkdir</span> ecoli  <span class="comment">#新建 ecoli 目录,对应物种名或后续软件调用的参数名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考基因序列放至 genomes 目录下并改名，改名对应 data 中的 ecoli 文件夹名</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.fna.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.fna snpEff/data/ecoli.fa</span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考注释放至 ecoli 文件夹中并一定改名为 gene.gff</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.gff.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.gff snpEff/data/genes.gff</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置 snpEff/snpEff.config 文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ecoli.genome:ecoli&quot;</span> &gt;&gt; snpEff.conf</span><br><span class="line"><span class="comment">#可配置 config 文件自定义 data 文件夹路径</span></span><br><span class="line"><span class="comment">#data_dir = PATH/TO/data/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#软件配置自动建立数据库，建立后文件夹 ecoli 中生成 snpEffectPredictor.bin 文件</span></span><br><span class="line">java -jar snpEff/snpEff.jar build -gff3 ecoli</span><br><span class="line"><span class="comment">#-gff3 对应为 ecoli 文件夹中注释文件的对应格式版本</span></span><br><span class="line"><span class="comment">#如果注释文件的格式版本在后缀名中无法体现，可通过 head 命令查看文件头信息获得</span></span><br><span class="line"><span class="comment">#head ecoli.gff</span></span><br><span class="line"><span class="comment">#ecoli 对应为 data 目录中的 ecoli 文件夹以及 genomes 目录中的 ecoli.fa 文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#配置完成后的目录结构，其他文件夹/结构不显示</span></span><br><span class="line">snpEff</span><br><span class="line">├── SnpSift.jar</span><br><span class="line">├── data</span><br><span class="line">│   ├── ecoli</span><br><span class="line">│   │   ├── genes.gff</span><br><span class="line">│   │   └── snpEffectPredictor.bin</span><br><span class="line">│   ├── genomes</span><br><span class="line">│   │   └── ecoli.fa</span><br><span class="line">├── examples/</span><br><span class="line">├── galaxy/</span><br><span class="line">├── scripts/</span><br><span class="line">├── snpEff.config</span><br><span class="line">└── snpEff.jar</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>基因组测序数据分析</title>
+    <url>/2024/10/24/Sequencing-Data-Analysis/</url>
+    <content><![CDATA[<h1 id="测序数据的预备">测序数据的预备</h1>
+<p>首先对其中一个数据进行解压，查看其前十行内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gzip -dk input/2nd_1.fq.gz    <span class="comment"># -d 解压缩; -k 保留原文件; 输出文件默认与原文件在同一路径</span></span><br><span class="line"><span class="built_in">head</span> -n 8 input/2nd_1.fq      <span class="comment"># -n 查看的行数</span></span><br></pre></td></tr></table></figure>
+<p>输出前8行内容如下，符合fastaq文件的格式（每4行表示一条reads）：</p>
+<ul>
+<li><p>第一行：<span class="citation" data-cites="read">@read</span>
+ID，包含index序列及read1或read2标志；</p></li>
+<li><p>第二行：碱基序列，大写“ACGTN”；</p></li>
+<li><p>第三行：分隔符，“+”，将序列数据和质量数据分开；</p></li>
+<li><p>第四行：质量值序列，用ASCII码表示每个碱基的质量<span
+class="math inline">\(Q\)</span>，<span
+class="math inline">\(Q=-10\lg{P_{error}}\)</span>。</p></li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">@DP8480002502TRL1C001R00500000110/1</span><br><span class="line">CGCGTCCCGTATATGAGTATGGCCATATGCCAGGGCATCGCCAGCGGCCAGCGGCGGCAGATTATCCGGACTATAGAGATGCCCGTGGGTCAGGAACAGG</span><br><span class="line">+</span><br><span class="line">FFFF,8F,FF8FFFFFF8FFFFFF88FFFFFFF8,F,,FF,F8FFFFFF888FFFF,FF,8,F8FFFFF,FF8FFF,F,FFFFF8,FF88FF8,F,8F,F</span><br><span class="line">@DP8480002502TRL1C001R00500001071/1</span><br><span class="line">CTGGGCGGCGGAAATTACTCACTTTCAGCCACTTTTATTCAGGCATTTAAACCATGAGCCTTAACGCGAATTATCAGAAGTTAGAGCCAGGCGATGAGGT</span><br><span class="line">+</span><br><span class="line">FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,FFFFFF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8FF8FFF</span><br></pre></td></tr></table></figure>
+<h1 id="测序数据的过滤">测序数据的过滤</h1>
+<p>接下来对测序数据进行过滤，使用软件<a
+href="https://github.com/OpenGene/fastp">fastp</a>对数据进行清洗，得到clean
+data。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># install fastp</span></span><br><span class="line">conda create -n fastp</span><br><span class="line">conda activate fastp</span><br><span class="line">conda install -c conda-forge -c bioconda fastp</span><br><span class="line"></span><br><span class="line"><span class="comment"># use fastp</span></span><br><span class="line"><span class="built_in">cd</span> output</span><br><span class="line"><span class="built_in">mkdir</span> fastp_out</span><br><span class="line">fastp -i ../input/2nd_1.fq.gz -I ../input/2nd_2.fq.gz -o fastp_out/2nd_1.out.fq.gz -O fastp_out/2nd_1.out.fq.gz    <span class="comment"># -i -I 双端测序结果; -o -O 对应的过滤结果</span></span><br></pre></td></tr></table></figure>
+<p>fastp输出结果均保存在<code>fastp_out</code>文件夹中，其中除了过滤后的序列，还有<code>fastp.html</code>展示了测序数据的质量。接下来对<code>fastp.html</code>文件中各项指标进行介绍：</p>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>FEATURES</th>
+<th>INTERPRETATION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Summary</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>General</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>fastp version</td>
+<td>使用的fastp的版本</td>
+</tr>
+<tr class="even">
+<td>sequencing</td>
+<td>测序数据的类型</td>
+</tr>
+<tr class="odd">
+<td>mean length before filtering</td>
+<td>过滤前insert的平均长度</td>
+</tr>
+<tr class="even">
+<td>length before filtering</td>
+<td>过滤后insert的平均长度</td>
+</tr>
+<tr class="odd">
+<td>duplication rate</td>
+<td>由完全相同的DNA片段形成的cluster占比</td>
+</tr>
+<tr class="even">
+<td>Insert size peak</td>
+<td>insert数量最多的片段大小</td>
+</tr>
+<tr class="odd">
+<td>Before/After filtering</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>total reads</td>
+<td>所有reads的数量</td>
+</tr>
+<tr class="odd">
+<td>total bases</td>
+<td>所有的碱基数量</td>
+</tr>
+<tr class="even">
+<td>Q20 bases</td>
+<td>错误的概率为1%的测序碱基</td>
+</tr>
+<tr class="odd">
+<td>Q30 bases</td>
+<td>错误的概率为0.1%的测序碱基</td>
+</tr>
+<tr class="even">
+<td>Filtering result</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>reads passed filters</td>
+<td>通过过滤的reads的数量</td>
+</tr>
+<tr class="even">
+<td>reads with low quality</td>
+<td>低质量reads的数量</td>
+</tr>
+<tr class="odd">
+<td>reads with too many N</td>
+<td>含过多未测定碱基的reads的数量</td>
+</tr>
+<tr class="even">
+<td>reads too short</td>
+<td>过短reads的数量</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Adapters</strong></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Occurrences</td>
+<td>不同长度的adapter的数量</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Insert size estimation</strong></td>
+<td>Insert size的估计值</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Before filtering</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>read quality</td>
+<td>read上每个位置的质量，应至少大于30且波动较小</td>
+</tr>
+<tr class="odd">
+<td>base contents</td>
+<td>read上每个位置的碱基出现频率，应A=T，C=G</td>
+</tr>
+<tr class="even">
+<td>KMER counting</td>
+<td>统计k-mer（k=5）的数量</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>==#Question==</p>
+<p>根据以上fastp过滤报告，总体上来看，经过过滤后数据质量有了些许改善，但提升并不显著。猜测测序数据已经过测序公司的清洗和过滤，质量已经由于fastp在统计k-mer时默认长度为5，且展示方式为灰度图，并不能直观地反映测序基因组的质量。因此使用jellyfish来对过滤前后基因组的k-mer进行更专业的分析。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># install jellyfish</span></span><br><span class="line"><span class="built_in">cd</span> ~/software</span><br><span class="line">wget https://github.com/gmarcais/Jellyfish/releases/download/v2.3.0/jellyfish-2.3.1.tar.gz</span><br><span class="line">tar -xzvf jellyfish-2.3.1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> jellyfish-2.3.1</span><br><span class="line">./configure --prefix=<span class="variable">$PWD</span></span><br><span class="line">make -j 4</span><br><span class="line">make instal</span><br><span class="line"></span><br><span class="line"><span class="comment"># use jellyfish</span></span><br><span class="line"><span class="comment"># -m 使用的k-mer的大小.若基因组大小为$X$, $m \approx \frac&#123;\log&#123;200x&#125;&#125;&#123;\log&#123;4&#125;&#125;$</span></span><br><span class="line"><span class="comment"># -s Hash的大小.若n个read每个有一个错误, $s \approx \frac&#123;x + n&#125;&#123;0.8&#125;$</span></span><br><span class="line"><span class="comment"># -t 使用的CPU线程数</span></span><br><span class="line"><span class="comment"># -o 输出的结果文件</span></span><br><span class="line"><span class="built_in">cd</span> output</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对过滤前的fastp文件进行kmer统计分析</span></span><br><span class="line">jellyfish count -C -m 19 -s 2748M -t 16 -o ./jellyfish_out/sample.raw.jf ../input/2nd_1.fq ../input/2nd_2.fq</span><br><span class="line">jellyfish histo -t 16 sample.raw.jf &gt; sample.raw.histo</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对过滤后的fastp文件进行kmer统计分析</span></span><br><span class="line">jellyfish count -C -m 19 -s 2748M -t 16 -o ./jellyfish_out/sample.clean.jf ./fastp_out/2nd_1.out.fq.gz ./fastp_out/2nd_2.out.fq.gz</span><br><span class="line">jellyfish histo -t 16 sample.clean.jf &gt; sample.clean.histo</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接下来对通过jellyfish得到的kmer频数分布数据进行可视化，采用r-base的绘图函数。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment"># create function</span></span><br><span class="line">kmerplot <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>histo<span class="punctuation">,</span> start<span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">    </span><br><span class="line">    par<span class="punctuation">(</span>family <span class="operator">=</span> <span class="string">&quot;Times&quot;</span><span class="punctuation">,</span> cex <span class="operator">=</span> <span class="number">1.2</span><span class="punctuation">,</span> font.main <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line">    </span><br><span class="line">    kmer <span class="operator">&lt;-</span> read.table<span class="punctuation">(</span>histo<span class="punctuation">)</span></span><br><span class="line">    len <span class="operator">&lt;-</span> <span class="built_in">length</span><span class="punctuation">(</span>hist_data<span class="operator">$</span>V1<span class="punctuation">)</span></span><br><span class="line">    x <span class="operator">&lt;-</span> hist_data<span class="operator">$</span>V1<span class="punctuation">[</span>start<span class="operator">:</span>len<span class="punctuation">]</span></span><br><span class="line">    y <span class="operator">&lt;-</span> hist_data<span class="operator">$</span>V2<span class="punctuation">[</span>start<span class="operator">:</span>len<span class="punctuation">]</span></span><br><span class="line">    </span><br><span class="line">    plot<span class="punctuation">(</span>x<span class="punctuation">,</span> y<span class="punctuation">,</span> main<span class="operator">=</span>histo<span class="punctuation">,</span></span><br><span class="line">         xlab <span class="operator">=</span> <span class="string">&#x27;Frequency&#x27;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="string">&#x27;Number&#x27;</span><span class="punctuation">,</span></span><br><span class="line">         type <span class="operator">=</span> <span class="string">&#x27;l&#x27;</span><span class="punctuation">,</span> col <span class="operator">=</span> <span class="string">&#x27;red&#x27;</span><span class="punctuation">)</span></span><br><span class="line">    </span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Draw and save the image</span></span><br><span class="line">svg<span class="punctuation">(</span><span class="string">&quot;kmer_plot.svg&quot;</span><span class="punctuation">,</span> width <span class="operator">=</span> <span class="number">10</span><span class="punctuation">,</span> height <span class="operator">=</span> <span class="number">6</span><span class="punctuation">)</span> </span><br><span class="line"></span><br><span class="line">layout<span class="punctuation">(</span>matrix<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span><span class="punctuation">,</span> nrow <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">kmerplot<span class="punctuation">(</span><span class="string">&quot;sample.raw.histo&quot;</span><span class="punctuation">,</span> <span class="number">100</span><span class="punctuation">)</span></span><br><span class="line">kmerplot<span class="punctuation">(</span><span class="string">&quot;sample.clean.histo&quot;</span><span class="punctuation">,</span> <span class="number">100</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">dev.off<span class="punctuation">(</span><span class="punctuation">)</span> </span><br></pre></td></tr></table></figure>
+<p>绘制得到的图像如__kmer_plot__所示。理论上对于不同物种的基因组，相同大小的kmer的频率具有相同的分布特征，且大致呈现高斯分布。根据下图可以看出，过滤前后fastq文件的kmer分布并没有发生较大的改变，且过滤前fastq文件的kmer频率分布已经非常清晰，不存在杂合峰和重复峰。因此可以基本确定测序公司已清洗过测序数据。</p>
+<p>==#Question==</p>
+<figure>
+<img src="./Sequencing-Data-Analysis/kmer_plot.svg" alt="kmer_plot" />
+<figcaption aria-hidden="true">kmer_plot</figcaption>
+</figure>
+]]></content>
+      <categories>
+        <category>组学数据分析</category>
+      </categories>
+      <tags>
+        <tag>组学</tag>
+        <tag>数据分析</tag>
+        <tag>二代测序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于种群遗传多样性影响因素的分析</title>
     <url>/2023/10/07/Synecology1/</url>
     <content><![CDATA[<p>本文是<strong>群体生态学</strong>（Synecology）课程<strong>种群遗传学</strong>章节课程作业，本文主要对影响种群遗传多样性的因素进行简单的建模模拟和理论分析。</p>
@@ -442,82 +693,5 @@ equations of life</em>. Harvard university press.</p>
         <tag>模型模拟</tag>
         <tag>R语言</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Omp Data Analysis Report</title>
-    <url>/2024/05/13/Omp-Data-Analysis-Report/</url>
-    <content><![CDATA[<h1 id="数据获取">数据获取</h1>
-<h2 id="数据筛选">数据筛选</h2>
-<h3 id="pipeline">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt</span><br><span class="line">grep <span class="string">&quot;Escherichia coli&quot;</span> assembly_summary.txt &gt; ecoli.all.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.all.txt</span><br><span class="line">&gt; 260227 ecoli.all.txt</span><br><span class="line"></span><br><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;$21 == &quot;na&quot; &#123;print $1 &quot;\t&quot; $20&#125;&#x27;</span> ecoli.all.txt &gt; ecoli.refseq.txt</span><br><span class="line"><span class="built_in">wc</span> -l ecoli.refseq.txt</span><br><span class="line">&gt; 37360 ecoli.refseq.txt</span><br><span class="line"></span><br><span class="line"><span class="built_in">head</span> -2 ecoli.refseq.txt</span><br><span class="line">&gt; GCA_002442165.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/165/GCA_002442165.1_ASM244216v1</span><br><span class="line">&gt; GCA_002442365.1	https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/442/365/GCA_002442365.1_ASM244236v1</span><br></pre></td></tr></table></figure>
-<h2 id="数据下载">数据下载</h2>
-<h3 id="pipeline-1">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk -F<span class="string">&#x27;\t&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> ecoli.refseq.txt &gt; ecoli.ftp.list</span><br><span class="line"><span class="built_in">mkdir</span> ecoli_genome_gz</span><br><span class="line"><span class="built_in">cd</span> ecoli_genome_gz</span><br><span class="line">bash ../download.ftp.sh ../ecoli.ftp.list</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.gz.list</span><br></pre></td></tr></table></figure>
-<h3 id="script">Script</h3>
-<ul>
-<li>download.ftp.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">link</span> <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	name=$(<span class="built_in">echo</span> <span class="variable">$link</span> | awk -F<span class="string">&#x27;/&#x27;</span> <span class="string">&#x27;&#123;print $NF &quot;_genomic.fna.gz&quot;&#125;&#x27;</span>)</span><br><span class="line">	wget <span class="string">&quot;<span class="variable">$&#123;link&#125;</span>/<span class="variable">$&#123;name&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h1 id="基因预测">基因预测</h1>
-<h2 id="数据解压">数据解压</h2>
-<h3 id="pipeline-2">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_genome_fasta</span><br><span class="line">bash ../ungz.sh ../ecoli.genome.gz.list ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">cd</span> ../ecoli_genome_fasta</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.genome.fasta.list</span><br></pre></td></tr></table></figure>
-<h3 id="script-1">Script</h3>
-<ul>
-<li>ungz.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	path=<span class="string">&quot;<span class="variable">$2</span>/<span class="subst">$(basename $&#123;file&#125; .fna.gz)</span>.fasta&quot;</span></span><br><span class="line">	gunzip -c <span class="variable">$&#123;file&#125;</span> &gt; <span class="variable">$&#123;path&#125;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h2 id="基因预测-1">基因预测</h2>
-<h3 id="pipeline-3">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../ecoli_gene_predict</span><br><span class="line">bash ../gene.predict.sh ../ecoli.genome.fasta.list ../ecoli_gene_predict</span><br></pre></td></tr></table></figure>
-<h3 id="script-2">Script</h3>
-<ul>
-<li>prodigal.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gff</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/gene</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$2</span>/protein</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	filename=<span class="variable">$&#123;file%.*&#125;</span></span><br><span class="line">	prodigal -i <span class="variable">$file</span> -o <span class="string">&quot;<span class="variable">$2</span>/gff/<span class="variable">$&#123;filename&#125;</span>.gff&quot;</span> -d <span class="string">&quot;<span class="variable">$2</span>/gene/<span class="variable">$&#123;filename&#125;</span>.gene.fasta&quot;</span> -a <span class="string">&quot;<span class="variable">$2</span>/protein/<span class="variable">$&#123;filename&#125;</span>.protein.fasta&quot;</span> -p single</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h1 id="blastp">blastp</h1>
-<h2 id="基因合并">基因合并</h2>
-<h3 id="pipeline-4">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../ecoli_gene_predict/protein</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.protein.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein &gt; ecoli.gene.protein.summary.fasta</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> gene</span><br><span class="line"><span class="built_in">ls</span> &gt; ../ecoli.gene.list</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">bash ../combined.sh ecoli.gene.protein.list protein</span><br></pre></td></tr></table></figure>
-<h3 id="script-3">Script</h3>
-<ul>
-<li>combined.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$2</span>/<span class="variable">$&#123;file&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h2 id="下载参考序列">下载参考序列</h2>
-<h3 id="pipeline-5">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_db</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_db</span><br><span class="line">wget -O ompa.prot.ref https://rest.uniprot.org/uniprotkb/P0A910.fasta</span><br><span class="line">wget -O ompc.prot.ref https://rest.uniprot.org/uniprotkb/P06996.fasta</span><br><span class="line">wget -O ompf.prot.ref https://rest.uniprot.org/uniprotkb/P02931.fasta</span><br><span class="line"><span class="built_in">cat</span> omp*.prot.ref &gt;&gt; omp.prot.ref.fasta</span><br></pre></td></tr></table></figure>
-<h2 id="建库与运行">建库与运行</h2>
-<h3 id="pipeline-6">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">diamond makedb --<span class="keyword">in</span> omp.prot.ref.fasta --db omp.prot</span><br><span class="line">diamond blastp -d omp.prot -q ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta -o blastp.out</span><br></pre></td></tr></table></figure>
-<h1 id="序列筛选">序列筛选</h1>
-<h2 id="基因分类">基因分类</h2>
-<h3 id="pipeline-7">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_prot_fasta</span><br><span class="line"><span class="built_in">cd</span> ../omp_prot_fasta</span><br><span class="line">bash ../gene.filter.sh omp.gene.list ../ecoli_gene_predict/ecoli.gene.protein.summary.fasta &gt; omp.prot.fasta</span><br></pre></td></tr></table></figure>
-<p><a href="./omp.filter.python.html">Get
-<code>omp.gene.list</code></a></p>
-<h3 id="script-4">Script</h3>
-<ul>
-<li>gene.filter.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> `<span class="built_in">cat</span> <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        awk <span class="string">&quot;/<span class="variable">$&#123;name&#125;</span> #/,/\\*/&quot;</span> <span class="string">&quot;<span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h2 id="基因去冗">基因去冗</h2>
-<h3 id="pipeline-8">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cd-hit -i omp.prot.fasta -o omp.uniq -c 1.0 -n 5 -d 0 -M 150000 -T 52 -aS 1.0 -aL 1.0 -g 1</span><br><span class="line">python omp.prot.freq.py omp.uniq.clstr omp.prot.freq</span><br><span class="line">grep -c <span class="string">&#x27;^1\s&#x27;</span> &gt; omp.prot.filted</span><br><span class="line">grep -Po <span class="string">&#x27;, \K[^at]*&#x27;</span> omp.prot.filted | sed <span class="string">&#x27;s/....$//&#x27;</span> &gt; omp.uniq.filted.list</span><br><span class="line">bash ../gene.filter.sh omp.uniq.filted.list ../ecoli_gene_predict/ecoli.gene.summary.fasta &gt; omp.gene.fasta</span><br></pre></td></tr></table></figure>
-<h3 id="script-5">Script</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sys, os</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    infile = sys.argv[<span class="number">1</span>] <span class="comment">#</span></span><br><span class="line">    outfile = sys.argv[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    repre_seqs = &#123;&#125;</span><br><span class="line">    seqids = &#123;&#125;</span><br><span class="line">    seqsamples = &#123;&#125;</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(infile, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> fin:</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> fin.readlines():</span><br><span class="line">            seqflag = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> l.startswith(<span class="string">&#x27;&gt;&#x27;</span>):</span><br><span class="line">                cluster = l.strip(<span class="string">&#x27;&gt;&#x27;</span>).strip(<span class="string">&#x27;\n&#x27;</span>).split(<span class="string">&quot; &quot;</span>)[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                seqid = l.split(<span class="string">&#x27;&gt;&#x27;</span>)[<span class="number">1</span>].split(<span class="string">&#x27;|&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                sampleid = seqid.split(<span class="string">&#x27;_&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(seqids) == <span class="number">0</span>:</span><br><span class="line">                    seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> cluster <span class="keyword">in</span> seqids.keys():</span><br><span class="line">                        seqids[cluster] = seqids[cluster] + <span class="string">&#x27;,&#x27;</span> + seqid</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        seqids[cluster] = seqid</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&quot;*&quot;</span> <span class="keyword">in</span> l:</span><br><span class="line">                    repre_seqs[cluster] = seqid</span><br><span class="line"></span><br><span class="line">    outdf = pd.DataFrame(&#123;<span class="string">&#x27;Cluster&#x27;</span>:<span class="built_in">list</span>(seqids.keys()), <span class="string">&#x27;represent_seqid&#x27;</span>:<span class="built_in">list</span>(repre_seqs.values()), <span class="string">&#x27;seqid&#x27;</span>:<span class="built_in">list</span>(seqids.values())&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#outdf = pd.merge(outdf, summarydf, on = &#x27;represent_seqid&#x27;, how = &#x27;left&#x27;)</span></span><br><span class="line"></span><br><span class="line">    outdf.to_csv(outfile, sep = <span class="string">&#x27;\t&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="snp分析">SNP分析</h1>
-<h2 id="生成vcf">生成VCF</h2>
-<h3 id="pipeline-9">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ../omp_snp</span><br><span class="line"><span class="built_in">cd</span> ../omp_snp</span><br><span class="line">bash snp.sh ompa.gene.ref ompa.gene.fasta ./ompa/ompa</span><br></pre></td></tr></table></figure>
-<h3 id="script-6">Script</h3>
-<ul>
-<li>snp.sh</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">minimap2 -ax asm20 <span class="variable">$1</span> <span class="variable">$2</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span></span><br><span class="line">samtools view -S -b <span class="string">&quot;<span class="variable">$3</span>.sam&quot;</span> &gt; <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span></span><br><span class="line">samtools <span class="built_in">sort</span> <span class="string">&quot;<span class="variable">$3</span>.bam&quot;</span> -o <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span></span><br><span class="line">bcftools mpileup -Ou -f <span class="variable">$1</span> <span class="string">&quot;<span class="variable">$3</span>.sorted.bam&quot;</span> | bcftools call -<span class="built_in">mv</span> -Ov -o <span class="string">&quot;<span class="variable">$3</span>.vcf&quot;</span></span><br></pre></td></tr></table></figure>
-<h2 id="建库与注释">建库与注释</h2>
-<h3 id="pipeline-10">Pipeline</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip</span><br><span class="line">unzip snpEff_latest_core.zip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> snpEff  <span class="comment">#进入 snpEff 目录下</span></span><br><span class="line"><span class="built_in">mkdir</span> data  <span class="comment">#新建 data 目录</span></span><br><span class="line"><span class="built_in">cd</span> data  <span class="comment">#进入 data 目录下，必须在该目录</span></span><br><span class="line"><span class="built_in">mkdir</span> genomes  <span class="comment">#新建 genomes 目录，用于建立 ecoli 目录中的 bin</span></span><br><span class="line"><span class="built_in">mkdir</span> ecoli  <span class="comment">#新建 ecoli 目录,对应物种名或后续软件调用的参数名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考基因序列放至 genomes 目录下并改名，改名对应 data 中的 ecoli 文件夹名</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.fna.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.fna snpEff/data/ecoli.fa</span><br><span class="line"></span><br><span class="line"><span class="comment">#将参考注释放至 ecoli 文件夹中并一定改名为 gene.gff</span></span><br><span class="line">gzip -d &#123;reference&#125;_genomic.gff.gz</span><br><span class="line"><span class="built_in">mv</span> dir_path/&#123;reference&#125;_genomic.gff snpEff/data/genes.gff</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置 snpEff/snpEff.config 文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ecoli.genome:ecoli&quot;</span> &gt;&gt; snpEff.conf</span><br><span class="line"><span class="comment">#可配置 config 文件自定义 data 文件夹路径</span></span><br><span class="line"><span class="comment">#data_dir = PATH/TO/data/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#软件配置自动建立数据库，建立后文件夹 ecoli 中生成 snpEffectPredictor.bin 文件</span></span><br><span class="line">java -jar snpEff/snpEff.jar build -gff3 ecoli</span><br><span class="line"><span class="comment">#-gff3 对应为 ecoli 文件夹中注释文件的对应格式版本</span></span><br><span class="line"><span class="comment">#如果注释文件的格式版本在后缀名中无法体现，可通过 head 命令查看文件头信息获得</span></span><br><span class="line"><span class="comment">#head ecoli.gff</span></span><br><span class="line"><span class="comment">#ecoli 对应为 data 目录中的 ecoli 文件夹以及 genomes 目录中的 ecoli.fa 文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#配置完成后的目录结构，其他文件夹/结构不显示</span></span><br><span class="line">snpEff</span><br><span class="line">├── SnpSift.jar</span><br><span class="line">├── data</span><br><span class="line">│   ├── ecoli</span><br><span class="line">│   │   ├── genes.gff</span><br><span class="line">│   │   └── snpEffectPredictor.bin</span><br><span class="line">│   ├── genomes</span><br><span class="line">│   │   └── ecoli.fa</span><br><span class="line">├── examples/</span><br><span class="line">├── galaxy/</span><br><span class="line">├── scripts/</span><br><span class="line">├── snpEff.config</span><br><span class="line">└── snpEff.jar</span><br></pre></td></tr></table></figure>
-]]></content>
   </entry>
 </search>
